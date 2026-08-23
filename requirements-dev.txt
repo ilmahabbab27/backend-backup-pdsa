@@ -1,0 +1,4 @@
+-r task1-route-service/requirements.txt
+pytest==8.3.5
+httpx==0.28.1
+
