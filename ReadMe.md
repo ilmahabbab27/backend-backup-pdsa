@@ -184,3 +184,92 @@ smart-city-backend/
 | `shared/` | Common code shared between tasks |
 
 ---
+
+# How to Run
+
+## 1. Configure Supabase
+
+Create a `.env` file in the backend root with:
+
+```env
+SUPABASE_URL=https://baprktxsesgogiwiuvzy.supabase.co
+SUPABASE_KEY=your_supabase_key_here
+```
+
+If you need a database script, run:
+
+```sql
+sql/all_in_one.sql
+```
+
+in the Supabase SQL editor.
+
+## 2. Start the backend services
+
+Open five terminals from the backend root and run one service per terminal:
+
+```powershell
+cd task1-route-service
+.\.venv\Scripts\python.exe -m uvicorn app.main:app --reload --port 8001
+```
+
+```powershell
+cd task2-resource-service
+.\.venv\Scripts\python.exe -m uvicorn app.main:app --reload --port 8002
+```
+
+```powershell
+cd task3-network-service
+.\.venv\Scripts\python.exe -m uvicorn app.main:app --reload --port 8003
+```
+
+```powershell
+cd task4-decision-service
+.\.venv\Scripts\python.exe -m uvicorn app.main:app --reload --port 8004
+```
+
+```powershell
+cd task5-optimization-service
+.\.venv\Scripts\python.exe -m uvicorn app.main:app --reload --port 8005
+```
+
+## 3. Start the frontend
+
+In the frontend project folder:
+
+```powershell
+npm install
+npm run dev
+```
+
+Then open:
+
+```text
+http://localhost:5173
+```
+
+## 4. Verify the backend
+
+Check these health endpoints in the browser:
+
+- `http://localhost:8001/health`
+- `http://localhost:8002/health`
+- `http://localhost:8003/health`
+- `http://localhost:8004/health`
+- `http://localhost:8005/health`
+
+## 5. Shared SQL files
+
+If you want to load the full schema and sample data in one run, use:
+
+- `sql/all_in_one.sql`
+
+If you prefer smaller files, use:
+
+- `sql/schema.sql`
+- `sql/seed.sql`
+- `sql/route_queries.sql`
+- `sql/resource_queries.sql`
+- `sql/network_queries.sql`
+- `sql/decision_queries.sql`
+- `sql/optimization_queries.sql`
