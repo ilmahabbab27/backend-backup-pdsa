@@ -1,7 +1,9 @@
 """Branch and Bound solver for homogeneous fleet allocation, capacity enforcement, and optimal route sequencing."""
 
+from collections import defaultdict
 import itertools
-from typing import Any, Dict, List, Optional, Tuple
+import time
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 
 class RouteOptimizationResult:
@@ -46,7 +48,8 @@ class BranchAndBoundOptimizer:
         dist_matrix: Dict[str, Dict[str, float]],
         truck_count: int,
         truck_capacity_kg: int,
-        max_search_nodes: int = 10000,
+        max_search_nodes: int = 5000,
+        time_limit_sec: float = 2.5,
     ) -> None:
         """Initialize optimizer parameters.
 
@@ -57,7 +60,8 @@ class BranchAndBoundOptimizer:
             dist_matrix: All-pairs shortest path distance lookup matrix.
             truck_count: Total available trucks in the fleet.
             truck_capacity_kg: Maximum payload capacity per truck in kg.
-            max_search_nodes: Search budget to prevent timeout on large instances.
+            max_search_nodes: Search budget to prevent long CPU lockup.
+            time_limit_sec: Strict wall-clock deadline in seconds.
         """
         self.depot_id = depot_id
         self.dump_id = dump_id
@@ -65,13 +69,14 @@ class BranchAndBoundOptimizer:
         self.truck_count = truck_count
         self.truck_capacity_kg = truck_capacity_kg
         self.max_search_nodes = max_search_nodes
+        self.time_limit_sec = time_limit_sec
 
         self.bin_weights: Dict[str, int] = {b["id"]: int(b["weight_kg"]) for b in bins}
 
-        # Order bins by proximity to depot and decreasing weight to encourage coherent vehicle clustering
+        # Order bins by proximity to depot and decreasing weight
         self.bins = sorted(
             bins,
-            key=lambda b: (self.dist_matrix[self.depot_id][b["id"]], -b["weight_kg"]),
+            key=lambda b: (self.dist_matrix[self.depot_id][b["id"]], -int(b["weight_kg"])),
         )
         self.bin_ids: List[str] = [b["id"] for b in self.bins]
         self.num_bins: int = len(self.bins)
@@ -94,6 +99,8 @@ class BranchAndBoundOptimizer:
         self.best_global_distance: float = float("inf")
         self.best_assignment: Optional[List[List[str]]] = None
         self._nodes_evaluated: int = 0
+        self.start_time: float = 0.0
+        self.deadline: float = 0.0
 
     def _solve_single_truck_tsp(self, bin_subset: Tuple[str, ...]) -> Tuple[float, List[str]]:
         """Compute the exact minimum distance and stop sequence for a single truck visiting bin_subset.
@@ -108,37 +115,47 @@ class BranchAndBoundOptimizer:
 
         n = len(bin_subset)
         if n == 1:
+            b0 = bin_subset[0]
             cost = (
-                self.dist_matrix[self.depot_id][bin_subset[0]]
-                + self.dist_matrix[bin_subset[0]][self.dump_id]
+                self.dist_matrix[self.depot_id][b0]
+                + self.dist_matrix[b0][self.dump_id]
                 + self.t1_to_d0_dist
             )
-            result = (round(cost, 4), [self.depot_id, bin_subset[0], self.dump_id, self.depot_id])
+            result = (round(cost, 4), [self.depot_id, b0, self.dump_id, self.depot_id])
             self._tsp_cache[bin_subset] = result
             return result
 
-        if n <= 8:
-            # Exact brute force permutation search for small subsets
-            best_cost = float("inf")
-            best_perm: Tuple[str, ...] = ()
-            for perm in itertools.permutations(bin_subset):
-                cost = self.dist_matrix[self.depot_id][perm[0]]
-                for i in range(n - 1):
-                    cost += self.dist_matrix[perm[i]][perm[i + 1]]
-                cost += self.dist_matrix[perm[-1]][self.dump_id] + self.t1_to_d0_dist
-                if cost < best_cost:
-                    best_cost = cost
-                    best_perm = perm
-            result = (round(best_cost, 4), [self.depot_id] + list(best_perm) + [self.dump_id, self.depot_id])
+        if n == 2:
+            b0, b1 = bin_subset[0], bin_subset[1]
+            c1 = (
+                self.dist_matrix[self.depot_id][b0]
+                + self.dist_matrix[b0][b1]
+                + self.dist_matrix[b1][self.dump_id]
+                + self.t1_to_d0_dist
+            )
+            c2 = (
+                self.dist_matrix[self.depot_id][b1]
+                + self.dist_matrix[b1][b0]
+                + self.dist_matrix[b0][self.dump_id]
+                + self.t1_to_d0_dist
+            )
+            if c1 <= c2:
+                result = (round(c1, 4), [self.depot_id, b0, b1, self.dump_id, self.depot_id])
+            else:
+                result = (round(c2, 4), [self.depot_id, b1, b0, self.dump_id, self.depot_id])
             self._tsp_cache[bin_subset] = result
             return result
 
-        elif n <= 14:
-            # Exact Held-Karp dynamic programming with bitmask
+        if n <= 12:
+            # Fast integer-indexed Held-Karp dynamic programming
             nodes = list(bin_subset)
+            d_depot = [self.dist_matrix[self.depot_id][nodes[i]] for i in range(n)]
+            d_dump = [self.dist_matrix[nodes[i]][self.dump_id] for i in range(n)]
+            d_mat = [[self.dist_matrix[nodes[i]][nodes[j]] for j in range(n)] for i in range(n)]
+
             dp: Dict[Tuple[int, int], Tuple[float, int]] = {}
-            for i, node in enumerate(nodes):
-                dp[((1 << i), i)] = (self.dist_matrix[self.depot_id][node], -1)
+            for i in range(n):
+                dp[((1 << i), i)] = (d_depot[i], -1)
 
             for size in range(2, n + 1):
                 for comb in itertools.combinations(range(n), size):
@@ -152,20 +169,25 @@ class BranchAndBoundOptimizer:
                         for prev in comb:
                             if prev == curr:
                                 continue
-                            val = dp[(prev_mask, prev)][0] + self.dist_matrix[nodes[prev]][nodes[curr]]
-                            if val < min_val:
-                                min_val = val
-                                min_prev = prev
-                        dp[(mask, curr)] = (min_val, min_prev)
+                            prev_entry = dp.get((prev_mask, prev))
+                            if prev_entry is not None:
+                                val = prev_entry[0] + d_mat[prev][curr]
+                                if val < min_val:
+                                    min_val = val
+                                    min_prev = prev
+                        if min_prev != -1:
+                            dp[(mask, curr)] = (min_val, min_prev)
 
             full_mask = (1 << n) - 1
             best_cost = float("inf")
             best_last = -1
             for last in range(n):
-                val = dp[(full_mask, last)][0] + self.dist_matrix[nodes[last]][self.dump_id] + self.t1_to_d0_dist
-                if val < best_cost:
-                    best_cost = val
-                    best_last = last
+                entry = dp.get((full_mask, last))
+                if entry is not None:
+                    val = entry[0] + d_dump[last] + self.t1_to_d0_dist
+                    if val < best_cost:
+                        best_cost = val
+                        best_last = last
 
             path_idx = []
             curr_mask = full_mask
@@ -185,7 +207,7 @@ class BranchAndBoundOptimizer:
             return result
 
         else:
-            # Nearest Insertion + 2-Opt refinement for larger single-truck sets (>14)
+            # Nearest Insertion + 2-Opt refinement for larger single-truck sets (>12)
             unvisited = list(bin_subset)
             first_node = min(unvisited, key=lambda b: self.dist_matrix[self.depot_id][b])
             unvisited.remove(first_node)
@@ -261,49 +283,11 @@ class BranchAndBoundOptimizer:
             self._tsp_cache[bin_subset] = result
             return result
 
-    def _find_greedy_initial_solution(self) -> None:
-        """Compute a fast nearest-neighbor greedy initial solution to set a tight incumbent bound."""
-        if not self.bin_ids:
-            self.best_global_distance = 0.0
-            self.best_assignment = [[] for _ in range(self.truck_count)]
+    def _test_and_update_incumbent(self, truck_bins: List[List[str]]) -> None:
+        """Helper to evaluate a complete assignment and update the best known solution if improved."""
+        assigned_count = sum(len(sub) for sub in truck_bins)
+        if assigned_count != self.num_bins:
             return
-
-        truck_bins: List[List[str]] = [[] for _ in range(self.truck_count)]
-        truck_weights: List[int] = [0 for _ in range(self.truck_count)]
-
-        unassigned = set(self.bin_ids)
-        for t_idx in range(self.truck_count):
-            if not unassigned:
-                break
-            current_loc = self.depot_id
-            while unassigned:
-                candidates = [
-                    b
-                    for b in unassigned
-                    if truck_weights[t_idx] + self.bin_weights[b] <= self.truck_capacity_kg
-                ]
-                if not candidates:
-                    break
-                closest_bin = min(candidates, key=lambda b: self.dist_matrix[current_loc][b])
-                truck_bins[t_idx].append(closest_bin)
-                truck_weights[t_idx] += self.bin_weights[closest_bin]
-                unassigned.remove(closest_bin)
-                current_loc = closest_bin
-
-        if unassigned:
-            # Fallback to First Fit Decreasing
-            truck_bins = [[] for _ in range(self.truck_count)]
-            truck_weights = [0 for _ in range(self.truck_count)]
-            for b_id in sorted(self.bin_ids, key=lambda b: self.bin_weights[b], reverse=True):
-                assigned = False
-                for t_idx in range(self.truck_count):
-                    if truck_weights[t_idx] + self.bin_weights[b_id] <= self.truck_capacity_kg:
-                        truck_bins[t_idx].append(b_id)
-                        truck_weights[t_idx] += self.bin_weights[b_id]
-                        assigned = True
-                        break
-                if not assigned:
-                    return
 
         total_dist = 0.0
         for subset in truck_bins:
@@ -311,11 +295,236 @@ class BranchAndBoundOptimizer:
                 cost, _ = self._solve_single_truck_tsp(tuple(sorted(subset)))
                 total_dist += cost
 
-        self.best_global_distance = total_dist
-        self.best_assignment = [list(subset) for subset in truck_bins]
+        if total_dist < self.best_global_distance:
+            self.best_global_distance = total_dist
+            self.best_assignment = [list(sub) for sub in truck_bins]
+
+    def _find_greedy_initial_solution(self) -> None:
+        """Compute high-quality initial solutions using multiple heuristics to establish a tight bound."""
+        if not self.bin_ids:
+            self.best_global_distance = 0.0
+            self.best_assignment = [[] for _ in range(self.truck_count)]
+            return
+
+        # Strategy 1: Greedy Nearest-Neighbor Route Packing
+        truck_bins_1: List[List[str]] = [[] for _ in range(self.truck_count)]
+        truck_weights_1: List[int] = [0 for _ in range(self.truck_count)]
+        unassigned_1 = set(self.bin_ids)
+
+        for t_idx in range(self.truck_count):
+            if not unassigned_1:
+                break
+            current_loc = self.depot_id
+            while unassigned_1:
+                candidates = [
+                    b
+                    for b in unassigned_1
+                    if truck_weights_1[t_idx] + self.bin_weights[b] <= self.truck_capacity_kg
+                ]
+                if not candidates:
+                    break
+                closest_bin = min(candidates, key=lambda b: self.dist_matrix[current_loc][b])
+                truck_bins_1[t_idx].append(closest_bin)
+                truck_weights_1[t_idx] += self.bin_weights[closest_bin]
+                unassigned_1.remove(closest_bin)
+                current_loc = closest_bin
+
+        if not unassigned_1:
+            self._test_and_update_incumbent(truck_bins_1)
+
+        # Strategy 2: First-Fit Decreasing (FFD) by weight
+        truck_bins_2: List[List[str]] = [[] for _ in range(self.truck_count)]
+        truck_weights_2: List[int] = [0 for _ in range(self.truck_count)]
+        unassigned_2: List[str] = []
+
+        for b_id in sorted(self.bin_ids, key=lambda b: self.bin_weights[b], reverse=True):
+            placed = False
+            for t_idx in range(self.truck_count):
+                if truck_weights_2[t_idx] + self.bin_weights[b_id] <= self.truck_capacity_kg:
+                    truck_bins_2[t_idx].append(b_id)
+                    truck_weights_2[t_idx] += self.bin_weights[b_id]
+                    placed = True
+                    break
+            if not placed:
+                unassigned_2.append(b_id)
+
+        if not unassigned_2:
+            self._test_and_update_incumbent(truck_bins_2)
+
+        # Strategy 3: Best-Fit Decreasing (BFD)
+        truck_bins_3: List[List[str]] = [[] for _ in range(self.truck_count)]
+        truck_weights_3: List[int] = [0 for _ in range(self.truck_count)]
+        unassigned_3: List[str] = []
+
+        for b_id in sorted(self.bin_ids, key=lambda b: self.bin_weights[b], reverse=True):
+            bw = self.bin_weights[b_id]
+            best_t = -1
+            min_remaining = float("inf")
+            for t_idx in range(self.truck_count):
+                rem = self.truck_capacity_kg - (truck_weights_3[t_idx] + bw)
+                if rem >= 0 and rem < min_remaining:
+                    min_remaining = rem
+                    best_t = t_idx
+            if best_t != -1:
+                truck_bins_3[best_t].append(b_id)
+                truck_weights_3[best_t] += bw
+            else:
+                unassigned_3.append(b_id)
+
+        if not unassigned_3:
+            self._test_and_update_incumbent(truck_bins_3)
+
+        # Strategy 4: Proximity Clustering + Capacity Fill
+        sorted_by_depot = sorted(self.bin_ids, key=lambda b: self.dist_matrix[self.depot_id][b])
+        truck_bins_4: List[List[str]] = [[] for _ in range(self.truck_count)]
+        truck_weights_4: List[int] = [0 for _ in range(self.truck_count)]
+        unassigned_4 = set(self.bin_ids)
+
+        for t_idx in range(self.truck_count):
+            if not unassigned_4:
+                break
+            seed = next((b for b in sorted_by_depot if b in unassigned_4), None)
+            if not seed:
+                break
+            truck_bins_4[t_idx].append(seed)
+            truck_weights_4[t_idx] += self.bin_weights[seed]
+            unassigned_4.remove(seed)
+
+            while unassigned_4:
+                candidates = [
+                    b for b in unassigned_4
+                    if truck_weights_4[t_idx] + self.bin_weights[b] <= self.truck_capacity_kg
+                ]
+                if not candidates:
+                    break
+                closest = min(candidates, key=lambda b: min(self.dist_matrix[in_b][b] for in_b in truck_bins_4[t_idx]))
+                truck_bins_4[t_idx].append(closest)
+                truck_weights_4[t_idx] += self.bin_weights[closest]
+                unassigned_4.remove(closest)
+
+        if not unassigned_4:
+            self._test_and_update_incumbent(truck_bins_4)
+
+    def _improve_assignment_vns(self) -> None:
+        """Variable Neighborhood Search (Relocate & Swap 2-Opt) across vehicle clusters."""
+        if not self.best_assignment:
+            return
+
+        current_assignment = [list(sub) for sub in self.best_assignment]
+        truck_weights = [sum(self.bin_weights[b] for b in sub) for sub in current_assignment]
+        truck_costs = [
+            self._solve_single_truck_tsp(tuple(sorted(sub)))[0] if sub else 0.0
+            for sub in current_assignment
+        ]
+
+        improved = True
+        iteration = 0
+        max_iterations = 25
+
+        while improved and iteration < max_iterations:
+            if time.perf_counter() > self.deadline:
+                break
+            improved = False
+            iteration += 1
+
+            # 1. Relocate Move: Move bin from truck i to truck j
+            for i in range(len(current_assignment)):
+                if not current_assignment[i]:
+                    continue
+                for b_idx, bin_id in enumerate(current_assignment[i]):
+                    bw = self.bin_weights[bin_id]
+                    candidate_trucks = [
+                        j for j in range(len(current_assignment))
+                        if i != j and truck_weights[j] + bw <= self.truck_capacity_kg
+                    ]
+                    if len(candidate_trucks) > 4:
+                        candidate_trucks.sort(
+                            key=lambda j: min(
+                                (self.dist_matrix[b][bin_id] for b in current_assignment[j]),
+                                default=self.dist_matrix[self.depot_id][bin_id],
+                            )
+                        )
+                        candidate_trucks = candidate_trucks[:4]
+
+                    for j in candidate_trucks:
+                        new_sub_i = current_assignment[i][:b_idx] + current_assignment[i][b_idx + 1:]
+                        new_sub_j = current_assignment[j] + [bin_id]
+
+                        cost_i = self._solve_single_truck_tsp(tuple(sorted(new_sub_i)))[0] if new_sub_i else 0.0
+                        cost_j = self._solve_single_truck_tsp(tuple(sorted(new_sub_j)))[0]
+
+                        delta = (cost_i + cost_j) - (truck_costs[i] + truck_costs[j])
+                        if delta < -1e-4:
+                            current_assignment[i] = new_sub_i
+                            current_assignment[j] = new_sub_j
+                            truck_weights[i] -= bw
+                            truck_weights[j] += bw
+                            truck_costs[i] = cost_i
+                            truck_costs[j] = cost_j
+                            improved = True
+                            break
+                    if improved:
+                        break
+                if improved:
+                    break
+
+            if improved:
+                continue
+
+            # 2. Swap Move: Swap bin_a in truck i with bin_b in truck j
+            for i in range(len(current_assignment) - 1):
+                if not current_assignment[i]:
+                    continue
+                for b1_idx, bin_a in enumerate(current_assignment[i]):
+                    wa = self.bin_weights[bin_a]
+                    candidate_trucks = [
+                        j for j in range(i + 1, len(current_assignment))
+                        if current_assignment[j]
+                    ]
+                    if len(candidate_trucks) > 4:
+                        candidate_trucks.sort(
+                            key=lambda j: min(
+                                (self.dist_matrix[b][bin_a] for b in current_assignment[j]),
+                                default=self.dist_matrix[self.depot_id][bin_a],
+                            )
+                        )
+                        candidate_trucks = candidate_trucks[:4]
+
+                    for j in candidate_trucks:
+                        for b2_idx, bin_b in enumerate(current_assignment[j]):
+                            wb = self.bin_weights[bin_b]
+                            if (truck_weights[i] - wa + wb <= self.truck_capacity_kg and
+                                truck_weights[j] - wb + wa <= self.truck_capacity_kg):
+                                new_sub_i = current_assignment[i][:b1_idx] + [bin_b] + current_assignment[i][b1_idx + 1:]
+                                new_sub_j = current_assignment[j][:b2_idx] + [bin_a] + current_assignment[j][b2_idx + 1:]
+
+                                cost_i = self._solve_single_truck_tsp(tuple(sorted(new_sub_i)))[0]
+                                cost_j = self._solve_single_truck_tsp(tuple(sorted(new_sub_j)))[0]
+
+                                delta = (cost_i + cost_j) - (truck_costs[i] + truck_costs[j])
+                                if delta < -1e-4:
+                                    current_assignment[i] = new_sub_i
+                                    current_assignment[j] = new_sub_j
+                                    truck_weights[i] = truck_weights[i] - wa + wb
+                                    truck_weights[j] = truck_weights[j] - wb + wa
+                                    truck_costs[i] = cost_i
+                                    truck_costs[j] = cost_j
+                                    improved = True
+                                    break
+                        if improved:
+                            break
+                    if improved:
+                        break
+                if improved:
+                    break
+
+        total_dist = sum(truck_costs)
+        if total_dist < self.best_global_distance:
+            self.best_global_distance = total_dist
+            self.best_assignment = [list(sub) for sub in current_assignment]
 
     def solve(self) -> Tuple[List[RouteOptimizationResult], float]:
-        """Execute the Branch and Bound search algorithm.
+        """Execute the Branch and Bound / Adaptive VRP search algorithm.
 
         Returns:
             A tuple of (list of RouteOptimizationResult for dispatched trucks, total fleet distance).
@@ -323,16 +532,30 @@ class BranchAndBoundOptimizer:
         if self.num_bins == 0:
             return [], 0.0
 
-        # Set initial upper bound using heuristic
+        self.start_time = time.perf_counter()
+        self.deadline = self.start_time + self.time_limit_sec
+
+        # 1. Establish initial upper bound from multi-heuristic packing
         self._find_greedy_initial_solution()
         initial_heuristic_dist = self.best_global_distance
 
-        initial_assignments: List[List[str]] = [[] for _ in range(self.truck_count)]
-        initial_weights: List[int] = [0 for _ in range(self.truck_count)]
-        self._nodes_evaluated = 0
+        # 2. Optimization phase based on instance size
+        if self.num_bins <= 16:
+            # Exact Branch and Bound exploration for small/medium instances
+            initial_assignments: List[List[str]] = [[] for _ in range(self.truck_count)]
+            initial_weights: List[int] = [0 for _ in range(self.truck_count)]
+            initial_costs: List[float] = [0.0 for _ in range(self.truck_count)]
+            self._nodes_evaluated = 0
 
-        # Start recursive branch and bound exploration
-        self._branch_and_bound(0, initial_assignments, initial_weights)
+            self._branch_and_bound_incremental(
+                bin_idx=0,
+                current_assignments=initial_assignments,
+                current_weights=initial_weights,
+                current_costs=initial_costs,
+            )
+        else:
+            # VNS Local Search for larger instances (> 16 bins)
+            self._improve_assignment_vns()
 
         if self.best_assignment is None:
             raise ValueError(
@@ -374,31 +597,24 @@ class BranchAndBoundOptimizer:
 
         return results, round(total_distance, 4)
 
-    def _branch_and_bound(
+    def _branch_and_bound_incremental(
         self,
         bin_idx: int,
         current_assignments: List[List[str]],
         current_weights: List[int],
+        current_costs: List[float],
     ) -> None:
-        """Recursive Branch and Bound search step with capacity and distance pruning.
-
-        Args:
-            bin_idx: Index of current bin in self.bin_ids being assigned.
-            current_assignments: Current bins assigned to each truck.
-            current_weights: Current total payload weight on each truck.
-        """
+        """Recursive Branch and Bound search step with incremental lower bounding and time check."""
         self._nodes_evaluated += 1
         if self._nodes_evaluated > self.max_search_nodes:
             return
 
+        if (self._nodes_evaluated & 63) == 0 and time.perf_counter() > self.deadline:
+            return
+
         # Leaf node: all bins assigned successfully
         if bin_idx == self.num_bins:
-            total_cost = 0.0
-            for subset in current_assignments:
-                if subset:
-                    cost, _ = self._solve_single_truck_tsp(tuple(sorted(subset)))
-                    total_cost += cost
-
+            total_cost = sum(current_costs)
             if total_cost < self.best_global_distance:
                 self.best_global_distance = total_cost
                 self.best_assignment = [list(subset) for subset in current_assignments]
@@ -415,27 +631,21 @@ class BranchAndBoundOptimizer:
             self.truck_capacity_kg - w for w in current_weights
         )
         if remaining_unassigned_weight > total_available_capacity:
-            # Capacity Pruning: remaining waste cannot fit into available remaining space
             return
 
         # Lower bound distance pruning
-        lb = 0.0
-        for subset in current_assignments:
-            if subset:
-                cost, _ = self._solve_single_truck_tsp(tuple(sorted(subset)))
-                lb += cost
+        lb = sum(current_costs)
         for idx in range(bin_idx, self.num_bins):
             lb += self._min_in_out[self.bin_ids[idx]]
 
         if lb >= self.best_global_distance:
-            # Distance Bound Pruning: this branch cannot beat current best known solution
             return
 
-        # Order candidate trucks by proximity to this bin for optimal search order
+        # Order candidate trucks by proximity
         truck_candidates = []
         for t_idx in range(self.truck_count):
             if current_weights[t_idx] + current_bin_weight <= self.truck_capacity_kg:
-                if len(current_assignments[t_idx]) == 0:
+                if not current_assignments[t_idx]:
                     truck_dist = self.dist_matrix[self.depot_id][current_bin_id]
                 else:
                     last_bin = current_assignments[t_idx][-1]
@@ -455,15 +665,25 @@ class BranchAndBoundOptimizer:
                     continue
                 first_empty_truck_encountered = True
 
+            # Save previous state
+            old_cost = current_costs[t_idx]
+
             # Branch: Assign bin to truck t_idx
             current_assignments[t_idx].append(current_bin_id)
             current_weights[t_idx] += current_bin_weight
 
-            self._branch_and_bound(bin_idx + 1, current_assignments, current_weights)
+            # Incrementally calculate new cost for ONLY this truck
+            new_cost, _ = self._solve_single_truck_tsp(tuple(sorted(current_assignments[t_idx])))
+            current_costs[t_idx] = new_cost
+
+            self._branch_and_bound_incremental(
+                bin_idx + 1, current_assignments, current_weights, current_costs
+            )
 
             # Backtrack
             current_assignments[t_idx].pop()
             current_weights[t_idx] -= current_bin_weight
+            current_costs[t_idx] = old_cost
 
 
 def select_feasible_bins_ffd(

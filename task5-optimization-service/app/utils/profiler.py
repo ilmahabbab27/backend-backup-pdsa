@@ -14,14 +14,13 @@ class Profiler:
         self.end_ns: int = 0
         self.execution_time_ms: float = 0.0
         self.peak_memory_kb: float = 0.0
-        self._was_tracing: bool = False
+        self._initial_peak: int = 0
 
     def __enter__(self) -> "Profiler":
-        self._was_tracing = tracemalloc.is_tracing()
-        if not self._was_tracing:
-            tracemalloc.start()
-        tracemalloc.reset_peak()
         self.start_ns = time.perf_counter_ns()
+        if tracemalloc.is_tracing():
+            _, peak_bytes = tracemalloc.get_traced_memory()
+            self._initial_peak = peak_bytes
         return self
 
     def __exit__(
@@ -31,9 +30,11 @@ class Profiler:
         exc_tb: Optional[TracebackType],
     ) -> None:
         self.end_ns = time.perf_counter_ns()
-        _, peak_bytes = tracemalloc.get_traced_memory()
-        if not self._was_tracing:
-            tracemalloc.stop()
-
         self.execution_time_ms = round((self.end_ns - self.start_ns) / 1_000_000.0, 4)
-        self.peak_memory_kb = round(peak_bytes / 1024.0, 2)
+
+        if tracemalloc.is_tracing():
+            _, peak_bytes = tracemalloc.get_traced_memory()
+            delta = max(0, peak_bytes - self._initial_peak)
+            self.peak_memory_kb = round(delta / 1024.0, 2)
+        else:
+            self.peak_memory_kb = 0.0

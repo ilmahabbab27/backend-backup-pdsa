@@ -39,7 +39,7 @@ async def health_check() -> HealthResponse:
     summary="Get City Road Network Map",
     tags=["map"],
 )
-async def get_city_map(
+def get_city_map(
     service: Annotated[OptimizerService, Depends(get_optimizer_service)],
 ) -> CityMapResponse:
     """Retrieve full city map nodes, coordinates, bin weights, and road network topology."""
@@ -53,7 +53,7 @@ async def get_city_map(
     summary="Optimize Waste Collection Routes",
     tags=["optimization"],
 )
-async def optimize_routes(
+def optimize_routes(
     request: OptimizationRequest,
     service: Annotated[OptimizerService, Depends(get_optimizer_service)],
 ) -> OptimizationResponse:
