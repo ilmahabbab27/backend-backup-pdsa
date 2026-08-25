@@ -158,27 +158,64 @@ def log_truck_route_details(
     print(f"     * Turn-by-Turn Path:    {c.DIM}{path_summary}{c.RESET}", flush=True)
 
 
+def log_fallback_initiated(
+    reason: str,
+    selected_bins: int,
+    total_bins: int,
+    collected_weight_kg: int,
+    total_waste_kg: int,
+    fleet_capacity_kg: int,
+    uncollected_bins_count: int,
+) -> None:
+    """Print visual banner when capacity fallback is triggered."""
+    c = TerminalColors
+    print(flush=True)
+    print(f"{c.YELLOW}{c.BOLD}+-----------------------------------------------------------------------------+{c.RESET}", flush=True)
+    print(f"{c.YELLOW}{c.BOLD}|              [FALLBACK] CAPACITY EXCEEDED - PARTIAL COLLECTION TRIGGERED     |{c.RESET}", flush=True)
+    print(f"{c.YELLOW}{c.BOLD}+-----------------------------------------------------------------------------+{c.RESET}", flush=True)
+    print(f"  {c.BOLD}Fallback Execution Rationale:{c.RESET}", flush=True)
+    print(f"    * Trigger Reason:            {c.BRIGHT_YELLOW}{reason}{c.RESET}", flush=True)
+    print(f"    * Total City Waste:          {c.BRIGHT_YELLOW}{total_waste_kg:,} kg{c.RESET} ({total_bins} bins)", flush=True)
+    print(f"    * Total Available Capacity:  {c.BRIGHT_YELLOW}{fleet_capacity_kg:,} kg{c.RESET}", flush=True)
+    print(f"    * Scheduled for Collection:  {c.BRIGHT_GREEN}{collected_weight_kg:,} kg{c.RESET} ({selected_bins}/{total_bins} bins, {round((collected_weight_kg/total_waste_kg)*100, 1)}% coverage)", flush=True)
+    print(f"    * Deferred to Next Cycle:    {c.YELLOW}{total_waste_kg - collected_weight_kg:,} kg{c.RESET} ({uncollected_bins_count} bins)", flush=True)
+    print(f"{c.YELLOW}{'-' * 79}{c.RESET}\n", flush=True)
+
+
 def log_optimization_summary(
     total_distance_km: float,
     total_waste_collected_kg: int,
+    total_waste_available_kg: int,
     trucks_used: int,
     total_trucks_available: int,
     execution_time_ms: float,
     peak_memory_kb: float,
+    is_fallback: bool = False,
+    uncollected_count: int = 0,
 ) -> None:
     """Print comprehensive summary box of the completed optimization."""
     c = TerminalColors
+    box_color = c.YELLOW if is_fallback else c.GREEN
+    status_label = "[PARTIAL SUCCESS - FALLBACK APPLIED]" if is_fallback else "[SUCCESS] OPTIMIZATION SOLUTION COMPLETE"
+    
     print(flush=True)
-    print(f"{c.GREEN}{c.BOLD}+-----------------------------------------------------------------------------+{c.RESET}", flush=True)
-    print(f"{c.GREEN}{c.BOLD}|                    [SUCCESS] OPTIMIZATION SOLUTION COMPLETE                 |{c.RESET}", flush=True)
-    print(f"{c.GREEN}{c.BOLD}+-----------------------------------------------------------------------------+{c.RESET}", flush=True)
+    print(f"{box_color}{c.BOLD}+-----------------------------------------------------------------------------+{c.RESET}", flush=True)
+    print(f"{box_color}{c.BOLD}|{status_label.center(77)}|{c.RESET}", flush=True)
+    print(f"{box_color}{c.BOLD}+-----------------------------------------------------------------------------+{c.RESET}", flush=True)
     print(f"  {c.BOLD}Fleet Performance Summary:{c.RESET}", flush=True)
-    print(f"    * Total Cumulative Road Distance:  {c.BRIGHT_GREEN}{c.BOLD}{total_distance_km:.2f} km{c.RESET}", flush=True)
-    print(f"    * Total Waste Collected:          {c.BRIGHT_GREEN}{c.BOLD}{total_waste_collected_kg:,} kg{c.RESET} (100% of all smart bins)", flush=True)
-    print(f"    * Fleet Deployment:               {c.BRIGHT_GREEN}{c.BOLD}{trucks_used}{c.RESET} dispatched of {total_trucks_available} available", flush=True)
+    print(f"    * Total Cumulative Road Distance:  {box_color}{c.BOLD}{total_distance_km:.2f} km{c.RESET}", flush=True)
+    
+    if is_fallback:
+        coverage_pct = round((total_waste_collected_kg / total_waste_available_kg) * 100.0, 1) if total_waste_available_kg > 0 else 100.0
+        print(f"    * Total Waste Collected:          {box_color}{c.BOLD}{total_waste_collected_kg:,} kg / {total_waste_available_kg:,} kg{c.RESET} ({coverage_pct}% coverage)", flush=True)
+        print(f"    * Bins Deferred / Uncollected:    {c.YELLOW}{c.BOLD}{uncollected_count} bins{c.RESET} ({total_waste_available_kg - total_waste_collected_kg:,} kg deferred)", flush=True)
+    else:
+        print(f"    * Total Waste Collected:          {c.BRIGHT_GREEN}{c.BOLD}{total_waste_collected_kg:,} kg{c.RESET} (100% of all smart bins)", flush=True)
+        
+    print(f"    * Fleet Deployment:               {box_color}{c.BOLD}{trucks_used}{c.RESET} dispatched of {total_trucks_available} available", flush=True)
     print(f"    * Algorithm Execution Time:       {c.BRIGHT_CYAN}{c.BOLD}{execution_time_ms:.2f} ms{c.RESET}", flush=True)
     print(f"    * Peak Dynamic Memory Used:       {c.BRIGHT_CYAN}{c.BOLD}{peak_memory_kb:.2f} KB{c.RESET}", flush=True)
-    print(f"{c.GREEN}{'=' * 79}{c.RESET}\n", flush=True)
+    print(f"{box_color}{'=' * 79}{c.RESET}\n", flush=True)
 
 
 def log_info(msg: str) -> None:
@@ -199,8 +236,8 @@ def log_warning(msg: str) -> None:
     print(f"{c.DIM}[{_ts()}]{c.RESET} {c.YELLOW}[WARNING]{c.RESET} {msg}", flush=True)
 
 
-def log_error(title: str, detail: str = "") -> None:
-    """Print formatted error alert."""
+def log_error(title: str, detail: str = "", suggestions: Optional[List[str]] = None) -> None:
+    """Print formatted error alert with suggestions."""
     c = TerminalColors
     print(flush=True)
     print(f"{c.RED}{c.BOLD}+-----------------------------------------------------------------------------+{c.RESET}", flush=True)
@@ -209,4 +246,8 @@ def log_error(title: str, detail: str = "") -> None:
     print(f"  {c.RED}{c.BOLD}{title}{c.RESET}", flush=True)
     if detail:
         print(f"  {c.DIM}Detail: {detail}{c.RESET}", flush=True)
+    if suggestions:
+        print(f"\n  {c.BOLD}Recommended Action / Recovery:{c.RESET}", flush=True)
+        for s in suggestions:
+            print(f"    {c.BRIGHT_YELLOW}* {s}{c.RESET}", flush=True)
     print(f"{c.RED}{'=' * 79}{c.RESET}\n", flush=True)

@@ -466,6 +466,49 @@ class BranchAndBoundOptimizer:
             current_weights[t_idx] -= current_bin_weight
 
 
+def select_feasible_bins_ffd(
+    bins: List[Dict[str, Any]],
+    truck_count: int,
+    truck_capacity_kg: int,
+) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
+    """Select the maximal feasible subset of bins that can be packed into truck_count trucks.
+
+    Uses First-Fit Decreasing (FFD) bin packing algorithm.
+    Filters out any individual bins that exceed single truck capacity.
+
+    Args:
+        bins: List of dicts with 'id' and 'weight_kg'.
+        truck_count: Number of trucks available.
+        truck_capacity_kg: Maximum payload capacity per truck in kg.
+
+    Returns:
+        A tuple of (packed_bins, uncollected_bins).
+    """
+    valid_bins = [b for b in bins if int(b.get("weight_kg", 0)) <= truck_capacity_kg]
+    overweight_bins = [b for b in bins if int(b.get("weight_kg", 0)) > truck_capacity_kg]
+
+    # Sort valid bins descending by weight (heuristic: heavier bins packed first)
+    sorted_bins = sorted(valid_bins, key=lambda b: int(b.get("weight_kg", 0)), reverse=True)
+
+    truck_loads = [0] * truck_count
+    packed_bins: List[Dict[str, Any]] = []
+    uncollected_bins: List[Dict[str, Any]] = list(overweight_bins)
+
+    for b in sorted_bins:
+        weight = int(b.get("weight_kg", 0))
+        placed = False
+        for t_idx in range(truck_count):
+            if truck_loads[t_idx] + weight <= truck_capacity_kg:
+                truck_loads[t_idx] += weight
+                packed_bins.append(b)
+                placed = True
+                break
+        if not placed:
+            uncollected_bins.append(b)
+
+    return packed_bins, uncollected_bins
+
+
 def solve_fleet_routing(
     depot_id: str,
     dump_id: str,

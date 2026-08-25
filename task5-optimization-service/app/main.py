@@ -4,14 +4,16 @@ from contextlib import asynccontextmanager
 from datetime import datetime, timezone
 import time
 from typing import AsyncGenerator
-from fastapi import FastAPI, Request, Response
+from fastapi import FastAPI, HTTPException, Request, Response, status
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 
 from app.api.deps import get_map_repository
 from app.api.v1.router import api_router
 from app.config.settings import get_settings
-from app.models.schemas import HealthResponse
-from app.utils.logger import log_request, log_response, log_startup_banner
+from app.models.schemas import HealthResponse, StructuredErrorResponse
+from app.utils.exceptions import OptimizationException
+from app.utils.logger import log_error, log_request, log_response, log_startup_banner
 
 settings = get_settings()
 
@@ -69,6 +71,59 @@ app.add_middleware(
 )
 
 
+# Global Exception Handlers
+@app.exception_handler(OptimizationException)
+async def optimization_exception_handler(request: Request, exc: OptimizationException) -> JSONResponse:
+    """Handle domain-specific optimization errors with structured recovery suggestions."""
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={
+            "status": "error",
+            "error": exc.error_type,
+            "message": exc.message,
+            "detail": exc.message,
+            "details": exc.details,
+            "suggestions": exc.suggestions,
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+        },
+    )
+
+
+@app.exception_handler(HTTPException)
+async def http_exception_handler(request: Request, exc: HTTPException) -> JSONResponse:
+    """Standardize HTTP exception responses."""
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={
+            "status": "error",
+            "error": "HTTPException",
+            "message": str(exc.detail),
+            "detail": str(exc.detail),
+            "details": {},
+            "suggestions": [],
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+        },
+    )
+
+
+@app.exception_handler(Exception)
+async def generic_exception_handler(request: Request, exc: Exception) -> JSONResponse:
+    """Catch-all unexpected server exception handler."""
+    log_error("Unhandled Internal Server Error", str(exc))
+    return JSONResponse(
+        status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        content={
+            "status": "error",
+            "error": "InternalServerError",
+            "message": "An unexpected error occurred during optimization processing.",
+            "detail": str(exc),
+            "details": {},
+            "suggestions": ["Please check server logs or verify map and fleet parameter configuration."],
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+        },
+    )
+
+
 @app.middleware("http")
 async def logging_middleware(request: Request, call_next) -> Response:
     """Middleware to log all incoming HTTP requests and their processing times."""
@@ -106,4 +161,3 @@ if __name__ == "__main__":
         port=settings.APP_PORT,
         reload=True,
     )
-

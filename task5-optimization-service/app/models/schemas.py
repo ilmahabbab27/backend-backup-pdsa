@@ -1,6 +1,6 @@
 """Pydantic schemas for data validation and API response serialization."""
 
-from typing import Any, Dict, List, Literal
+from typing import Any, Dict, List, Literal, Optional
 from pydantic import BaseModel, ConfigDict, Field
 
 
@@ -57,6 +57,13 @@ class OptimizationRequest(BaseModel):
     truck_capacity_kg: int = Field(
         ..., ge=100, description="Uniform maximum payload capacity per truck in kilograms"
     )
+    allow_partial_collection: bool = Field(
+        True,
+        description=(
+            "When true (default), enables fallback to collect the maximum feasible waste within fleet capacity "
+            "limits rather than raising a capacity exceeded error."
+        ),
+    )
 
 
 class CoordinatePoint(BaseModel):
@@ -97,9 +104,17 @@ class OptimizationSummary(BaseModel):
         ..., ge=0.0, description="Cumulative road distance traversed by all trucks in kilometers"
     )
     total_waste_collected_kg: int = Field(
-        ..., ge=0, description="Total waste collected across all smart bins in kilograms"
+        ..., ge=0, description="Total waste collected across scheduled smart bins in kilograms"
+    )
+    total_waste_available_kg: int = Field(
+        ..., ge=0, description="Total waste weight across all city smart bins in kilograms"
+    )
+    collection_coverage_pct: float = Field(
+        100.0, ge=0.0, le=100.0, description="Percentage of available city waste collected in this run"
     )
     trucks_used: int = Field(..., ge=0, description="Number of trucks actively dispatched")
+    total_trucks_available: int = Field(..., ge=1, description="Total trucks configured in fleet")
+    is_fallback: bool = Field(False, description="True if capacity fallback was activated")
     execution_time_ms: float = Field(
         ..., ge=0.0, description="Total optimization calculation time in milliseconds"
     )
@@ -111,11 +126,40 @@ class OptimizationSummary(BaseModel):
 class OptimizationResponse(BaseModel):
     """Complete response returned by the optimization service."""
 
-    status: str = Field("success", description="Status indicator of the optimization outcome")
+    status: str = Field(
+        "success",
+        description="Status indicator: 'success' (100% collected) or 'partial_collection' (capacity fallback)",
+    )
+    is_fallback: bool = Field(False, description="Whether fallback mode was triggered")
+    fallback_message: Optional[str] = Field(None, description="Diagnostic message when fallback is triggered")
     summary: OptimizationSummary = Field(..., description="Summary metrics of the solution")
     truck_routes: List[TruckRouteResponse] = Field(
         ..., description="Optimized route details for each dispatched truck"
     )
+    uncollected_bins: List[str] = Field(
+        default_factory=list, description="IDs of smart bins deferred due to capacity constraints"
+    )
+    uncollected_waste_kg: int = Field(0, description="Total waste kg deferred due to capacity constraints")
+    recommended_fleet_size: Optional[int] = Field(
+        None, description="Recommended minimum fleet size to collect 100% of city waste"
+    )
+    recommended_truck_capacity_kg: Optional[int] = Field(
+        None, description="Recommended minimum capacity per truck to collect 100% of city waste"
+    )
+    warnings: List[str] = Field(
+        default_factory=list, description="Operational warnings or constraint fallback notes"
+    )
+
+
+class StructuredErrorResponse(BaseModel):
+    """Standardized structured error response payload."""
+
+    status: str = Field("error", description="Error status indicator")
+    error: str = Field(..., description="High-level error classification")
+    message: str = Field(..., description="Descriptive error explanation")
+    details: Dict[str, Any] = Field(default_factory=dict, description="Detailed diagnostic context")
+    suggestions: List[str] = Field(default_factory=list, description="Actionable recommendations to resolve the issue")
+    timestamp: str = Field(..., description="ISO 8601 UTC timestamp")
 
 
 class HealthResponse(BaseModel):

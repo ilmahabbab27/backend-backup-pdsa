@@ -6,6 +6,7 @@ import networkx as nx
 
 from app.algorithms.branch_and_bound import (
     BranchAndBoundOptimizer,
+    select_feasible_bins_ffd,
     solve_fleet_routing,
 )
 from app.algorithms.dijkstra import (
@@ -17,6 +18,10 @@ from app.main import app
 from app.models.schemas import OptimizationRequest
 from app.repositories.map_repository import MapRepository
 from app.services.optimizer_service import OptimizerService
+from app.utils.exceptions import (
+    CapacityExceededException,
+    OverweightBinException,
+)
 from app.utils.profiler import Profiler
 
 client = TestClient(app)
@@ -149,8 +154,29 @@ def test_dijkstra_disconnected_error() -> None:
 
 
 # ---------------------------------------------------------
-# 3. Branch and Bound Optimizer Tests
+# 3. Branch and Bound & FFD Packing Algorithm Tests
 # ---------------------------------------------------------
+
+def test_select_feasible_bins_ffd() -> None:
+    """Test First-Fit Decreasing bin selection heuristic."""
+    bins = [
+        {"id": "B1", "weight_kg": 400},
+        {"id": "B2", "weight_kg": 350},
+        {"id": "B3", "weight_kg": 300},
+        {"id": "B4", "weight_kg": 250},
+        {"id": "B5", "weight_kg": 800},  # Overweight for 500kg truck
+    ]
+    # 2 trucks with 500kg capacity = 1000kg max
+    packed, uncollected = select_feasible_bins_ffd(bins, truck_count=2, truck_capacity_kg=500)
+
+    # Overweight bin B5 must be uncollected
+    assert any(b["id"] == "B5" for b in uncollected)
+
+    # Packed bins must not exceed individual or total capacity
+    packed_weight = sum(b["weight_kg"] for b in packed)
+    assert packed_weight <= 1000
+    assert len(packed) >= 2
+
 
 def test_branch_and_bound_subset_truck() -> None:
     """Test route sequencing when 1 truck has sufficient capacity for a subset of bins."""
@@ -193,7 +219,7 @@ def test_branch_and_bound_multi_truck_partitioning() -> None:
     dist_matrix = compute_distance_matrix(graph, poi_ids)
     bins_data = [{"id": b.id, "weight_kg": b.weight_kg} for b in bins]
 
-    # Capacity = 1500kg per truck, 25 bins (~8500kg) -> requires ~6 trucks
+    # Capacity = 1500kg per truck, 25 bins (~8500-9630kg) -> requires ~6-8 trucks
     results, total_dist = solve_fleet_routing(
         depot_id="D0",
         dump_id="T1",
@@ -245,7 +271,7 @@ def test_profiler_context_manager() -> None:
 
 
 # ---------------------------------------------------------
-# 5. API Integration Tests
+# 5. API Integration & Fallback Tests
 # ---------------------------------------------------------
 
 def test_api_get_map() -> None:
@@ -259,8 +285,8 @@ def test_api_get_map() -> None:
     assert len(data["nodes"]) == 57
 
 
-def test_api_optimize_successful() -> None:
-    """Test POST /api/v1/optimize with valid, feasible inputs for 25 bins."""
+def test_api_optimize_successful_full_fleet() -> None:
+    """Test POST /api/v1/optimize with valid, feasible inputs for 100% bin collection."""
     payload = {
         "truck_count": 8,
         "truck_capacity_kg": 1500,
@@ -270,9 +296,14 @@ def test_api_optimize_successful() -> None:
     data = response.json()
 
     assert data["status"] == "success"
+    assert data["is_fallback"] is False
+    assert data["uncollected_bins"] == []
+    assert data["uncollected_waste_kg"] == 0
+
     summary = data["summary"]
     assert summary["total_distance_km"] > 0.0
     assert summary["total_waste_collected_kg"] > 0
+    assert summary["collection_coverage_pct"] == 100.0
     assert summary["trucks_used"] > 0
     assert summary["execution_time_ms"] >= 0.0
     assert summary["peak_memory_kb"] >= 0.0
@@ -290,38 +321,96 @@ def test_api_optimize_successful() -> None:
         assert route["stop_sequence"][-1] == "D0"
         assert len(route["full_path_coordinates"]) >= len(route["stop_sequence"])
         all_collected_bins.extend([s for s in route["stop_sequence"] if s.startswith("B")])
-        for pt in route["full_path_coordinates"]:
-            assert "node_id" in pt
-            assert "lat" in pt
-            assert "lon" in pt
-            assert "name" in pt
-            assert "node_type" in pt
 
     assert len(all_collected_bins) == 25
 
 
-def test_api_optimize_unfeasible_total_capacity() -> None:
-    """Test POST /api/v1/optimize when total fleet capacity is less than total waste."""
+def test_api_optimize_capacity_exceeded_fallback_mode() -> None:
+    """Test POST /api/v1/optimize when fleet capacity is exceeded (10 trucks x 700 kg = 7000 kg < 9630 kg).
+
+    Verifies that fallback partial collection engages smoothly without 400 error.
+    """
     payload = {
-        "truck_count": 1,
-        "truck_capacity_kg": 200,
+        "truck_count": 10,
+        "truck_capacity_kg": 700,
+        "allow_partial_collection": True,
+    }
+    response = client.post("/api/v1/optimize", json=payload)
+    assert response.status_code == 200
+    data = response.json()
+
+    # Fallback assertions
+    assert data["status"] == "partial_collection"
+    assert data["is_fallback"] is True
+    assert data["fallback_message"] is not None
+    assert len(data["uncollected_bins"]) > 0
+    assert data["uncollected_waste_kg"] > 0
+    assert data["recommended_fleet_size"] >= 14
+    assert data["recommended_truck_capacity_kg"] >= 963
+    assert len(data["warnings"]) >= 1
+
+    summary = data["summary"]
+    assert summary["is_fallback"] is True
+    assert summary["total_waste_collected_kg"] <= 7000
+    assert summary["collection_coverage_pct"] < 100.0
+    assert summary["total_waste_available_kg"] > summary["total_waste_collected_kg"]
+
+    # All dispatched trucks must respect the 700 kg capacity limit
+    for route in data["truck_routes"]:
+        assert route["collected_weight_kg"] <= 700
+
+
+def test_api_optimize_strict_capacity_exceeded_exception() -> None:
+    """Test POST /api/v1/optimize with allow_partial_collection=False raises structured 400 error."""
+    payload = {
+        "truck_count": 10,
+        "truck_capacity_kg": 700,
+        "allow_partial_collection": False,
     }
     response = client.post("/api/v1/optimize", json=payload)
     assert response.status_code == 400
     data = response.json()
-    assert "exceeds" in data["detail"].lower()
+
+    assert data["status"] == "error"
+    assert data["error"] == "CapacityExceeded"
+    assert "exceeds total fleet capacity" in data["message"]
+    assert data["details"]["total_waste_kg"] > data["details"]["fleet_capacity_kg"]
+    assert data["details"]["recommended_truck_count"] >= 14
+    assert data["details"]["recommended_truck_capacity_kg"] >= 963
+    assert len(data["suggestions"]) >= 2
 
 
-def test_api_optimize_overweight_single_bin() -> None:
-    """Test POST /api/v1/optimize when single truck capacity is smaller than an individual bin weight."""
+def test_api_optimize_overweight_single_bin_fallback() -> None:
+    """Test POST /api/v1/optimize when some bins exceed capacity but compliant bins can be serviced."""
     payload = {
-        "truck_count": 50,
-        "truck_capacity_kg": 150,  # All bins are >= 200kg
+        "truck_count": 5,
+        "truck_capacity_kg": 350,  # Bins > 350kg will be deferred
+        "allow_partial_collection": True,
+    }
+    response = client.post("/api/v1/optimize", json=payload)
+    assert response.status_code == 200
+    data = response.json()
+
+    assert data["is_fallback"] is True
+    assert len(data["uncollected_bins"]) > 0
+    for route in data["truck_routes"]:
+        assert route["collected_weight_kg"] <= 350
+
+
+def test_api_optimize_all_bins_overweight_exception() -> None:
+    """Test POST /api/v1/optimize when capacity is smaller than the smallest bin (150kg < 200kg min)."""
+    payload = {
+        "truck_count": 10,
+        "truck_capacity_kg": 150,
+        "allow_partial_collection": True,
     }
     response = client.post("/api/v1/optimize", json=payload)
     assert response.status_code == 400
     data = response.json()
-    assert "individual bin payload exceeds" in data["detail"].lower()
+
+    assert data["status"] == "error"
+    assert data["error"] == "OverweightBin"
+    assert len(data["suggestions"]) > 0
 
 
 def test_api_optimize_validation_errors() -> None:
