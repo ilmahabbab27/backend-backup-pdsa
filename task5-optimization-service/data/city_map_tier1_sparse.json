@@ -1,0 +1,712 @@
+{
+  "nodes": [
+    {
+      "id": "D0",
+      "type": "start",
+      "name": "Regional Suburban Highway Maintenance Depot",
+      "lat": 41.43,
+      "lon": -74.05,
+      "weight_kg": 0
+    },
+    {
+      "id": "T1",
+      "type": "destination",
+      "name": "County Solid Waste & Eco-Recovery Center",
+      "lat": 41.73,
+      "lon": -73.67,
+      "weight_kg": 0
+    },
+    {
+      "id": "I1",
+      "type": "intersection",
+      "name": "Intersection 1 - Crossroad 1 - Route 9 & Pine Bush Turn",
+      "lat": 41.6258,
+      "lon": -74.1165,
+      "weight_kg": 0
+    },
+    {
+      "id": "I2",
+      "type": "intersection",
+      "name": "Intersection 2 - Crossroad 2 - Valley View Parkway Jct",
+      "lat": 41.48,
+      "lon": -74.0095,
+      "weight_kg": 0
+    },
+    {
+      "id": "I3",
+      "type": "intersection",
+      "name": "Intersection 3 - Crossroad 3 - Mill River Ridge Fork",
+      "lat": 41.6646,
+      "lon": -73.7646,
+      "weight_kg": 0
+    },
+    {
+      "id": "I4",
+      "type": "intersection",
+      "name": "Intersection 4 - Crossroad 4 - North County Expressway Exit 4",
+      "lat": 41.7269,
+      "lon": -74.0831,
+      "weight_kg": 0
+    },
+    {
+      "id": "I5",
+      "type": "intersection",
+      "name": "Intersection 5 - Crossroad 5 - Cedar Ridge Rural Bypass",
+      "lat": 41.5388,
+      "lon": -74.1139,
+      "weight_kg": 0
+    },
+    {
+      "id": "I6",
+      "type": "intersection",
+      "name": "Intersection 6 - Crossroad 6 - Old Post Highway Intersect",
+      "lat": 41.4575,
+      "lon": -73.8571,
+      "weight_kg": 0
+    },
+    {
+      "id": "I7",
+      "type": "intersection",
+      "name": "Intersection 7 - Crossroad 7 - Green Mountain Overlook",
+      "lat": 41.3806,
+      "lon": -74.0226,
+      "weight_kg": 0
+    },
+    {
+      "id": "I8",
+      "type": "intersection",
+      "name": "Intersection 8 - Crossroad 8 - Farmstead Arterial Crossing",
+      "lat": 41.63,
+      "lon": -73.8357,
+      "weight_kg": 0
+    },
+    {
+      "id": "I9",
+      "type": "intersection",
+      "name": "Intersection 9 - Crossroad 9 - Lakeview Turnpike Spur",
+      "lat": 41.4582,
+      "lon": -73.8118,
+      "weight_kg": 0
+    },
+    {
+      "id": "I10",
+      "type": "intersection",
+      "name": "Intersection 10 - Crossroad 10 - Prairie Brook Bridge Junction",
+      "lat": 41.6938,
+      "lon": -74.1265,
+      "weight_kg": 0
+    },
+    {
+      "id": "I11",
+      "type": "intersection",
+      "name": "Intersection 11 - Crossroad 11 - State Route 52 West Fork",
+      "lat": 41.6923,
+      "lon": -73.753,
+      "weight_kg": 0
+    },
+    {
+      "id": "I12",
+      "type": "intersection",
+      "name": "Intersection 12 - Crossroad 12 - Timberline Forestry Crossing",
+      "lat": 41.5061,
+      "lon": -74.046,
+      "weight_kg": 0
+    },
+    {
+      "id": "I13",
+      "type": "intersection",
+      "name": "Intersection 13 - Crossroad 13 - South Valley Agricultural Link",
+      "lat": 41.7529,
+      "lon": -73.9482,
+      "weight_kg": 0
+    },
+    {
+      "id": "I14",
+      "type": "intersection",
+      "name": "Intersection 14 - Crossroad 14 - Sunset Hill Highway Junction",
+      "lat": 41.4071,
+      "lon": -74.0778,
+      "weight_kg": 0
+    },
+    {
+      "id": "I15",
+      "type": "intersection",
+      "name": "Intersection 15 - Crossroad 15 - Maplewood Rural Concourse",
+      "lat": 41.709,
+      "lon": -73.804,
+      "weight_kg": 0
+    },
+    {
+      "id": "I16",
+      "type": "intersection",
+      "name": "Intersection 16 - Crossroad 16 - Highland Pass Roundabout",
+      "lat": 41.6929,
+      "lon": -73.7359,
+      "weight_kg": 0
+    },
+    {
+      "id": "I17",
+      "type": "intersection",
+      "name": "Intersection 17 - Crossroad 17 - East County Connector Exit 8",
+      "lat": 41.5845,
+      "lon": -73.6045,
+      "weight_kg": 0
+    },
+    {
+      "id": "I18",
+      "type": "intersection",
+      "name": "Intersection 18 - Crossroad 18 - Orchard Valley Road Crossing",
+      "lat": 41.5214,
+      "lon": -73.8319,
+      "weight_kg": 0
+    },
+    {
+      "id": "I19",
+      "type": "intersection",
+      "name": "Intersection 19 - Crossroad 19 - Meadowbrook Parkway Jct",
+      "lat": 41.7018,
+      "lon": -73.796,
+      "weight_kg": 0
+    },
+    {
+      "id": "I20",
+      "type": "intersection",
+      "name": "Intersection 20 - Crossroad 20 - Creek Road Railway Crossing",
+      "lat": 41.7147,
+      "lon": -73.8182,
+      "weight_kg": 0
+    },
+    {
+      "id": "B1",
+      "type": "bin",
+      "name": "Smart Bin 1 - Town Hall & Community Green",
+      "lat": 41.6477,
+      "lon": -74.0962,
+      "weight_kg": 290
+    },
+    {
+      "id": "B2",
+      "type": "bin",
+      "name": "Smart Bin 2 - North Prairie Farmers Market Depot",
+      "lat": 41.6738,
+      "lon": -73.6077,
+      "weight_kg": 290
+    },
+    {
+      "id": "B3",
+      "type": "bin",
+      "name": "Smart Bin 3 - Ridgeview Country School Pavilion",
+      "lat": 41.7093,
+      "lon": -73.9223,
+      "weight_kg": 360
+    },
+    {
+      "id": "B4",
+      "type": "bin",
+      "name": "Smart Bin 4 - Pine Creek Recreational Park",
+      "lat": 41.6216,
+      "lon": -73.9303,
+      "weight_kg": 330
+    },
+    {
+      "id": "B5",
+      "type": "bin",
+      "name": "Smart Bin 5 - Suburban Shopping Hamlet",
+      "lat": 41.515,
+      "lon": -73.7715,
+      "weight_kg": 440
+    },
+    {
+      "id": "B6",
+      "type": "bin",
+      "name": "Smart Bin 6 - Cedar Glen Residential Loop",
+      "lat": 41.7359,
+      "lon": -73.783,
+      "weight_kg": 410
+    },
+    {
+      "id": "B7",
+      "type": "bin",
+      "name": "Smart Bin 7 - Green Valley Sports Complex",
+      "lat": 41.6213,
+      "lon": -73.8422,
+      "weight_kg": 290
+    },
+    {
+      "id": "B8",
+      "type": "bin",
+      "name": "Smart Bin 8 - Timber Ridge Equestrian Outpost",
+      "lat": 41.4421,
+      "lon": -73.9227,
+      "weight_kg": 420
+    },
+    {
+      "id": "B9",
+      "type": "bin",
+      "name": "Smart Bin 9 - Lake Mahopac Boat Launch & Pavilion",
+      "lat": 41.6415,
+      "lon": -74.0058,
+      "weight_kg": 320
+    },
+    {
+      "id": "B10",
+      "type": "bin",
+      "name": "Smart Bin 10 - East Hamlet Firehouse Waste Point",
+      "lat": 41.7003,
+      "lon": -73.7165,
+      "weight_kg": 290
+    },
+    {
+      "id": "B11",
+      "type": "bin",
+      "name": "Smart Bin 11 - Orchard Hills Farmstand Plaza",
+      "lat": 41.6923,
+      "lon": -73.7014,
+      "weight_kg": 340
+    },
+    {
+      "id": "B12",
+      "type": "bin",
+      "name": "Smart Bin 12 - Highland Crest Senior Living Park",
+      "lat": 41.4817,
+      "lon": -74.0103,
+      "weight_kg": 400
+    },
+    {
+      "id": "B13",
+      "type": "bin",
+      "name": "Smart Bin 13 - Old Mill Historic District Post",
+      "lat": 41.713,
+      "lon": -73.9564,
+      "weight_kg": 420
+    },
+    {
+      "id": "B14",
+      "type": "bin",
+      "name": "Smart Bin 14 - Sunset Meadow Community Dropoff",
+      "lat": 41.5697,
+      "lon": -73.66,
+      "weight_kg": 420
+    },
+    {
+      "id": "B15",
+      "type": "bin",
+      "name": "Smart Bin 15 - Valley Forge Regional Bus Depot",
+      "lat": 41.5544,
+      "lon": -73.9823,
+      "weight_kg": 290
+    }
+  ],
+  "adjacency_list": {
+    "D0": [
+      {
+        "target": "I14",
+        "distance_km": 4.13
+      },
+      {
+        "target": "I2",
+        "distance_km": 7.8
+      }
+    ],
+    "T1": [
+      {
+        "target": "B11",
+        "distance_km": 5.92
+      }
+    ],
+    "I1": [
+      {
+        "target": "B1",
+        "distance_km": 3.55
+      }
+    ],
+    "I2": [
+      {
+        "target": "B12",
+        "distance_km": 0.24
+      },
+      {
+        "target": "B8",
+        "distance_km": 10.05
+      },
+      {
+        "target": "D0",
+        "distance_km": 7.8
+      }
+    ],
+    "I3": [
+      {
+        "target": "I11",
+        "distance_km": 3.87
+      },
+      {
+        "target": "I16",
+        "distance_km": 4.74
+      },
+      {
+        "target": "I8",
+        "distance_km": 8.46
+      }
+    ],
+    "I4": [
+      {
+        "target": "I10",
+        "distance_km": 6.18
+      }
+    ],
+    "I5": [
+      {
+        "target": "I12",
+        "distance_km": 8.07
+      }
+    ],
+    "I6": [
+      {
+        "target": "B8",
+        "distance_km": 6.88
+      },
+      {
+        "target": "I9",
+        "distance_km": 4.53
+      }
+    ],
+    "I7": [
+      {
+        "target": "I14",
+        "distance_km": 6.56
+      }
+    ],
+    "I8": [
+      {
+        "target": "B7",
+        "distance_km": 1.33
+      },
+      {
+        "target": "I3",
+        "distance_km": 8.46
+      }
+    ],
+    "I9": [
+      {
+        "target": "B5",
+        "distance_km": 8.58
+      },
+      {
+        "target": "I6",
+        "distance_km": 4.53
+      }
+    ],
+    "I10": [
+      {
+        "target": "B1",
+        "distance_km": 6.85
+      },
+      {
+        "target": "I4",
+        "distance_km": 6.18
+      }
+    ],
+    "I11": [
+      {
+        "target": "B10",
+        "distance_km": 3.79
+      },
+      {
+        "target": "I16",
+        "distance_km": 1.71
+      },
+      {
+        "target": "I19",
+        "distance_km": 4.47
+      },
+      {
+        "target": "I3",
+        "distance_km": 3.87
+      }
+    ],
+    "I12": [
+      {
+        "target": "B12",
+        "distance_km": 4.83
+      },
+      {
+        "target": "B15",
+        "distance_km": 9.06
+      },
+      {
+        "target": "I5",
+        "distance_km": 8.07
+      }
+    ],
+    "I13": [
+      {
+        "target": "B13",
+        "distance_km": 5.39
+      }
+    ],
+    "I14": [
+      {
+        "target": "D0",
+        "distance_km": 4.13
+      },
+      {
+        "target": "I7",
+        "distance_km": 6.56
+      }
+    ],
+    "I15": [
+      {
+        "target": "B6",
+        "distance_km": 4.15
+      },
+      {
+        "target": "I19",
+        "distance_km": 1.25
+      },
+      {
+        "target": "I20",
+        "distance_km": 1.61
+      }
+    ],
+    "I16": [
+      {
+        "target": "B10",
+        "distance_km": 2.17
+      },
+      {
+        "target": "B11",
+        "distance_km": 3.44
+      },
+      {
+        "target": "I11",
+        "distance_km": 1.71
+      },
+      {
+        "target": "I3",
+        "distance_km": 4.74
+      }
+    ],
+    "I17": [
+      {
+        "target": "B14",
+        "distance_km": 5.88
+      },
+      {
+        "target": "B2",
+        "distance_km": 11.92
+      }
+    ],
+    "I18": [
+      {
+        "target": "B5",
+        "distance_km": 6.09
+      }
+    ],
+    "I19": [
+      {
+        "target": "B6",
+        "distance_km": 4.73
+      },
+      {
+        "target": "I11",
+        "distance_km": 4.47
+      },
+      {
+        "target": "I15",
+        "distance_km": 1.25
+      },
+      {
+        "target": "I20",
+        "distance_km": 2.8
+      }
+    ],
+    "I20": [
+      {
+        "target": "B3",
+        "distance_km": 10.39
+      },
+      {
+        "target": "B6",
+        "distance_km": 4.5
+      },
+      {
+        "target": "I15",
+        "distance_km": 1.61
+      },
+      {
+        "target": "I19",
+        "distance_km": 2.8
+      }
+    ],
+    "B1": [
+      {
+        "target": "B9",
+        "distance_km": 9.05
+      },
+      {
+        "target": "I1",
+        "distance_km": 3.55
+      },
+      {
+        "target": "I10",
+        "distance_km": 6.85
+      }
+    ],
+    "B2": [
+      {
+        "target": "B11",
+        "distance_km": 9.66
+      },
+      {
+        "target": "I17",
+        "distance_km": 11.92
+      }
+    ],
+    "B3": [
+      {
+        "target": "B13",
+        "distance_km": 3.43
+      },
+      {
+        "target": "I20",
+        "distance_km": 10.39
+      }
+    ],
+    "B4": [
+      {
+        "target": "B15",
+        "distance_km": 10.36
+      },
+      {
+        "target": "B7",
+        "distance_km": 8.79
+      },
+      {
+        "target": "B9",
+        "distance_km": 7.98
+      }
+    ],
+    "B5": [
+      {
+        "target": "I18",
+        "distance_km": 6.09
+      },
+      {
+        "target": "I9",
+        "distance_km": 8.58
+      }
+    ],
+    "B6": [
+      {
+        "target": "I15",
+        "distance_km": 4.15
+      },
+      {
+        "target": "I19",
+        "distance_km": 4.73
+      },
+      {
+        "target": "I20",
+        "distance_km": 4.5
+      }
+    ],
+    "B7": [
+      {
+        "target": "B4",
+        "distance_km": 8.79
+      },
+      {
+        "target": "I8",
+        "distance_km": 1.33
+      }
+    ],
+    "B8": [
+      {
+        "target": "I2",
+        "distance_km": 10.05
+      },
+      {
+        "target": "I6",
+        "distance_km": 6.88
+      }
+    ],
+    "B9": [
+      {
+        "target": "B1",
+        "distance_km": 9.05
+      },
+      {
+        "target": "B4",
+        "distance_km": 7.98
+      }
+    ],
+    "B10": [
+      {
+        "target": "B11",
+        "distance_km": 1.84
+      },
+      {
+        "target": "I11",
+        "distance_km": 3.79
+      },
+      {
+        "target": "I16",
+        "distance_km": 2.17
+      }
+    ],
+    "B11": [
+      {
+        "target": "B10",
+        "distance_km": 1.84
+      },
+      {
+        "target": "B2",
+        "distance_km": 9.66
+      },
+      {
+        "target": "I16",
+        "distance_km": 3.44
+      },
+      {
+        "target": "T1",
+        "distance_km": 5.92
+      }
+    ],
+    "B12": [
+      {
+        "target": "I12",
+        "distance_km": 4.83
+      },
+      {
+        "target": "I2",
+        "distance_km": 0.24
+      }
+    ],
+    "B13": [
+      {
+        "target": "B3",
+        "distance_km": 3.43
+      },
+      {
+        "target": "I13",
+        "distance_km": 5.39
+      }
+    ],
+    "B14": [
+      {
+        "target": "I17",
+        "distance_km": 5.88
+      }
+    ],
+    "B15": [
+      {
+        "target": "B4",
+        "distance_km": 10.36
+      },
+      {
+        "target": "I12",
+        "distance_km": 9.06
+      }
+    ]
+  }
+}

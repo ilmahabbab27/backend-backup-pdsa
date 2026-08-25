@@ -1,0 +1,2004 @@
+{
+  "nodes": [
+    {
+      "id": "D0",
+      "type": "start",
+      "name": "District Municipal Fleet Station",
+      "lat": 40.69,
+      "lon": -73.94,
+      "weight_kg": 0
+    },
+    {
+      "id": "T1",
+      "type": "destination",
+      "name": "Metro Materials Recovery & Incineration Facility",
+      "lat": 40.81,
+      "lon": -73.78,
+      "weight_kg": 0
+    },
+    {
+      "id": "I1",
+      "type": "intersection",
+      "name": "Intersection 1 - Avenue A & 10th Street",
+      "lat": 40.6724,
+      "lon": -73.9696,
+      "weight_kg": 0
+    },
+    {
+      "id": "I2",
+      "type": "intersection",
+      "name": "Intersection 2 - Avenue A & 20th Street",
+      "lat": 40.6725,
+      "lon": -73.9167,
+      "weight_kg": 0
+    },
+    {
+      "id": "I3",
+      "type": "intersection",
+      "name": "Intersection 3 - Avenue A & 30th Street",
+      "lat": 40.6708,
+      "lon": -73.8634,
+      "weight_kg": 0
+    },
+    {
+      "id": "I4",
+      "type": "intersection",
+      "name": "Intersection 4 - Avenue A & 40th Street",
+      "lat": 40.675,
+      "lon": -73.8116,
+      "weight_kg": 0
+    },
+    {
+      "id": "I5",
+      "type": "intersection",
+      "name": "Intersection 5 - Avenue A & 50th Street",
+      "lat": 40.6699,
+      "lon": -73.7514,
+      "weight_kg": 0
+    },
+    {
+      "id": "I6",
+      "type": "intersection",
+      "name": "Intersection 6 - Avenue B & 10th Street",
+      "lat": 40.6968,
+      "lon": -73.9735,
+      "weight_kg": 0
+    },
+    {
+      "id": "I7",
+      "type": "intersection",
+      "name": "Intersection 7 - Avenue B & 20th Street",
+      "lat": 40.6897,
+      "lon": -73.9142,
+      "weight_kg": 0
+    },
+    {
+      "id": "I8",
+      "type": "intersection",
+      "name": "Intersection 8 - Avenue B & 30th Street",
+      "lat": 40.6941,
+      "lon": -73.8632,
+      "weight_kg": 0
+    },
+    {
+      "id": "I9",
+      "type": "intersection",
+      "name": "Intersection 9 - Avenue B & 40th Street",
+      "lat": 40.6941,
+      "lon": -73.8083,
+      "weight_kg": 0
+    },
+    {
+      "id": "I10",
+      "type": "intersection",
+      "name": "Intersection 10 - Avenue B & 50th Street",
+      "lat": 40.6907,
+      "lon": -73.7535,
+      "weight_kg": 0
+    },
+    {
+      "id": "I11",
+      "type": "intersection",
+      "name": "Intersection 11 - Avenue C & 10th Street",
+      "lat": 40.7207,
+      "lon": -73.9682,
+      "weight_kg": 0
+    },
+    {
+      "id": "I12",
+      "type": "intersection",
+      "name": "Intersection 12 - Avenue C & 20th Street",
+      "lat": 40.7124,
+      "lon": -73.9122,
+      "weight_kg": 0
+    },
+    {
+      "id": "I13",
+      "type": "intersection",
+      "name": "Intersection 13 - Avenue C & 30th Street",
+      "lat": 40.7188,
+      "lon": -73.8593,
+      "weight_kg": 0
+    },
+    {
+      "id": "I14",
+      "type": "intersection",
+      "name": "Intersection 14 - Avenue C & 40th Street",
+      "lat": 40.7147,
+      "lon": -73.8101,
+      "weight_kg": 0
+    },
+    {
+      "id": "I15",
+      "type": "intersection",
+      "name": "Intersection 15 - Avenue C & 50th Street",
+      "lat": 40.7129,
+      "lon": -73.759,
+      "weight_kg": 0
+    },
+    {
+      "id": "I16",
+      "type": "intersection",
+      "name": "Intersection 16 - Avenue D & 10th Street",
+      "lat": 40.7416,
+      "lon": -73.9678,
+      "weight_kg": 0
+    },
+    {
+      "id": "I17",
+      "type": "intersection",
+      "name": "Intersection 17 - Avenue D & 20th Street",
+      "lat": 40.7441,
+      "lon": -73.9134,
+      "weight_kg": 0
+    },
+    {
+      "id": "I18",
+      "type": "intersection",
+      "name": "Intersection 18 - Avenue D & 30th Street",
+      "lat": 40.7395,
+      "lon": -73.8659,
+      "weight_kg": 0
+    },
+    {
+      "id": "I19",
+      "type": "intersection",
+      "name": "Intersection 19 - Avenue D & 40th Street",
+      "lat": 40.7407,
+      "lon": -73.8046,
+      "weight_kg": 0
+    },
+    {
+      "id": "I20",
+      "type": "intersection",
+      "name": "Intersection 20 - Avenue D & 50th Street",
+      "lat": 40.7395,
+      "lon": -73.757,
+      "weight_kg": 0
+    },
+    {
+      "id": "I21",
+      "type": "intersection",
+      "name": "Intersection 21 - Avenue E & 10th Street",
+      "lat": 40.7613,
+      "lon": -73.9734,
+      "weight_kg": 0
+    },
+    {
+      "id": "I22",
+      "type": "intersection",
+      "name": "Intersection 22 - Avenue E & 20th Street",
+      "lat": 40.7671,
+      "lon": -73.9118,
+      "weight_kg": 0
+    },
+    {
+      "id": "I23",
+      "type": "intersection",
+      "name": "Intersection 23 - Avenue E & 30th Street",
+      "lat": 40.7668,
+      "lon": -73.861,
+      "weight_kg": 0
+    },
+    {
+      "id": "I24",
+      "type": "intersection",
+      "name": "Intersection 24 - Avenue E & 40th Street",
+      "lat": 40.7625,
+      "lon": -73.8119,
+      "weight_kg": 0
+    },
+    {
+      "id": "I25",
+      "type": "intersection",
+      "name": "Intersection 25 - Avenue E & 50th Street",
+      "lat": 40.7612,
+      "lon": -73.7491,
+      "weight_kg": 0
+    },
+    {
+      "id": "I26",
+      "type": "intersection",
+      "name": "Intersection 26 - Avenue F & 10th Street",
+      "lat": 40.7888,
+      "lon": -73.9726,
+      "weight_kg": 0
+    },
+    {
+      "id": "I27",
+      "type": "intersection",
+      "name": "Intersection 27 - Avenue F & 20th Street",
+      "lat": 40.7831,
+      "lon": -73.9153,
+      "weight_kg": 0
+    },
+    {
+      "id": "I28",
+      "type": "intersection",
+      "name": "Intersection 28 - Avenue F & 30th Street",
+      "lat": 40.7815,
+      "lon": -73.8597,
+      "weight_kg": 0
+    },
+    {
+      "id": "I29",
+      "type": "intersection",
+      "name": "Intersection 29 - Avenue F & 40th Street",
+      "lat": 40.7889,
+      "lon": -73.8032,
+      "weight_kg": 0
+    },
+    {
+      "id": "I30",
+      "type": "intersection",
+      "name": "Intersection 30 - Avenue F & 50th Street",
+      "lat": 40.786,
+      "lon": -73.7577,
+      "weight_kg": 0
+    },
+    {
+      "id": "I31",
+      "type": "intersection",
+      "name": "Intersection 31 - Avenue G & 10th Street",
+      "lat": 40.8105,
+      "lon": -73.9655,
+      "weight_kg": 0
+    },
+    {
+      "id": "I32",
+      "type": "intersection",
+      "name": "Intersection 32 - Avenue G & 20th Street",
+      "lat": 40.8055,
+      "lon": -73.9157,
+      "weight_kg": 0
+    },
+    {
+      "id": "I33",
+      "type": "intersection",
+      "name": "Intersection 33 - Avenue G & 30th Street",
+      "lat": 40.8099,
+      "lon": -73.8574,
+      "weight_kg": 0
+    },
+    {
+      "id": "I34",
+      "type": "intersection",
+      "name": "Intersection 34 - Avenue G & 40th Street",
+      "lat": 40.8131,
+      "lon": -73.8054,
+      "weight_kg": 0
+    },
+    {
+      "id": "I35",
+      "type": "intersection",
+      "name": "Intersection 35 - Avenue G & 50th Street",
+      "lat": 40.8108,
+      "lon": -73.7519,
+      "weight_kg": 0
+    },
+    {
+      "id": "I36",
+      "type": "intersection",
+      "name": "Intersection 36 - Avenue H & 10th Street",
+      "lat": 40.831,
+      "lon": -73.9683,
+      "weight_kg": 0
+    },
+    {
+      "id": "I37",
+      "type": "intersection",
+      "name": "Intersection 37 - Avenue H & 20th Street",
+      "lat": 40.8307,
+      "lon": -73.912,
+      "weight_kg": 0
+    },
+    {
+      "id": "I38",
+      "type": "intersection",
+      "name": "Intersection 38 - Avenue H & 30th Street",
+      "lat": 40.8315,
+      "lon": -73.8645,
+      "weight_kg": 0
+    },
+    {
+      "id": "I39",
+      "type": "intersection",
+      "name": "Intersection 39 - Avenue H & 40th Street",
+      "lat": 40.8276,
+      "lon": -73.8128,
+      "weight_kg": 0
+    },
+    {
+      "id": "I40",
+      "type": "intersection",
+      "name": "Intersection 40 - Avenue H & 50th Street",
+      "lat": 40.8325,
+      "lon": -73.7531,
+      "weight_kg": 0
+    },
+    {
+      "id": "B1",
+      "type": "bin",
+      "name": "Smart Bin 1 - Residential Block 1 Concourse",
+      "lat": 40.7138,
+      "lon": -73.9653,
+      "weight_kg": 210
+    },
+    {
+      "id": "B2",
+      "type": "bin",
+      "name": "Smart Bin 2 - Residential Block 2 Concourse",
+      "lat": 40.7109,
+      "lon": -73.8044,
+      "weight_kg": 470
+    },
+    {
+      "id": "B3",
+      "type": "bin",
+      "name": "Smart Bin 3 - Residential Block 3 Concourse",
+      "lat": 40.7417,
+      "lon": -73.9132,
+      "weight_kg": 280
+    },
+    {
+      "id": "B4",
+      "type": "bin",
+      "name": "Smart Bin 4 - Residential Block 4 Concourse",
+      "lat": 40.7419,
+      "lon": -73.761,
+      "weight_kg": 240
+    },
+    {
+      "id": "B5",
+      "type": "bin",
+      "name": "Smart Bin 5 - Residential Block 5 Concourse",
+      "lat": 40.7699,
+      "lon": -73.8556,
+      "weight_kg": 380
+    },
+    {
+      "id": "B6",
+      "type": "bin",
+      "name": "Smart Bin 6 - Residential Block 6 Concourse",
+      "lat": 40.7884,
+      "lon": -73.9686,
+      "weight_kg": 450
+    },
+    {
+      "id": "B7",
+      "type": "bin",
+      "name": "Smart Bin 7 - Residential Block 7 Concourse",
+      "lat": 40.7876,
+      "lon": -73.8089,
+      "weight_kg": 410
+    },
+    {
+      "id": "B8",
+      "type": "bin",
+      "name": "Smart Bin 8 - Residential Block 8 Concourse",
+      "lat": 40.8045,
+      "lon": -73.9168,
+      "weight_kg": 340
+    },
+    {
+      "id": "B9",
+      "type": "bin",
+      "name": "Smart Bin 9 - Residential Block 9 Concourse",
+      "lat": 40.8159,
+      "lon": -73.7581,
+      "weight_kg": 400
+    },
+    {
+      "id": "B10",
+      "type": "bin",
+      "name": "Smart Bin 10 - Residential Block 10 Concourse",
+      "lat": 40.8383,
+      "lon": -73.8701,
+      "weight_kg": 320
+    },
+    {
+      "id": "B11",
+      "type": "bin",
+      "name": "Smart Bin 11 - Residential Block 11 Concourse",
+      "lat": 40.6756,
+      "lon": -73.9654,
+      "weight_kg": 230
+    },
+    {
+      "id": "B12",
+      "type": "bin",
+      "name": "Smart Bin 12 - Residential Block 12 Concourse",
+      "lat": 40.6715,
+      "lon": -73.8159,
+      "weight_kg": 340
+    },
+    {
+      "id": "B13",
+      "type": "bin",
+      "name": "Smart Bin 13 - Residential Block 13 Concourse",
+      "lat": 40.6847,
+      "lon": -73.9186,
+      "weight_kg": 340
+    },
+    {
+      "id": "B14",
+      "type": "bin",
+      "name": "Smart Bin 14 - Residential Block 14 Concourse",
+      "lat": 40.6872,
+      "lon": -73.7476,
+      "weight_kg": 340
+    },
+    {
+      "id": "B15",
+      "type": "bin",
+      "name": "Smart Bin 15 - Residential Block 15 Concourse",
+      "lat": 40.7231,
+      "lon": -73.8543,
+      "weight_kg": 230
+    },
+    {
+      "id": "B16",
+      "type": "bin",
+      "name": "Smart Bin 16 - Residential Block 16 Concourse",
+      "lat": 40.7353,
+      "lon": -73.9608,
+      "weight_kg": 460
+    },
+    {
+      "id": "B17",
+      "type": "bin",
+      "name": "Smart Bin 17 - Residential Block 17 Concourse",
+      "lat": 40.7339,
+      "lon": -73.8103,
+      "weight_kg": 440
+    },
+    {
+      "id": "B18",
+      "type": "bin",
+      "name": "Smart Bin 18 - Residential Block 18 Concourse",
+      "lat": 40.772,
+      "lon": -73.9165,
+      "weight_kg": 350
+    },
+    {
+      "id": "B19",
+      "type": "bin",
+      "name": "Smart Bin 19 - Residential Block 19 Concourse",
+      "lat": 40.7609,
+      "lon": -73.744,
+      "weight_kg": 480
+    },
+    {
+      "id": "B20",
+      "type": "bin",
+      "name": "Smart Bin 20 - Residential Block 20 Concourse",
+      "lat": 40.7753,
+      "lon": -73.8614,
+      "weight_kg": 320
+    },
+    {
+      "id": "B21",
+      "type": "bin",
+      "name": "Smart Bin 21 - Residential Block 21 Concourse",
+      "lat": 40.8072,
+      "lon": -73.9615,
+      "weight_kg": 340
+    },
+    {
+      "id": "B22",
+      "type": "bin",
+      "name": "Smart Bin 22 - Residential Block 22 Concourse",
+      "lat": 40.8101,
+      "lon": -73.8026,
+      "weight_kg": 430
+    },
+    {
+      "id": "B23",
+      "type": "bin",
+      "name": "Smart Bin 23 - Residential Block 23 Concourse",
+      "lat": 40.8376,
+      "lon": -73.9112,
+      "weight_kg": 420
+    },
+    {
+      "id": "B24",
+      "type": "bin",
+      "name": "Smart Bin 24 - Residential Block 24 Concourse",
+      "lat": 40.8323,
+      "lon": -73.7574,
+      "weight_kg": 260
+    },
+    {
+      "id": "B25",
+      "type": "bin",
+      "name": "Smart Bin 25 - Residential Block 25 Concourse",
+      "lat": 40.6774,
+      "lon": -73.8623,
+      "weight_kg": 370
+    },
+    {
+      "id": "B26",
+      "type": "bin",
+      "name": "Smart Bin 26 - Residential Block 26 Concourse",
+      "lat": 40.6907,
+      "lon": -73.9761,
+      "weight_kg": 210
+    },
+    {
+      "id": "B27",
+      "type": "bin",
+      "name": "Smart Bin 27 - Residential Block 27 Concourse",
+      "lat": 40.6953,
+      "lon": -73.8083,
+      "weight_kg": 470
+    },
+    {
+      "id": "B28",
+      "type": "bin",
+      "name": "Smart Bin 28 - Residential Block 28 Concourse",
+      "lat": 40.7128,
+      "lon": -73.9184,
+      "weight_kg": 360
+    },
+    {
+      "id": "B29",
+      "type": "bin",
+      "name": "Smart Bin 29 - Residential Block 29 Concourse",
+      "lat": 40.707,
+      "lon": -73.7634,
+      "weight_kg": 390
+    },
+    {
+      "id": "B30",
+      "type": "bin",
+      "name": "Smart Bin 30 - Residential Block 30 Concourse",
+      "lat": 40.7335,
+      "lon": -73.8608,
+      "weight_kg": 320
+    },
+    {
+      "id": "B31",
+      "type": "bin",
+      "name": "Smart Bin 31 - Residential Block 31 Concourse",
+      "lat": 40.756,
+      "lon": -73.9679,
+      "weight_kg": 270
+    },
+    {
+      "id": "B32",
+      "type": "bin",
+      "name": "Smart Bin 32 - Residential Block 32 Concourse",
+      "lat": 40.7636,
+      "lon": -73.8183,
+      "weight_kg": 220
+    },
+    {
+      "id": "B33",
+      "type": "bin",
+      "name": "Smart Bin 33 - Residential Block 33 Concourse",
+      "lat": 40.782,
+      "lon": -73.9141,
+      "weight_kg": 360
+    },
+    {
+      "id": "B34",
+      "type": "bin",
+      "name": "Smart Bin 34 - Residential Block 34 Concourse",
+      "lat": 40.7834,
+      "lon": -73.761,
+      "weight_kg": 410
+    },
+    {
+      "id": "B35",
+      "type": "bin",
+      "name": "Smart Bin 35 - Residential Block 35 Concourse",
+      "lat": 40.8129,
+      "lon": -73.8611,
+      "weight_kg": 320
+    },
+    {
+      "id": "B36",
+      "type": "bin",
+      "name": "Smart Bin 36 - Residential Block 36 Concourse",
+      "lat": 40.8258,
+      "lon": -73.9663,
+      "weight_kg": 340
+    },
+    {
+      "id": "B37",
+      "type": "bin",
+      "name": "Smart Bin 37 - Residential Block 37 Concourse",
+      "lat": 40.825,
+      "lon": -73.8093,
+      "weight_kg": 220
+    },
+    {
+      "id": "B38",
+      "type": "bin",
+      "name": "Smart Bin 38 - Residential Block 38 Concourse",
+      "lat": 40.6656,
+      "lon": -73.915,
+      "weight_kg": 380
+    },
+    {
+      "id": "B39",
+      "type": "bin",
+      "name": "Smart Bin 39 - Residential Block 39 Concourse",
+      "lat": 40.6768,
+      "lon": -73.7574,
+      "weight_kg": 260
+    },
+    {
+      "id": "B40",
+      "type": "bin",
+      "name": "Smart Bin 40 - Residential Block 40 Concourse",
+      "lat": 40.6942,
+      "lon": -73.8683,
+      "weight_kg": 310
+    },
+    {
+      "id": "B41",
+      "type": "bin",
+      "name": "Smart Bin 41 - Residential Block 41 Concourse",
+      "lat": 40.726,
+      "lon": -73.9629,
+      "weight_kg": 310
+    },
+    {
+      "id": "B42",
+      "type": "bin",
+      "name": "Smart Bin 42 - Residential Block 42 Concourse",
+      "lat": 40.7117,
+      "lon": -73.811,
+      "weight_kg": 370
+    },
+    {
+      "id": "B43",
+      "type": "bin",
+      "name": "Smart Bin 43 - Residential Block 43 Concourse",
+      "lat": 40.7469,
+      "lon": -73.9118,
+      "weight_kg": 450
+    },
+    {
+      "id": "B44",
+      "type": "bin",
+      "name": "Smart Bin 44 - Residential Block 44 Concourse",
+      "lat": 40.7417,
+      "lon": -73.7639,
+      "weight_kg": 460
+    },
+    {
+      "id": "B45",
+      "type": "bin",
+      "name": "Smart Bin 45 - Residential Block 45 Concourse",
+      "lat": 40.7676,
+      "lon": -73.855,
+      "weight_kg": 230
+    }
+  ],
+  "adjacency_list": {
+    "D0": [
+      {
+        "target": "B11",
+        "distance_km": 3.1
+      },
+      {
+        "target": "B13",
+        "distance_km": 2.2
+      },
+      {
+        "target": "I7",
+        "distance_km": 2.52
+      }
+    ],
+    "T1": [
+      {
+        "target": "B22",
+        "distance_km": 2.21
+      },
+      {
+        "target": "B9",
+        "distance_km": 2.27
+      },
+      {
+        "target": "I34",
+        "distance_km": 2.51
+      },
+      {
+        "target": "I35",
+        "distance_km": 2.75
+      }
+    ],
+    "I1": [
+      {
+        "target": "B11",
+        "distance_km": 0.58
+      },
+      {
+        "target": "B26",
+        "distance_km": 2.44
+      }
+    ],
+    "I2": [
+      {
+        "target": "B13",
+        "distance_km": 1.58
+      },
+      {
+        "target": "B38",
+        "distance_km": 0.91
+      },
+      {
+        "target": "I7",
+        "distance_km": 2.23
+      }
+    ],
+    "I3": [
+      {
+        "target": "B25",
+        "distance_km": 0.86
+      }
+    ],
+    "I4": [
+      {
+        "target": "B12",
+        "distance_km": 0.62
+      },
+      {
+        "target": "B27",
+        "distance_km": 2.64
+      },
+      {
+        "target": "I9",
+        "distance_km": 2.48
+      }
+    ],
+    "I5": [
+      {
+        "target": "B14",
+        "distance_km": 2.26
+      },
+      {
+        "target": "B39",
+        "distance_km": 1.07
+      },
+      {
+        "target": "I10",
+        "distance_km": 2.69
+      }
+    ],
+    "I6": [
+      {
+        "target": "B1",
+        "distance_km": 2.33
+      },
+      {
+        "target": "B11",
+        "distance_km": 2.85
+      },
+      {
+        "target": "B26",
+        "distance_km": 0.83
+      }
+    ],
+    "I7": [
+      {
+        "target": "B13",
+        "distance_km": 0.78
+      },
+      {
+        "target": "D0",
+        "distance_km": 2.52
+      },
+      {
+        "target": "I12",
+        "distance_km": 2.93
+      },
+      {
+        "target": "I2",
+        "distance_km": 2.23
+      }
+    ],
+    "I8": [
+      {
+        "target": "B25",
+        "distance_km": 2.16
+      },
+      {
+        "target": "B40",
+        "distance_km": 0.5
+      },
+      {
+        "target": "I13",
+        "distance_km": 3.21
+      }
+    ],
+    "I9": [
+      {
+        "target": "B2",
+        "distance_km": 2.2
+      },
+      {
+        "target": "B27",
+        "distance_km": 0.15
+      },
+      {
+        "target": "B42",
+        "distance_km": 2.29
+      },
+      {
+        "target": "I14",
+        "distance_km": 2.66
+      },
+      {
+        "target": "I4",
+        "distance_km": 2.48
+      }
+    ],
+    "I10": [
+      {
+        "target": "B14",
+        "distance_km": 0.73
+      },
+      {
+        "target": "B29",
+        "distance_km": 2.31
+      },
+      {
+        "target": "B39",
+        "distance_km": 1.83
+      },
+      {
+        "target": "I5",
+        "distance_km": 2.69
+      }
+    ],
+    "I11": [
+      {
+        "target": "B1",
+        "distance_km": 0.93
+      },
+      {
+        "target": "B16",
+        "distance_km": 2.02
+      },
+      {
+        "target": "B41",
+        "distance_km": 0.86
+      },
+      {
+        "target": "I16",
+        "distance_km": 2.7
+      }
+    ],
+    "I12": [
+      {
+        "target": "B28",
+        "distance_km": 0.61
+      },
+      {
+        "target": "I7",
+        "distance_km": 2.93
+      }
+    ],
+    "I13": [
+      {
+        "target": "B15",
+        "distance_km": 0.74
+      },
+      {
+        "target": "B30",
+        "distance_km": 1.9
+      },
+      {
+        "target": "I18",
+        "distance_km": 2.75
+      },
+      {
+        "target": "I8",
+        "distance_km": 3.21
+      }
+    ],
+    "I14": [
+      {
+        "target": "B17",
+        "distance_km": 2.48
+      },
+      {
+        "target": "B2",
+        "distance_km": 0.74
+      },
+      {
+        "target": "B27",
+        "distance_km": 2.51
+      },
+      {
+        "target": "B42",
+        "distance_km": 0.4
+      },
+      {
+        "target": "I9",
+        "distance_km": 2.66
+      }
+    ],
+    "I15": [
+      {
+        "target": "B29",
+        "distance_km": 0.87
+      },
+      {
+        "target": "I20",
+        "distance_km": 3.44
+      }
+    ],
+    "I16": [
+      {
+        "target": "B16",
+        "distance_km": 1.06
+      },
+      {
+        "target": "B31",
+        "distance_km": 1.86
+      },
+      {
+        "target": "B41",
+        "distance_km": 2.07
+      },
+      {
+        "target": "I11",
+        "distance_km": 2.7
+      },
+      {
+        "target": "I21",
+        "distance_km": 2.6
+      }
+    ],
+    "I17": [
+      {
+        "target": "B3",
+        "distance_km": 0.31
+      },
+      {
+        "target": "B43",
+        "distance_km": 0.39
+      }
+    ],
+    "I18": [
+      {
+        "target": "B15",
+        "distance_km": 2.4
+      },
+      {
+        "target": "B30",
+        "distance_km": 0.92
+      },
+      {
+        "target": "I13",
+        "distance_km": 2.75
+      },
+      {
+        "target": "I23",
+        "distance_km": 3.55
+      }
+    ],
+    "I19": [
+      {
+        "target": "B17",
+        "distance_km": 1.04
+      },
+      {
+        "target": "I24",
+        "distance_km": 2.9
+      }
+    ],
+    "I20": [
+      {
+        "target": "B4",
+        "distance_km": 0.5
+      },
+      {
+        "target": "B44",
+        "distance_km": 0.73
+      },
+      {
+        "target": "I15",
+        "distance_km": 3.44
+      },
+      {
+        "target": "I25",
+        "distance_km": 2.9
+      }
+    ],
+    "I21": [
+      {
+        "target": "B31",
+        "distance_km": 0.87
+      },
+      {
+        "target": "B6",
+        "distance_km": 3.53
+      },
+      {
+        "target": "I16",
+        "distance_km": 2.6
+      }
+    ],
+    "I22": [
+      {
+        "target": "B18",
+        "distance_km": 0.78
+      },
+      {
+        "target": "B33",
+        "distance_km": 1.93
+      },
+      {
+        "target": "B43",
+        "distance_km": 2.61
+      },
+      {
+        "target": "I27",
+        "distance_km": 2.09
+      }
+    ],
+    "I23": [
+      {
+        "target": "B20",
+        "distance_km": 1.1
+      },
+      {
+        "target": "B45",
+        "distance_km": 0.6
+      },
+      {
+        "target": "B5",
+        "distance_km": 0.66
+      },
+      {
+        "target": "I18",
+        "distance_km": 3.55
+      },
+      {
+        "target": "I28",
+        "distance_km": 1.9
+      }
+    ],
+    "I24": [
+      {
+        "target": "B32",
+        "distance_km": 0.64
+      },
+      {
+        "target": "I19",
+        "distance_km": 2.9
+      }
+    ],
+    "I25": [
+      {
+        "target": "B19",
+        "distance_km": 0.5
+      },
+      {
+        "target": "B34",
+        "distance_km": 3.09
+      },
+      {
+        "target": "B4",
+        "distance_km": 2.75
+      },
+      {
+        "target": "B44",
+        "distance_km": 2.9
+      },
+      {
+        "target": "I20",
+        "distance_km": 2.9
+      }
+    ],
+    "I26": [
+      {
+        "target": "B21",
+        "distance_km": 2.61
+      },
+      {
+        "target": "B6",
+        "distance_km": 0.39
+      },
+      {
+        "target": "I31",
+        "distance_km": 2.88
+      }
+    ],
+    "I27": [
+      {
+        "target": "B18",
+        "distance_km": 1.44
+      },
+      {
+        "target": "B33",
+        "distance_km": 0.18
+      },
+      {
+        "target": "B8",
+        "distance_km": 2.76
+      },
+      {
+        "target": "I22",
+        "distance_km": 2.09
+      },
+      {
+        "target": "I32",
+        "distance_km": 2.89
+      }
+    ],
+    "I28": [
+      {
+        "target": "B20",
+        "distance_km": 0.82
+      },
+      {
+        "target": "B45",
+        "distance_km": 1.85
+      },
+      {
+        "target": "B5",
+        "distance_km": 1.55
+      },
+      {
+        "target": "I23",
+        "distance_km": 1.9
+      },
+      {
+        "target": "I33",
+        "distance_km": 3.67
+      }
+    ],
+    "I29": [
+      {
+        "target": "B22",
+        "distance_km": 2.74
+      },
+      {
+        "target": "B7",
+        "distance_km": 0.58
+      }
+    ],
+    "I30": [
+      {
+        "target": "B34",
+        "distance_km": 0.47
+      },
+      {
+        "target": "I35",
+        "distance_km": 3.25
+      }
+    ],
+    "I31": [
+      {
+        "target": "B21",
+        "distance_km": 0.58
+      },
+      {
+        "target": "B36",
+        "distance_km": 1.98
+      },
+      {
+        "target": "B6",
+        "distance_km": 2.87
+      },
+      {
+        "target": "I26",
+        "distance_km": 2.88
+      },
+      {
+        "target": "I36",
+        "distance_km": 2.66
+      }
+    ],
+    "I32": [
+      {
+        "target": "B8",
+        "distance_km": 0.17
+      },
+      {
+        "target": "I27",
+        "distance_km": 2.89
+      },
+      {
+        "target": "I37",
+        "distance_km": 3.27
+      }
+    ],
+    "I33": [
+      {
+        "target": "B35",
+        "distance_km": 0.53
+      },
+      {
+        "target": "I28",
+        "distance_km": 3.67
+      },
+      {
+        "target": "I38",
+        "distance_km": 2.87
+      }
+    ],
+    "I34": [
+      {
+        "target": "B22",
+        "distance_km": 0.47
+      },
+      {
+        "target": "B37",
+        "distance_km": 1.58
+      },
+      {
+        "target": "I39",
+        "distance_km": 2.0
+      },
+      {
+        "target": "T1",
+        "distance_km": 2.51
+      }
+    ],
+    "I35": [
+      {
+        "target": "B24",
+        "distance_km": 2.82
+      },
+      {
+        "target": "B9",
+        "distance_km": 0.89
+      },
+      {
+        "target": "I30",
+        "distance_km": 3.25
+      },
+      {
+        "target": "I40",
+        "distance_km": 2.8
+      },
+      {
+        "target": "T1",
+        "distance_km": 2.75
+      }
+    ],
+    "I36": [
+      {
+        "target": "B36",
+        "distance_km": 0.7
+      },
+      {
+        "target": "I31",
+        "distance_km": 2.66
+      }
+    ],
+    "I37": [
+      {
+        "target": "B23",
+        "distance_km": 0.89
+      },
+      {
+        "target": "I32",
+        "distance_km": 3.27
+      }
+    ],
+    "I38": [
+      {
+        "target": "B10",
+        "distance_km": 1.03
+      },
+      {
+        "target": "B35",
+        "distance_km": 2.42
+      },
+      {
+        "target": "I33",
+        "distance_km": 2.87
+      }
+    ],
+    "I39": [
+      {
+        "target": "B22",
+        "distance_km": 2.47
+      },
+      {
+        "target": "B37",
+        "distance_km": 0.48
+      },
+      {
+        "target": "I34",
+        "distance_km": 2.0
+      }
+    ],
+    "I40": [
+      {
+        "target": "B24",
+        "distance_km": 0.42
+      },
+      {
+        "target": "B9",
+        "distance_km": 2.2
+      },
+      {
+        "target": "I35",
+        "distance_km": 2.8
+      }
+    ],
+    "B1": [
+      {
+        "target": "B16",
+        "distance_km": 2.81
+      },
+      {
+        "target": "B41",
+        "distance_km": 1.59
+      },
+      {
+        "target": "I11",
+        "distance_km": 0.93
+      },
+      {
+        "target": "I6",
+        "distance_km": 2.33
+      }
+    ],
+    "B2": [
+      {
+        "target": "B27",
+        "distance_km": 2.05
+      },
+      {
+        "target": "B42",
+        "distance_km": 0.65
+      },
+      {
+        "target": "I14",
+        "distance_km": 0.74
+      },
+      {
+        "target": "I9",
+        "distance_km": 2.2
+      }
+    ],
+    "B3": [
+      {
+        "target": "B28",
+        "distance_km": 3.76
+      },
+      {
+        "target": "B43",
+        "distance_km": 0.68
+      },
+      {
+        "target": "I17",
+        "distance_km": 0.31
+      }
+    ],
+    "B4": [
+      {
+        "target": "B44",
+        "distance_km": 0.28
+      },
+      {
+        "target": "I20",
+        "distance_km": 0.5
+      },
+      {
+        "target": "I25",
+        "distance_km": 2.75
+      }
+    ],
+    "B5": [
+      {
+        "target": "B20",
+        "distance_km": 0.9
+      },
+      {
+        "target": "B45",
+        "distance_km": 0.3
+      },
+      {
+        "target": "I23",
+        "distance_km": 0.66
+      },
+      {
+        "target": "I28",
+        "distance_km": 1.55
+      }
+    ],
+    "B6": [
+      {
+        "target": "B21",
+        "distance_km": 2.52
+      },
+      {
+        "target": "I21",
+        "distance_km": 3.53
+      },
+      {
+        "target": "I26",
+        "distance_km": 0.39
+      },
+      {
+        "target": "I31",
+        "distance_km": 2.87
+      }
+    ],
+    "B7": [
+      {
+        "target": "B32",
+        "distance_km": 3.23
+      },
+      {
+        "target": "I29",
+        "distance_km": 0.58
+      }
+    ],
+    "B8": [
+      {
+        "target": "I27",
+        "distance_km": 2.76
+      },
+      {
+        "target": "I32",
+        "distance_km": 0.17
+      }
+    ],
+    "B9": [
+      {
+        "target": "B24",
+        "distance_km": 2.12
+      },
+      {
+        "target": "I35",
+        "distance_km": 0.89
+      },
+      {
+        "target": "I40",
+        "distance_km": 2.2
+      },
+      {
+        "target": "T1",
+        "distance_km": 2.27
+      }
+    ],
+    "B10": [
+      {
+        "target": "B23",
+        "distance_km": 4.01
+      },
+      {
+        "target": "I38",
+        "distance_km": 1.03
+      }
+    ],
+    "B11": [
+      {
+        "target": "B26",
+        "distance_km": 2.21
+      },
+      {
+        "target": "D0",
+        "distance_km": 3.1
+      },
+      {
+        "target": "I1",
+        "distance_km": 0.58
+      },
+      {
+        "target": "I6",
+        "distance_km": 2.85
+      }
+    ],
+    "B12": [
+      {
+        "target": "I4",
+        "distance_km": 0.62
+      }
+    ],
+    "B13": [
+      {
+        "target": "B38",
+        "distance_km": 2.49
+      },
+      {
+        "target": "D0",
+        "distance_km": 2.2
+      },
+      {
+        "target": "I2",
+        "distance_km": 1.58
+      },
+      {
+        "target": "I7",
+        "distance_km": 0.78
+      }
+    ],
+    "B14": [
+      {
+        "target": "B39",
+        "distance_km": 1.65
+      },
+      {
+        "target": "I10",
+        "distance_km": 0.73
+      },
+      {
+        "target": "I5",
+        "distance_km": 2.26
+      }
+    ],
+    "B15": [
+      {
+        "target": "B30",
+        "distance_km": 1.48
+      },
+      {
+        "target": "I13",
+        "distance_km": 0.74
+      },
+      {
+        "target": "I18",
+        "distance_km": 2.4
+      }
+    ],
+    "B16": [
+      {
+        "target": "B1",
+        "distance_km": 2.81
+      },
+      {
+        "target": "B31",
+        "distance_km": 2.76
+      },
+      {
+        "target": "B41",
+        "distance_km": 1.22
+      },
+      {
+        "target": "I11",
+        "distance_km": 2.02
+      },
+      {
+        "target": "I16",
+        "distance_km": 1.06
+      }
+    ],
+    "B17": [
+      {
+        "target": "B42",
+        "distance_km": 2.86
+      },
+      {
+        "target": "I14",
+        "distance_km": 2.48
+      },
+      {
+        "target": "I19",
+        "distance_km": 1.04
+      }
+    ],
+    "B18": [
+      {
+        "target": "B33",
+        "distance_km": 1.31
+      },
+      {
+        "target": "I22",
+        "distance_km": 0.78
+      },
+      {
+        "target": "I27",
+        "distance_km": 1.44
+      }
+    ],
+    "B19": [
+      {
+        "target": "I25",
+        "distance_km": 0.5
+      }
+    ],
+    "B20": [
+      {
+        "target": "B45",
+        "distance_km": 1.17
+      },
+      {
+        "target": "B5",
+        "distance_km": 0.9
+      },
+      {
+        "target": "I23",
+        "distance_km": 1.1
+      },
+      {
+        "target": "I28",
+        "distance_km": 0.82
+      }
+    ],
+    "B21": [
+      {
+        "target": "B36",
+        "distance_km": 2.44
+      },
+      {
+        "target": "B6",
+        "distance_km": 2.52
+      },
+      {
+        "target": "I26",
+        "distance_km": 2.61
+      },
+      {
+        "target": "I31",
+        "distance_km": 0.58
+      }
+    ],
+    "B22": [
+      {
+        "target": "B37",
+        "distance_km": 2.03
+      },
+      {
+        "target": "I29",
+        "distance_km": 2.74
+      },
+      {
+        "target": "I34",
+        "distance_km": 0.47
+      },
+      {
+        "target": "I39",
+        "distance_km": 2.47
+      },
+      {
+        "target": "T1",
+        "distance_km": 2.21
+      }
+    ],
+    "B23": [
+      {
+        "target": "B10",
+        "distance_km": 4.01
+      },
+      {
+        "target": "I37",
+        "distance_km": 0.89
+      }
+    ],
+    "B24": [
+      {
+        "target": "B9",
+        "distance_km": 2.12
+      },
+      {
+        "target": "I35",
+        "distance_km": 2.82
+      },
+      {
+        "target": "I40",
+        "distance_km": 0.42
+      }
+    ],
+    "B25": [
+      {
+        "target": "B40",
+        "distance_km": 2.25
+      },
+      {
+        "target": "I3",
+        "distance_km": 0.86
+      },
+      {
+        "target": "I8",
+        "distance_km": 2.16
+      }
+    ],
+    "B26": [
+      {
+        "target": "B11",
+        "distance_km": 2.21
+      },
+      {
+        "target": "I1",
+        "distance_km": 2.44
+      },
+      {
+        "target": "I6",
+        "distance_km": 0.83
+      }
+    ],
+    "B27": [
+      {
+        "target": "B2",
+        "distance_km": 2.05
+      },
+      {
+        "target": "B42",
+        "distance_km": 2.13
+      },
+      {
+        "target": "I14",
+        "distance_km": 2.51
+      },
+      {
+        "target": "I4",
+        "distance_km": 2.64
+      },
+      {
+        "target": "I9",
+        "distance_km": 0.15
+      }
+    ],
+    "B28": [
+      {
+        "target": "B3",
+        "distance_km": 3.76
+      },
+      {
+        "target": "I12",
+        "distance_km": 0.61
+      }
+    ],
+    "B29": [
+      {
+        "target": "I10",
+        "distance_km": 2.31
+      },
+      {
+        "target": "I15",
+        "distance_km": 0.87
+      }
+    ],
+    "B30": [
+      {
+        "target": "B15",
+        "distance_km": 1.48
+      },
+      {
+        "target": "I13",
+        "distance_km": 1.9
+      },
+      {
+        "target": "I18",
+        "distance_km": 0.92
+      }
+    ],
+    "B31": [
+      {
+        "target": "B16",
+        "distance_km": 2.76
+      },
+      {
+        "target": "I16",
+        "distance_km": 1.86
+      },
+      {
+        "target": "I21",
+        "distance_km": 0.87
+      }
+    ],
+    "B32": [
+      {
+        "target": "B45",
+        "distance_km": 3.62
+      },
+      {
+        "target": "B7",
+        "distance_km": 3.23
+      },
+      {
+        "target": "I24",
+        "distance_km": 0.64
+      }
+    ],
+    "B33": [
+      {
+        "target": "B18",
+        "distance_km": 1.31
+      },
+      {
+        "target": "I22",
+        "distance_km": 1.93
+      },
+      {
+        "target": "I27",
+        "distance_km": 0.18
+      }
+    ],
+    "B34": [
+      {
+        "target": "I25",
+        "distance_km": 3.09
+      },
+      {
+        "target": "I30",
+        "distance_km": 0.47
+      }
+    ],
+    "B35": [
+      {
+        "target": "I33",
+        "distance_km": 0.53
+      },
+      {
+        "target": "I38",
+        "distance_km": 2.42
+      }
+    ],
+    "B36": [
+      {
+        "target": "B21",
+        "distance_km": 2.44
+      },
+      {
+        "target": "I31",
+        "distance_km": 1.98
+      },
+      {
+        "target": "I36",
+        "distance_km": 0.7
+      }
+    ],
+    "B37": [
+      {
+        "target": "B22",
+        "distance_km": 2.03
+      },
+      {
+        "target": "I34",
+        "distance_km": 1.58
+      },
+      {
+        "target": "I39",
+        "distance_km": 0.48
+      }
+    ],
+    "B38": [
+      {
+        "target": "B13",
+        "distance_km": 2.49
+      },
+      {
+        "target": "I2",
+        "distance_km": 0.91
+      }
+    ],
+    "B39": [
+      {
+        "target": "B14",
+        "distance_km": 1.65
+      },
+      {
+        "target": "I10",
+        "distance_km": 1.83
+      },
+      {
+        "target": "I5",
+        "distance_km": 1.07
+      }
+    ],
+    "B40": [
+      {
+        "target": "B25",
+        "distance_km": 2.25
+      },
+      {
+        "target": "I8",
+        "distance_km": 0.5
+      }
+    ],
+    "B41": [
+      {
+        "target": "B1",
+        "distance_km": 1.59
+      },
+      {
+        "target": "B16",
+        "distance_km": 1.22
+      },
+      {
+        "target": "I11",
+        "distance_km": 0.86
+      },
+      {
+        "target": "I16",
+        "distance_km": 2.07
+      }
+    ],
+    "B42": [
+      {
+        "target": "B17",
+        "distance_km": 2.86
+      },
+      {
+        "target": "B2",
+        "distance_km": 0.65
+      },
+      {
+        "target": "B27",
+        "distance_km": 2.13
+      },
+      {
+        "target": "I14",
+        "distance_km": 0.4
+      },
+      {
+        "target": "I9",
+        "distance_km": 2.29
+      }
+    ],
+    "B43": [
+      {
+        "target": "B3",
+        "distance_km": 0.68
+      },
+      {
+        "target": "I17",
+        "distance_km": 0.39
+      },
+      {
+        "target": "I22",
+        "distance_km": 2.61
+      }
+    ],
+    "B44": [
+      {
+        "target": "B4",
+        "distance_km": 0.28
+      },
+      {
+        "target": "I20",
+        "distance_km": 0.73
+      },
+      {
+        "target": "I25",
+        "distance_km": 2.9
+      }
+    ],
+    "B45": [
+      {
+        "target": "B20",
+        "distance_km": 1.17
+      },
+      {
+        "target": "B32",
+        "distance_km": 3.62
+      },
+      {
+        "target": "B5",
+        "distance_km": 0.3
+      },
+      {
+        "target": "I23",
+        "distance_km": 0.6
+      },
+      {
+        "target": "I28",
+        "distance_km": 1.85
+      }
+    ]
+  }
+}
