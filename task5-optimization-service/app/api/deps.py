@@ -1,0 +1,23 @@
+"""FastAPI dependencies for dependency injection."""
+
+from functools import lru_cache
+from typing import Annotated
+from fastapi import Depends
+
+from app.config.settings import Settings, get_settings
+from app.repositories.map_repository import MapRepository
+from app.services.optimizer_service import OptimizerService
+
+
+@lru_cache()
+def get_map_repository() -> MapRepository:
+    """Return a singleton instance of MapRepository."""
+    settings = get_settings()
+    return MapRepository(settings=settings)
+
+
+def get_optimizer_service(
+    map_repo: Annotated[MapRepository, Depends(get_map_repository)],
+) -> OptimizerService:
+    """Dependency provider for OptimizerService."""
+    return OptimizerService(map_repo=map_repo)
