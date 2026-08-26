@@ -16,6 +16,7 @@ from app.algorithms.dijkstra import (
     reconstruct_full_path,
 )
 from app.main import app
+from app.api.deps import get_supabase_map_repository
 from app.models.schemas import OptimizationRequest
 from app.repositories.map_repository import MapRepository
 from app.services.optimizer_service import OptimizerService
@@ -304,14 +305,35 @@ def test_profiler_context_manager() -> None:
 # ---------------------------------------------------------
 
 def test_api_get_map() -> None:
-    """Test GET /api/v1/map endpoint."""
-    response = client.get("/api/v1/map")
+    """Test that GET /api/v1/map returns the Supabase payload unchanged."""
+    payload = {
+        "id": "map-id",
+        "slug": "enlarged-reference-city-v1",
+        "width": 4608,
+        "height": 3072,
+        "origin": "top-left",
+        "road_half_width": 24,
+        "nodes": [],
+        "edges": [],
+        "areas": [],
+        "bins": [],
+        "landmarks": [],
+    }
+
+    class FakeSupabaseMapRepository:
+        def get_enlarged_city_map(self) -> dict:
+            return payload
+
+    app.dependency_overrides[get_supabase_map_repository] = (
+        lambda: FakeSupabaseMapRepository()
+    )
+    try:
+        response = client.get("/api/v1/map")
+    finally:
+        app.dependency_overrides.pop(get_supabase_map_repository, None)
+
     assert response.status_code == 200
-    data = response.json()
-    assert "nodes" in data
-    assert "adjacency_list" in data
-    assert "edges" in data
-    assert len(data["nodes"]) >= 57
+    assert response.json() == payload
 
 
 def test_api_optimize_successful_full_fleet() -> None:

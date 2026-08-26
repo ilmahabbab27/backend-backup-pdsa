@@ -1,17 +1,17 @@
 """API v1 router definitions for Waste Route Optimization Service."""
 
 from datetime import datetime, timezone
-from typing import Annotated
+from typing import Annotated, Any, Dict
 from fastapi import APIRouter, Depends, status
 
-from app.api.deps import get_optimizer_service
+from app.api.deps import get_optimizer_service, get_supabase_map_repository
 from app.models.schemas import (
-    CityMapResponse,
     HealthResponse,
     OptimizationRequest,
     OptimizationResponse,
 )
 from app.services.optimizer_service import OptimizerService
+from app.repositories.supabase_map_repository import SupabaseMapRepository
 
 api_router = APIRouter()
 
@@ -35,15 +35,15 @@ async def health_check() -> HealthResponse:
 
 @api_router.get(
     "/map",
-    response_model=CityMapResponse,
+    response_model=Dict[str, Any],
     summary="Get City Road Network Map",
     tags=["map"],
 )
 def get_city_map(
-    service: Annotated[OptimizerService, Depends(get_optimizer_service)],
-) -> CityMapResponse:
-    """Retrieve full city map nodes, coordinates, bin weights, and road network topology."""
-    return service.get_city_map()
+    repository: Annotated[SupabaseMapRepository, Depends(get_supabase_map_repository)],
+) -> Dict[str, Any]:
+    """Retrieve the frontend-ready enlarged 2D city map payload from Supabase."""
+    return repository.get_enlarged_city_map()
 
 
 @api_router.post(
