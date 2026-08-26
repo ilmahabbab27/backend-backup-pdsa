@@ -168,3 +168,13 @@ class HealthResponse(BaseModel):
     status: str = Field("ok", description="Service health status")
     service: str = Field("task5-optimization-service", description="Service name")
     timestamp: str = Field(..., description="ISO 8601 current timestamp")
+
+
+class FleetEstimateResponse(BaseModel):
+    """Estimation of fleet requirements for city waste collection."""
+
+    total_bins: int = Field(..., description="Total number of smart bins in the city")
+    total_waste_kg: int = Field(..., description="Total waste weight across all smart bins in kilograms")
+    truck_capacity_kg: int = Field(..., description="Uniform capacity per truck in kilograms")
+    min_trucks_required: int = Field(..., description="Theoretical minimum trucks needed to collect all waste")
+

@@ -457,3 +457,45 @@ def test_api_optimize_validation_errors() -> None:
     # truck_capacity_kg < 100
     response = client.post("/api/v1/optimize", json={"truck_count": 2, "truck_capacity_kg": 50})
     assert response.status_code == 422
+
+
+def test_api_get_nodes_and_filters() -> None:
+    """Test GET /api/v1/nodes with and without type query parameters."""
+    response_all = client.get("/api/v1/nodes")
+    assert response_all.status_code == 200
+    all_nodes = response_all.json()
+    assert len(all_nodes) >= 57
+
+    response_bins = client.get("/api/v1/nodes?type=bin")
+    assert response_bins.status_code == 200
+    bins = response_bins.json()
+    assert len(bins) >= 25
+    assert all(b["type"] == "bin" for b in bins)
+
+
+def test_api_get_bins_and_depots() -> None:
+    """Test GET /api/v1/bins and GET /api/v1/depots."""
+    bins_res = client.get("/api/v1/bins")
+    assert bins_res.status_code == 200
+    bins = bins_res.json()
+    assert len(bins) >= 25
+
+    depots_res = client.get("/api/v1/depots")
+    assert depots_res.status_code == 200
+    depots = depots_res.json()
+    assert len(depots) >= 2
+    types = {d["type"] for d in depots}
+    assert "start" in types
+    assert "destination" in types
+
+
+def test_api_get_fleet_estimate() -> None:
+    """Test GET /api/v1/fleet/estimate."""
+    response = client.get("/api/v1/fleet/estimate?truck_capacity_kg=2000")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["total_bins"] >= 25
+    assert data["total_waste_kg"] > 0
+    assert data["truck_capacity_kg"] == 2000
+    assert data["min_trucks_required"] >= 1
+

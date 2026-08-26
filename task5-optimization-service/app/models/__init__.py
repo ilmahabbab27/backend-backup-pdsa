@@ -5,6 +5,7 @@ from app.models.schemas import (
     CoordinatePoint,
     EdgeNeighbor,
     EdgeSchema,
+    FleetEstimateResponse,
     HealthResponse,
     NodeSchema,
     OptimizationRequest,
@@ -18,6 +19,7 @@ __all__ = [
     "CoordinatePoint",
     "EdgeNeighbor",
     "EdgeSchema",
+    "FleetEstimateResponse",
     "HealthResponse",
     "NodeSchema",
     "OptimizationRequest",
@@ -25,3 +27,4 @@ __all__ = [
     "OptimizationSummary",
     "TruckRouteResponse",
 ]
+

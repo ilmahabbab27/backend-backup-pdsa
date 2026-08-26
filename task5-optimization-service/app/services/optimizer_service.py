@@ -10,6 +10,7 @@ from app.algorithms.dijkstra import compute_distance_matrix, reconstruct_full_pa
 from app.models.schemas import (
     CityMapResponse,
     CoordinatePoint,
+    FleetEstimateResponse,
     NodeSchema,
     OptimizationRequest,
     OptimizationResponse,
@@ -53,6 +54,45 @@ class OptimizerService:
             f"{len(full_map.edges)} edges, {len(full_map.adjacency_list)} adjacency entries."
         )
         return full_map
+
+    def get_nodes(self, node_type: Optional[str] = None) -> List[NodeSchema]:
+        """Retrieve all nodes or filter by node type ('start', 'destination', 'intersection', 'bin')."""
+        if node_type:
+            nodes = self.map_repo.get_nodes_by_type(node_type.lower().strip())
+            log_info(f"GET /api/v1/nodes?type={node_type} -> Returning {len(nodes)} nodes.")
+            return nodes
+        nodes = list(self.map_repo.get_node_dict().values())
+        log_info(f"GET /api/v1/nodes -> Returning {len(nodes)} nodes.")
+        return nodes
+
+    def get_bins(self) -> List[NodeSchema]:
+        """Retrieve all smart waste collection bins."""
+        bins = self.map_repo.get_nodes_by_type("bin")
+        log_info(f"GET /api/v1/bins -> Returning {len(bins)} smart bins.")
+        return bins
+
+    def get_depots(self) -> List[NodeSchema]:
+        """Retrieve start depot and waste disposal facility nodes."""
+        depots = self.map_repo.get_nodes_by_type("start") + self.map_repo.get_nodes_by_type("destination")
+        log_info(f"GET /api/v1/depots -> Returning {len(depots)} facility nodes.")
+        return depots
+
+    def get_fleet_estimate(self, truck_capacity_kg: int = 1500) -> FleetEstimateResponse:
+        """Estimate fleet requirements for collecting all city waste given a truck capacity."""
+        bins = self.map_repo.get_nodes_by_type("bin")
+        total_waste_kg = sum(b.weight_kg for b in bins)
+        min_trucks_required = math.ceil(total_waste_kg / truck_capacity_kg) if truck_capacity_kg > 0 else 0
+        log_info(
+            f"GET /api/v1/fleet/estimate?truck_capacity_kg={truck_capacity_kg} -> "
+            f"{len(bins)} bins, {total_waste_kg} kg waste, min {min_trucks_required} trucks."
+        )
+        return FleetEstimateResponse(
+            total_bins=len(bins),
+            total_waste_kg=total_waste_kg,
+            truck_capacity_kg=truck_capacity_kg,
+            min_trucks_required=min_trucks_required,
+        )
+
 
     def optimize_waste_collection(self, request: OptimizationRequest) -> OptimizationResponse:
         """Execute the complete waste collection route optimization pipeline.
