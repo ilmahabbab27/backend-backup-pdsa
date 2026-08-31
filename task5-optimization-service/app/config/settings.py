@@ -15,6 +15,7 @@ class Settings(BaseSettings):
     API_V1_STR: str = "/api/v1"
     CORS_ORIGINS: Union[List[str], str] = ["*"]
     MAP_DATA_PATH: str = "data/city_map.json"
+    STATIC_BIN_CAPACITY_KG: int = 400
 
     # Base directory of task5-optimization-service
     BASE_DIR: Path = Path(__file__).resolve().parent.parent.parent

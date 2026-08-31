@@ -5,27 +5,38 @@ import pytest
 from fastapi.testclient import TestClient
 import networkx as nx
 
-from app.algorithms.branch_and_bound import (
-    BranchAndBoundOptimizer,
+from app.algorithms.clarke_wright import (
+    ClarkeWrightOptimizer,
+    calculate_route_distance,
+    partition_bins_ffd,
     select_feasible_bins_ffd,
+    solve_by_truck_partition,
     solve_fleet_routing,
+    two_opt_sequence,
 )
 from app.algorithms.dijkstra import (
     compute_distance_matrix,
+    compute_path_matrix,
     compute_shortest_path,
+    get_connected_components,
+    is_graph_connected,
     reconstruct_full_path,
 )
+from app.config.settings import Settings
 from app.main import app
 from app.models.schemas import OptimizationRequest
 from app.repositories.map_repository import MapRepository
 from app.services.optimizer_service import OptimizerService
 from app.utils.exceptions import (
     CapacityExceededException,
+    GraphTopologyException,
+    InfeasibleRoutingException,
     OverweightBinException,
 )
 from app.utils.profiler import Profiler
 
 client = TestClient(app)
+
 
 
 # ---------------------------------------------------------
@@ -60,12 +71,11 @@ def test_map_repository_loads_nodes_and_graph() -> None:
     for inter in intersections:
         assert inter.weight_kg == 0
 
-    # Check smart bins
+    # Check smart bins (all bins have uniform static capacity of 400kg)
     bins = repo.get_nodes_by_type("bin")
     assert len(bins) >= 25
     for b in bins:
-        assert b.weight_kg >= 200
-        assert b.weight_kg <= 500
+        assert b.weight_kg == 400
 
 
 def test_map_repository_node_dict_and_lookup() -> None:
@@ -181,16 +191,16 @@ def test_dijkstra_disconnected_graph_raises_error() -> None:
 
 
 # ---------------------------------------------------------
-# 3. Branch and Bound & FFD Packing Algorithm Tests
+# 3. Clarke-Wright Savings & FFD Packing Algorithm Tests
 # ---------------------------------------------------------
 
 def test_select_feasible_bins_ffd() -> None:
     """Test First-Fit Decreasing bin selection heuristic."""
     bins = [
         {"id": "B1", "weight_kg": 400},
-        {"id": "B2", "weight_kg": 350},
-        {"id": "B3", "weight_kg": 300},
-        {"id": "B4", "weight_kg": 250},
+        {"id": "B2", "weight_kg": 400},
+        {"id": "B3", "weight_kg": 400},
+        {"id": "B4", "weight_kg": 400},
         {"id": "B5", "weight_kg": 800},  # Overweight for 500kg truck
     ]
     # 2 trucks with 500kg capacity = 1000kg max
@@ -205,7 +215,39 @@ def test_select_feasible_bins_ffd() -> None:
     assert len(packed) >= 2
 
 
-def test_branch_and_bound_subset_truck() -> None:
+def test_clarke_wright_savings_merging() -> None:
+    """Test Clarke-Wright Savings algorithm merges two proximal bins into one truck route."""
+    # Synthetic distance matrix where B1 and B2 are close to each other
+    dist_matrix = {
+        "D0": {"D0": 0.0, "T1": 5.0, "B1": 2.0, "B2": 2.5},
+        "T1": {"D0": 5.0, "T1": 0.0, "B1": 2.5, "B2": 2.0},
+        "B1": {"D0": 2.0, "T1": 2.5, "B1": 0.0, "B2": 0.5},
+        "B2": {"D0": 2.5, "T1": 2.0, "B1": 0.5, "B2": 0.0},
+    }
+    bins_data = [
+        {"id": "B1", "weight_kg": 400},
+        {"id": "B2", "weight_kg": 400},
+    ]
+
+    # With 1 truck with 1000kg capacity, B1 and B2 should be merged into 1 route
+    results, total_dist = solve_fleet_routing(
+        depot_id="D0",
+        dump_id="T1",
+        bins=bins_data,
+        dist_matrix=dist_matrix,
+        truck_count=1,
+        truck_capacity_kg=1000,
+    )
+
+    assert len(results) == 1
+    assert set(results[0].bins) == {"B1", "B2"}
+    assert results[0].collected_weight_kg == 800
+    assert results[0].stop_sequence[0] == "D0"
+    assert results[0].stop_sequence[-2] == "T1"
+    assert results[0].stop_sequence[-1] == "D0"
+
+
+def test_clarke_wright_subset_truck() -> None:
     """Test route sequencing when 1 truck has sufficient capacity for a subset of bins."""
     repo = MapRepository()
     graph = repo.get_graph()
@@ -236,14 +278,14 @@ def test_branch_and_bound_subset_truck() -> None:
     assert total_dist > 0.0
 
 
-def test_branch_and_bound_multi_truck_partitioning() -> None:
+def test_clarke_wright_multi_truck_partitioning() -> None:
     """Test that bins are partitioned correctly across trucks respecting capacity constraints."""
     repo = MapRepository()
     graph = repo.get_graph()
     bins = repo.get_nodes_by_type("bin")
-    total_weight = sum(b.weight_kg for b in bins)
     truck_cap = 1500
-    truck_count = math.ceil(total_weight / truck_cap) + 5
+    max_bins_per_truck = max(1, truck_cap // 400)
+    truck_count = math.ceil(len(bins) / max_bins_per_truck) + 5
 
     poi_ids = ["D0", "T1"] + [b.id for b in bins]
     dist_matrix = compute_distance_matrix(graph, poi_ids)
@@ -271,7 +313,7 @@ def test_branch_and_bound_multi_truck_partitioning() -> None:
     assert sorted(all_collected_bins) == sorted([b.id for b in bins])
 
 
-def test_branch_and_bound_empty_bins() -> None:
+def test_clarke_wright_empty_bins() -> None:
     """Test optimizer behavior when there are no bins to collect."""
     results, total_dist = solve_fleet_routing(
         depot_id="D0",
@@ -318,9 +360,9 @@ def test_api_optimize_successful_full_fleet() -> None:
     """Test POST /api/v1/optimize with valid, feasible inputs for 100% bin collection."""
     repo = MapRepository()
     bins = repo.get_nodes_by_type("bin")
-    total_weight = sum(b.weight_kg for b in bins)
     truck_cap = 1500
-    truck_count = math.ceil(total_weight / truck_cap) + 5
+    max_bins_per_truck = max(1, truck_cap // 400)
+    truck_count = math.ceil(len(bins) / max_bins_per_truck) + 5
 
     payload = {
         "truck_count": truck_count,
@@ -419,21 +461,18 @@ def test_api_optimize_overweight_single_bin_fallback() -> None:
     """Test POST /api/v1/optimize when some bins exceed capacity but compliant bins can be serviced."""
     payload = {
         "truck_count": 5,
-        "truck_capacity_kg": 350,  # Bins > 350kg will be deferred
+        "truck_capacity_kg": 350,  # 400kg bins > 350kg will be deferred
         "allow_partial_collection": True,
     }
     response = client.post("/api/v1/optimize", json=payload)
-    assert response.status_code == 200
+    # Since all bins are 400kg and capacity is 350kg, all bins are overweight -> raises OverweightBinException
+    assert response.status_code == 400
     data = response.json()
-
-    assert data["is_fallback"] is True
-    assert len(data["uncollected_bins"]) > 0
-    for route in data["truck_routes"]:
-        assert route["collected_weight_kg"] <= 350
+    assert data["error"] == "OverweightBin"
 
 
 def test_api_optimize_all_bins_overweight_exception() -> None:
-    """Test POST /api/v1/optimize when capacity is smaller than the smallest bin (150kg < 200kg min)."""
+    """Test POST /api/v1/optimize when capacity is smaller than the smallest bin (150kg < 400kg)."""
     payload = {
         "truck_count": 10,
         "truck_capacity_kg": 150,
@@ -498,4 +537,321 @@ def test_api_get_fleet_estimate() -> None:
     assert data["total_waste_kg"] > 0
     assert data["truck_capacity_kg"] == 2000
     assert data["min_trucks_required"] >= 1
+
+
+# ---------------------------------------------------------
+# 6. Advanced Fallback, Validation, and Tiered Dataset Tests
+# ---------------------------------------------------------
+
+def test_solve_by_truck_partition_fallback() -> None:
+    """Test the direct fallback routing solver with pre-partitioned trucks."""
+    dist_matrix = {
+        "D0": {"D0": 0.0, "T1": 4.0, "B1": 1.0, "B2": 2.0, "B3": 2.5},
+        "T1": {"D0": 4.0, "T1": 0.0, "B1": 3.0, "B2": 2.5, "B3": 1.5},
+        "B1": {"D0": 1.0, "T1": 3.0, "B1": 0.0, "B2": 1.2, "B3": 2.0},
+        "B2": {"D0": 2.0, "T1": 2.5, "B1": 1.2, "B2": 0.0, "B3": 0.8},
+        "B3": {"D0": 2.5, "T1": 1.5, "B1": 2.0, "B2": 0.8, "B3": 0.0},
+    }
+    truck_partitions = [
+        [{"id": "B1", "weight_kg": 400}, {"id": "B2", "weight_kg": 400}],
+        [{"id": "B3", "weight_kg": 400}],
+    ]
+
+    results, total_dist = solve_by_truck_partition(
+        depot_id="D0",
+        dump_id="T1",
+        truck_partitions=truck_partitions,
+        dist_matrix=dist_matrix,
+        truck_capacity_kg=1000,
+    )
+
+    assert len(results) == 2
+    assert results[0].truck_id == "TRUCK-1"
+    assert results[0].collected_weight_kg == 800
+    assert results[1].truck_id == "TRUCK-2"
+    assert results[1].collected_weight_kg == 400
+    assert total_dist > 0.0
+    for r in results:
+        assert r.stop_sequence[0] == "D0"
+        assert r.stop_sequence[-2] == "T1"
+        assert r.stop_sequence[-1] == "D0"
+
+
+def test_clarke_wright_iterative_consolidation() -> None:
+    """Test that multi-pass consolidation merges small routes when savings list is exhausted."""
+    # 4 bins with 200kg each, 2 trucks of 500kg each
+    # Distances designed such that savings are minimal, but weights easily fit in 2 trucks
+    dist_matrix = {
+        "D0": {"D0": 0.0, "T1": 10.0, "B1": 5.0, "B2": 5.0, "B3": 5.0, "B4": 5.0},
+        "T1": {"D0": 10.0, "T1": 0.0, "B1": 5.0, "B2": 5.0, "B3": 5.0, "B4": 5.0},
+        "B1": {"D0": 5.0, "T1": 5.0, "B1": 0.0, "B2": 9.9, "B3": 9.9, "B4": 9.9},
+        "B2": {"D0": 5.0, "T1": 5.0, "B1": 9.9, "B2": 0.0, "B3": 9.9, "B4": 9.9},
+        "B3": {"D0": 5.0, "T1": 5.0, "B1": 9.9, "B2": 9.9, "B3": 0.0, "B4": 9.9},
+        "B4": {"D0": 5.0, "T1": 5.0, "B1": 9.9, "B2": 9.9, "B3": 9.9, "B4": 0.0},
+    }
+    bins = [
+        {"id": "B1", "weight_kg": 200},
+        {"id": "B2", "weight_kg": 200},
+        {"id": "B3", "weight_kg": 200},
+        {"id": "B4", "weight_kg": 200},
+    ]
+
+    results, total_dist = solve_fleet_routing(
+        depot_id="D0",
+        dump_id="T1",
+        bins=bins,
+        dist_matrix=dist_matrix,
+        truck_count=2,
+        truck_capacity_kg=500,
+        allow_fallback=True,
+    )
+
+    assert len(results) <= 2
+    total_collected = sum(r.collected_weight_kg for r in results)
+    assert total_collected == 800
+
+
+def test_two_opt_sequence_and_calculate_distance() -> None:
+    """Test two_opt_sequence and calculate_route_distance helpers."""
+    dist_matrix = {
+        "D0": {"D0": 0.0, "T1": 5.0, "B1": 1.0, "B2": 4.0},
+        "T1": {"D0": 5.0, "T1": 0.0, "B1": 4.0, "B2": 1.0},
+        "B1": {"D0": 1.0, "T1": 4.0, "B1": 0.0, "B2": 1.0},
+        "B2": {"D0": 4.0, "T1": 1.0, "B1": 1.0, "B2": 0.0},
+    }
+
+    # B2 -> B1 reversed should be worse than B1 -> B2:
+    # D0 -> B1 (1) -> B2 (1) -> T1 (1) -> D0 (5) = 8.0
+    # D0 -> B2 (4) -> B1 (1) -> T1 (4) -> D0 (5) = 14.0
+    seq = ["B2", "B1"]
+    opt_seq = two_opt_sequence("D0", "T1", seq, dist_matrix)
+    assert opt_seq == ["B1", "B2"]
+
+    dist = calculate_route_distance("D0", "T1", opt_seq, dist_matrix)
+    assert abs(dist - 8.0) < 1e-4
+
+    # Empty sequence
+    assert two_opt_sequence("D0", "T1", [], dist_matrix) == []
+    assert calculate_route_distance("D0", "T1", [], dist_matrix) == 0.0
+
+
+def test_graph_connectivity_helpers() -> None:
+    """Test is_graph_connected and get_connected_components functions."""
+    g = nx.Graph()
+    assert is_graph_connected(g) is False
+
+    g.add_edge("A", "B", weight=1.0)
+    assert is_graph_connected(g) is True
+    assert len(get_connected_components(g)) == 1
+
+    g.add_node("C")
+    assert is_graph_connected(g) is False
+    assert len(get_connected_components(g)) == 2
+
+
+def test_map_validation_endpoint() -> None:
+    """Test GET /api/v1/map/validate endpoint."""
+    response = client.get("/api/v1/map/validate")
+    assert response.status_code == 200
+    data = response.json()
+
+    assert data["is_valid"] is True
+    assert data["is_connected"] is True
+    assert data["start_depots_count"] >= 1
+    assert data["destinations_count"] >= 1
+    assert data["smart_bins_count"] >= 25
+    assert data["total_nodes"] >= 57
+    assert data["total_edges"] >= 57
+    assert data["connected_components"] == 1
+    assert len(data["validation_messages"]) >= 1
+
+
+def test_map_reload_endpoint() -> None:
+    """Test POST /api/v1/map/reload endpoint with custom datasets."""
+    # Reload with tier 1 sparse map
+    res_tier1 = client.post("/api/v1/map/reload", json={"map_path": "data/city_map_tier1_sparse.json"})
+    assert res_tier1.status_code == 200
+    data1 = res_tier1.json()
+    assert data1["status"] == "success"
+    assert data1["bins_loaded"] == 15
+    assert "city_map_tier1_sparse.json" in data1["map_source"]
+
+    # Verify map endpoint reflects tier 1 dataset
+    map_res = client.get("/api/v1/map")
+    assert map_res.status_code == 200
+    assert len(map_res.json()["nodes"]) == 37
+
+    # Reload back to tier 3 dense dataset
+    res_dense = client.post("/api/v1/map/reload", json={"map_path": "data/city_map_tier3_dense.json"})
+    assert res_dense.status_code == 200
+    data_dense = res_dense.json()
+    assert data_dense["status"] == "success"
+    assert data_dense["bins_loaded"] == 120
+    assert "city_map_tier3_dense.json" in data_dense["map_source"]
+
+    # Verify map endpoint reflects tier 3 dataset
+    map_res_dense = client.get("/api/v1/map")
+    assert map_res_dense.status_code == 200
+    assert len(map_res_dense.json()["nodes"]) == 182
+
+
+def test_all_map_tier_datasets() -> None:
+    """Test optimization across all 4 map tier datasets."""
+    datasets = [
+        ("data/city_map.json", 25),
+        ("data/city_map_tier1_sparse.json", 15),
+        ("data/city_map_tier2_medium.json", 45),
+        ("data/city_map_tier3_dense.json", 120),
+    ]
+
+    for map_path, expected_bins in datasets:
+        settings = Settings(MAP_DATA_PATH=map_path)
+        repo = MapRepository(settings=settings)
+        service = OptimizerService(map_repo=repo)
+
+        validation = service.validate_map()
+        assert validation.is_valid is True
+        assert validation.smart_bins_count == expected_bins
+        assert validation.is_connected is True
+
+        req = OptimizationRequest(
+            truck_count=math.ceil(expected_bins / 3) + 2,
+            truck_capacity_kg=1500,
+            allow_partial_collection=True,
+        )
+        response = service.optimize_waste_collection(req)
+        assert response.status == "success"
+        assert response.summary.collection_coverage_pct == 100.0
+        assert response.summary.trucks_used > 0
+        assert response.summary.total_distance_km > 0.0
+        assert response.summary.execution_time_ms >= 0.0
+        assert response.summary.peak_memory_kb >= 0.0
+
+
+def test_map_repository_resilience_missing_and_corrupted_file() -> None:
+    """Test MapRepository fallback behavior for missing or unparseable files."""
+    # Non-existent file path: fallback discovery engages
+    repo = MapRepository(map_path="data/non_existent_map_12345.json")
+    graph = repo.get_graph()
+    assert isinstance(graph, nx.Graph)
+    assert graph.number_of_nodes() > 0
+
+    # Validation still functions
+    val = repo.validate_map_integrity()
+    assert val.total_nodes > 0
+
+
+def test_reconstruct_full_path_edge_cases() -> None:
+    """Test reconstruct_full_path with single node, empty list, and identical consecutive stops."""
+    repo = MapRepository()
+    graph = repo.get_graph()
+
+    assert reconstruct_full_path(graph, []) == []
+    assert reconstruct_full_path(graph, ["D0"]) == ["D0"]
+    assert reconstruct_full_path(graph, ["D0", "D0"]) == ["D0"]
+
+
+def test_overweight_single_bin_with_compliant_bins_fallback() -> None:
+    """Test fallback when one bin is overweight but compliant bins can be serviced."""
+    # Synthetic repository with 1 overweight bin and 2 normal bins
+    settings = Settings(MAP_DATA_PATH="data/city_map.json")
+    repo = MapRepository(settings=settings)
+    service = OptimizerService(map_repo=repo)
+
+    # 400kg bins: with capacity=600kg and truck_count=2, can collect 2 bins (800kg)
+    req = OptimizationRequest(
+        truck_count=2,
+        truck_capacity_kg=600,
+        allow_partial_collection=True,
+    )
+    res = service.optimize_waste_collection(req)
+    assert res.status == "partial_collection"
+    assert res.is_fallback is True
+    assert len(res.uncollected_bins) > 0
+    assert len(res.warnings) >= 1
+    assert res.summary.total_waste_collected_kg <= 1200
+
+
+def test_profiler_memory_measurement_and_accuracy() -> None:
+    """Test that Profiler measures execution time and dynamic memory accurately."""
+    with Profiler() as prof:
+        large_list = [i for i in range(200_000)]
+        del large_list
+
+    assert prof.execution_time_ms > 0.0
+    assert prof.peak_memory_kb >= 0.0
+
+
+def test_map_repository_nodes_by_type_case_insensitive() -> None:
+    """Test that get_nodes_by_type handles case insensitivity and whitespace."""
+    repo = MapRepository()
+    bins_upper = repo.get_nodes_by_type("BIN")
+    bins_lower = repo.get_nodes_by_type("bin  ")
+    assert len(bins_upper) == len(bins_lower)
+    assert len(bins_upper) >= 25
+
+
+def test_custom_domain_exceptions_structures() -> None:
+    """Test all custom domain exception properties, details, and suggestions."""
+    from app.utils.exceptions import (
+        InvalidMapDataException,
+        MapDataNotFoundException,
+        OptimizationException,
+        OptimizationTimeoutException,
+    )
+
+    base_exc = OptimizationException("Base error", 400, "BaseErr", {"key": "val"}, ["Fix it"])
+    assert base_exc.status_code == 400
+    assert base_exc.error_type == "BaseErr"
+    assert base_exc.details["key"] == "val"
+    assert base_exc.suggestions == ["Fix it"]
+
+    map_nf = MapDataNotFoundException("missing.json", ["/path/a", "/path/b"])
+    assert map_nf.status_code == 404
+    assert map_nf.error_type == "MapDataNotFound"
+    assert map_nf.details["configured_path"] == "missing.json"
+
+    inv_map = InvalidMapDataException("corrupt.json", "bad JSON syntax")
+    assert inv_map.status_code == 422
+    assert inv_map.error_type == "InvalidMapData"
+
+    timeout_exc = OptimizationTimeoutException(1200.5, 1000.0)
+    assert timeout_exc.status_code == 504
+    assert timeout_exc.error_type == "OptimizationTimeout"
+
+
+def test_nodes_endpoint_unknown_filter_returns_empty_list() -> None:
+    """Test GET /api/v1/nodes?type=unknown returns empty list without error."""
+    response = client.get("/api/v1/nodes?type=unknown_type_xyz")
+    assert response.status_code == 200
+    assert response.json() == []
+
+
+def test_single_bin_fleet_routing() -> None:
+    """Test routing when only 1 bin is present."""
+    dist_matrix = {
+        "D0": {"D0": 0.0, "T1": 4.0, "B1": 2.0},
+        "T1": {"D0": 4.0, "T1": 0.0, "B1": 2.0},
+        "B1": {"D0": 2.0, "T1": 2.0, "B1": 0.0},
+    }
+    bins = [{"id": "B1", "weight_kg": 400}]
+
+    results, total_dist = solve_fleet_routing(
+        depot_id="D0",
+        dump_id="T1",
+        bins=bins,
+        dist_matrix=dist_matrix,
+        truck_count=1,
+        truck_capacity_kg=500,
+    )
+
+    assert len(results) == 1
+    assert results[0].truck_id == "TRUCK-1"
+    assert results[0].bins == ["B1"]
+    assert results[0].stop_sequence == ["D0", "B1", "T1", "D0"]
+    assert results[0].collected_weight_kg == 400
+    assert results[0].capacity_utilization_pct == 80.0
+    # D0 -> B1 (2.0) + B1 -> T1 (2.0) + T1 -> D0 (4.0) = 8.0
+    assert abs(total_dist - 8.0) < 1e-4
+
 

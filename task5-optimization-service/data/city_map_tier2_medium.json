@@ -342,7 +342,7 @@
       "name": "Smart Bin 1 - Residential Block 1 Concourse",
       "lat": 40.7138,
       "lon": -73.9653,
-      "weight_kg": 210
+      "weight_kg": 400
     },
     {
       "id": "B2",
@@ -350,7 +350,7 @@
       "name": "Smart Bin 2 - Residential Block 2 Concourse",
       "lat": 40.7109,
       "lon": -73.8044,
-      "weight_kg": 470
+      "weight_kg": 400
     },
     {
       "id": "B3",
@@ -358,7 +358,7 @@
       "name": "Smart Bin 3 - Residential Block 3 Concourse",
       "lat": 40.7417,
       "lon": -73.9132,
-      "weight_kg": 280
+      "weight_kg": 400
     },
     {
       "id": "B4",
@@ -366,7 +366,7 @@
       "name": "Smart Bin 4 - Residential Block 4 Concourse",
       "lat": 40.7419,
       "lon": -73.761,
-      "weight_kg": 240
+      "weight_kg": 400
     },
     {
       "id": "B5",
@@ -374,7 +374,7 @@
       "name": "Smart Bin 5 - Residential Block 5 Concourse",
       "lat": 40.7699,
       "lon": -73.8556,
-      "weight_kg": 380
+      "weight_kg": 400
     },
     {
       "id": "B6",
@@ -382,7 +382,7 @@
       "name": "Smart Bin 6 - Residential Block 6 Concourse",
       "lat": 40.7884,
       "lon": -73.9686,
-      "weight_kg": 450
+      "weight_kg": 400
     },
     {
       "id": "B7",
@@ -390,7 +390,7 @@
       "name": "Smart Bin 7 - Residential Block 7 Concourse",
       "lat": 40.7876,
       "lon": -73.8089,
-      "weight_kg": 410
+      "weight_kg": 400
     },
     {
       "id": "B8",
@@ -398,7 +398,7 @@
       "name": "Smart Bin 8 - Residential Block 8 Concourse",
       "lat": 40.8045,
       "lon": -73.9168,
-      "weight_kg": 340
+      "weight_kg": 400
     },
     {
       "id": "B9",
@@ -414,7 +414,7 @@
       "name": "Smart Bin 10 - Residential Block 10 Concourse",
       "lat": 40.8383,
       "lon": -73.8701,
-      "weight_kg": 320
+      "weight_kg": 400
     },
     {
       "id": "B11",
@@ -422,7 +422,7 @@
       "name": "Smart Bin 11 - Residential Block 11 Concourse",
       "lat": 40.6756,
       "lon": -73.9654,
-      "weight_kg": 230
+      "weight_kg": 400
     },
     {
       "id": "B12",
@@ -430,7 +430,7 @@
       "name": "Smart Bin 12 - Residential Block 12 Concourse",
       "lat": 40.6715,
       "lon": -73.8159,
-      "weight_kg": 340
+      "weight_kg": 400
     },
     {
       "id": "B13",
@@ -438,7 +438,7 @@
       "name": "Smart Bin 13 - Residential Block 13 Concourse",
       "lat": 40.6847,
       "lon": -73.9186,
-      "weight_kg": 340
+      "weight_kg": 400
     },
     {
       "id": "B14",
@@ -446,7 +446,7 @@
       "name": "Smart Bin 14 - Residential Block 14 Concourse",
       "lat": 40.6872,
       "lon": -73.7476,
-      "weight_kg": 340
+      "weight_kg": 400
     },
     {
       "id": "B15",
@@ -454,7 +454,7 @@
       "name": "Smart Bin 15 - Residential Block 15 Concourse",
       "lat": 40.7231,
       "lon": -73.8543,
-      "weight_kg": 230
+      "weight_kg": 400
     },
     {
       "id": "B16",
@@ -462,7 +462,7 @@
       "name": "Smart Bin 16 - Residential Block 16 Concourse",
       "lat": 40.7353,
       "lon": -73.9608,
-      "weight_kg": 460
+      "weight_kg": 400
     },
     {
       "id": "B17",
@@ -470,7 +470,7 @@
       "name": "Smart Bin 17 - Residential Block 17 Concourse",
       "lat": 40.7339,
       "lon": -73.8103,
-      "weight_kg": 440
+      "weight_kg": 400
     },
     {
       "id": "B18",
@@ -478,7 +478,7 @@
       "name": "Smart Bin 18 - Residential Block 18 Concourse",
       "lat": 40.772,
       "lon": -73.9165,
-      "weight_kg": 350
+      "weight_kg": 400
     },
     {
       "id": "B19",
@@ -486,7 +486,7 @@
       "name": "Smart Bin 19 - Residential Block 19 Concourse",
       "lat": 40.7609,
       "lon": -73.744,
-      "weight_kg": 480
+      "weight_kg": 400
     },
     {
       "id": "B20",
@@ -494,7 +494,7 @@
       "name": "Smart Bin 20 - Residential Block 20 Concourse",
       "lat": 40.7753,
       "lon": -73.8614,
-      "weight_kg": 320
+      "weight_kg": 400
     },
     {
       "id": "B21",
@@ -502,7 +502,7 @@
       "name": "Smart Bin 21 - Residential Block 21 Concourse",
       "lat": 40.8072,
       "lon": -73.9615,
-      "weight_kg": 340
+      "weight_kg": 400
     },
     {
       "id": "B22",
@@ -510,7 +510,7 @@
       "name": "Smart Bin 22 - Residential Block 22 Concourse",
       "lat": 40.8101,
       "lon": -73.8026,
-      "weight_kg": 430
+      "weight_kg": 400
     },
     {
       "id": "B23",
@@ -518,7 +518,7 @@
       "name": "Smart Bin 23 - Residential Block 23 Concourse",
       "lat": 40.8376,
       "lon": -73.9112,
-      "weight_kg": 420
+      "weight_kg": 400
     },
     {
       "id": "B24",
@@ -526,7 +526,7 @@
       "name": "Smart Bin 24 - Residential Block 24 Concourse",
       "lat": 40.8323,
       "lon": -73.7574,
-      "weight_kg": 260
+      "weight_kg": 400
     },
     {
       "id": "B25",
@@ -534,7 +534,7 @@
       "name": "Smart Bin 25 - Residential Block 25 Concourse",
       "lat": 40.6774,
       "lon": -73.8623,
-      "weight_kg": 370
+      "weight_kg": 400
     },
     {
       "id": "B26",
@@ -542,7 +542,7 @@
       "name": "Smart Bin 26 - Residential Block 26 Concourse",
       "lat": 40.6907,
       "lon": -73.9761,
-      "weight_kg": 210
+      "weight_kg": 400
     },
     {
       "id": "B27",
@@ -550,7 +550,7 @@
       "name": "Smart Bin 27 - Residential Block 27 Concourse",
       "lat": 40.6953,
       "lon": -73.8083,
-      "weight_kg": 470
+      "weight_kg": 400
     },
     {
       "id": "B28",
@@ -558,7 +558,7 @@
       "name": "Smart Bin 28 - Residential Block 28 Concourse",
       "lat": 40.7128,
       "lon": -73.9184,
-      "weight_kg": 360
+      "weight_kg": 400
     },
     {
       "id": "B29",
@@ -566,7 +566,7 @@
       "name": "Smart Bin 29 - Residential Block 29 Concourse",
       "lat": 40.707,
       "lon": -73.7634,
-      "weight_kg": 390
+      "weight_kg": 400
     },
     {
       "id": "B30",
@@ -574,7 +574,7 @@
       "name": "Smart Bin 30 - Residential Block 30 Concourse",
       "lat": 40.7335,
       "lon": -73.8608,
-      "weight_kg": 320
+      "weight_kg": 400
     },
     {
       "id": "B31",
@@ -582,7 +582,7 @@
       "name": "Smart Bin 31 - Residential Block 31 Concourse",
       "lat": 40.756,
       "lon": -73.9679,
-      "weight_kg": 270
+      "weight_kg": 400
     },
     {
       "id": "B32",
@@ -590,7 +590,7 @@
       "name": "Smart Bin 32 - Residential Block 32 Concourse",
       "lat": 40.7636,
       "lon": -73.8183,
-      "weight_kg": 220
+      "weight_kg": 400
     },
     {
       "id": "B33",
@@ -598,7 +598,7 @@
       "name": "Smart Bin 33 - Residential Block 33 Concourse",
       "lat": 40.782,
       "lon": -73.9141,
-      "weight_kg": 360
+      "weight_kg": 400
     },
     {
       "id": "B34",
@@ -606,7 +606,7 @@
       "name": "Smart Bin 34 - Residential Block 34 Concourse",
       "lat": 40.7834,
       "lon": -73.761,
-      "weight_kg": 410
+      "weight_kg": 400
     },
     {
       "id": "B35",
@@ -614,7 +614,7 @@
       "name": "Smart Bin 35 - Residential Block 35 Concourse",
       "lat": 40.8129,
       "lon": -73.8611,
-      "weight_kg": 320
+      "weight_kg": 400
     },
     {
       "id": "B36",
@@ -622,7 +622,7 @@
       "name": "Smart Bin 36 - Residential Block 36 Concourse",
       "lat": 40.8258,
       "lon": -73.9663,
-      "weight_kg": 340
+      "weight_kg": 400
     },
     {
       "id": "B37",
@@ -630,7 +630,7 @@
       "name": "Smart Bin 37 - Residential Block 37 Concourse",
       "lat": 40.825,
       "lon": -73.8093,
-      "weight_kg": 220
+      "weight_kg": 400
     },
     {
       "id": "B38",
@@ -638,7 +638,7 @@
       "name": "Smart Bin 38 - Residential Block 38 Concourse",
       "lat": 40.6656,
       "lon": -73.915,
-      "weight_kg": 380
+      "weight_kg": 400
     },
     {
       "id": "B39",
@@ -646,7 +646,7 @@
       "name": "Smart Bin 39 - Residential Block 39 Concourse",
       "lat": 40.6768,
       "lon": -73.7574,
-      "weight_kg": 260
+      "weight_kg": 400
     },
     {
       "id": "B40",
@@ -654,7 +654,7 @@
       "name": "Smart Bin 40 - Residential Block 40 Concourse",
       "lat": 40.6942,
       "lon": -73.8683,
-      "weight_kg": 310
+      "weight_kg": 400
     },
     {
       "id": "B41",
@@ -662,7 +662,7 @@
       "name": "Smart Bin 41 - Residential Block 41 Concourse",
       "lat": 40.726,
       "lon": -73.9629,
-      "weight_kg": 310
+      "weight_kg": 400
     },
     {
       "id": "B42",
@@ -670,7 +670,7 @@
       "name": "Smart Bin 42 - Residential Block 42 Concourse",
       "lat": 40.7117,
       "lon": -73.811,
-      "weight_kg": 370
+      "weight_kg": 400
     },
     {
       "id": "B43",
@@ -678,7 +678,7 @@
       "name": "Smart Bin 43 - Residential Block 43 Concourse",
       "lat": 40.7469,
       "lon": -73.9118,
-      "weight_kg": 450
+      "weight_kg": 400
     },
     {
       "id": "B44",
@@ -686,7 +686,7 @@
       "name": "Smart Bin 44 - Residential Block 44 Concourse",
       "lat": 40.7417,
       "lon": -73.7639,
-      "weight_kg": 460
+      "weight_kg": 400
     },
     {
       "id": "B45",
@@ -694,7 +694,7 @@
       "name": "Smart Bin 45 - Residential Block 45 Concourse",
       "lat": 40.7676,
       "lon": -73.855,
-      "weight_kg": 230
+      "weight_kg": 400
     }
   ],
   "adjacency_list": {

@@ -9,6 +9,9 @@ from app.models.schemas import (
     CityMapResponse,
     FleetEstimateResponse,
     HealthResponse,
+    MapReloadRequest,
+    MapReloadResponse,
+    MapValidationResponse,
     NodeSchema,
     OptimizationRequest,
     OptimizationResponse,
@@ -46,6 +49,34 @@ def get_city_map(
 ) -> CityMapResponse:
     """Retrieve full city map nodes, coordinates, bin weights, and road network topology."""
     return service.get_city_map()
+
+
+@api_router.get(
+    "/map/validate",
+    response_model=MapValidationResponse,
+    summary="Validate Map Topology & Connectivity",
+    tags=["map"],
+)
+def validate_map(
+    service: Annotated[OptimizerService, Depends(get_optimizer_service)],
+) -> MapValidationResponse:
+    """Validate road network graph topology, component connectivity, and facility presence."""
+    return service.validate_map()
+
+
+@api_router.post(
+    "/map/reload",
+    response_model=MapReloadResponse,
+    summary="Reload City Map Dataset",
+    tags=["map"],
+)
+def reload_map(
+    service: Annotated[OptimizerService, Depends(get_optimizer_service)],
+    request: Optional[MapReloadRequest] = None,
+) -> MapReloadResponse:
+    """Reload the city map data from disk or switch dataset path dynamically."""
+    custom_path = request.map_path if request else None
+    return service.reload_map(custom_path=custom_path)
 
 
 @api_router.get(
@@ -129,4 +160,5 @@ def optimize_routes(
     - Returns detailed route sequences, turn-by-turn coordinate paths, and performance metrics.
     """
     return service.optimize_waste_collection(request)
+
 

@@ -182,7 +182,7 @@
       "name": "Smart Bin 1 - Town Hall & Community Green",
       "lat": 41.6477,
       "lon": -74.0962,
-      "weight_kg": 290
+      "weight_kg": 400
     },
     {
       "id": "B2",
@@ -190,7 +190,7 @@
       "name": "Smart Bin 2 - North Prairie Farmers Market Depot",
       "lat": 41.6738,
       "lon": -73.6077,
-      "weight_kg": 290
+      "weight_kg": 400
     },
     {
       "id": "B3",
@@ -198,7 +198,7 @@
       "name": "Smart Bin 3 - Ridgeview Country School Pavilion",
       "lat": 41.7093,
       "lon": -73.9223,
-      "weight_kg": 360
+      "weight_kg": 400
     },
     {
       "id": "B4",
@@ -206,7 +206,7 @@
       "name": "Smart Bin 4 - Pine Creek Recreational Park",
       "lat": 41.6216,
       "lon": -73.9303,
-      "weight_kg": 330
+      "weight_kg": 400
     },
     {
       "id": "B5",
@@ -214,7 +214,7 @@
       "name": "Smart Bin 5 - Suburban Shopping Hamlet",
       "lat": 41.515,
       "lon": -73.7715,
-      "weight_kg": 440
+      "weight_kg": 400
     },
     {
       "id": "B6",
@@ -222,7 +222,7 @@
       "name": "Smart Bin 6 - Cedar Glen Residential Loop",
       "lat": 41.7359,
       "lon": -73.783,
-      "weight_kg": 410
+      "weight_kg": 400
     },
     {
       "id": "B7",
@@ -230,7 +230,7 @@
       "name": "Smart Bin 7 - Green Valley Sports Complex",
       "lat": 41.6213,
       "lon": -73.8422,
-      "weight_kg": 290
+      "weight_kg": 400
     },
     {
       "id": "B8",
@@ -238,7 +238,7 @@
       "name": "Smart Bin 8 - Timber Ridge Equestrian Outpost",
       "lat": 41.4421,
       "lon": -73.9227,
-      "weight_kg": 420
+      "weight_kg": 400
     },
     {
       "id": "B9",
@@ -246,7 +246,7 @@
       "name": "Smart Bin 9 - Lake Mahopac Boat Launch & Pavilion",
       "lat": 41.6415,
       "lon": -74.0058,
-      "weight_kg": 320
+      "weight_kg": 400
     },
     {
       "id": "B10",
@@ -254,7 +254,7 @@
       "name": "Smart Bin 10 - East Hamlet Firehouse Waste Point",
       "lat": 41.7003,
       "lon": -73.7165,
-      "weight_kg": 290
+      "weight_kg": 400
     },
     {
       "id": "B11",
@@ -262,7 +262,7 @@
       "name": "Smart Bin 11 - Orchard Hills Farmstand Plaza",
       "lat": 41.6923,
       "lon": -73.7014,
-      "weight_kg": 340
+      "weight_kg": 400
     },
     {
       "id": "B12",
@@ -278,7 +278,7 @@
       "name": "Smart Bin 13 - Old Mill Historic District Post",
       "lat": 41.713,
       "lon": -73.9564,
-      "weight_kg": 420
+      "weight_kg": 400
     },
     {
       "id": "B14",
@@ -286,7 +286,7 @@
       "name": "Smart Bin 14 - Sunset Meadow Community Dropoff",
       "lat": 41.5697,
       "lon": -73.66,
-      "weight_kg": 420
+      "weight_kg": 400
     },
     {
       "id": "B15",
@@ -294,7 +294,7 @@
       "name": "Smart Bin 15 - Valley Forge Regional Bus Depot",
       "lat": 41.5544,
       "lon": -73.9823,
-      "weight_kg": 290
+      "weight_kg": 400
     }
   ],
   "adjacency_list": {

@@ -262,7 +262,7 @@
       "name": "Smart Bin 1 - Times Square Theater District",
       "lat": 40.758,
       "lon": -73.9855,
-      "weight_kg": 340
+      "weight_kg": 400
     },
     {
       "id": "B2",
@@ -270,7 +270,7 @@
       "name": "Smart Bin 2 - Central Park South Promenade",
       "lat": 40.7655,
       "lon": -73.978,
-      "weight_kg": 420
+      "weight_kg": 400
     },
     {
       "id": "B3",
@@ -278,7 +278,7 @@
       "name": "Smart Bin 3 - Rockefeller Center Concourse",
       "lat": 40.7595,
       "lon": -73.9775,
-      "weight_kg": 290
+      "weight_kg": 400
     },
     {
       "id": "B4",
@@ -286,7 +286,7 @@
       "name": "Smart Bin 4 - Midtown East Corporate Center",
       "lat": 40.7545,
       "lon": -73.9735,
-      "weight_kg": 480
+      "weight_kg": 400
     },
     {
       "id": "B5",
@@ -294,7 +294,7 @@
       "name": "Smart Bin 5 - Grand Central Station Entrance",
       "lat": 40.752,
       "lon": -73.9785,
-      "weight_kg": 490
+      "weight_kg": 400
     },
     {
       "id": "B6",
@@ -302,7 +302,7 @@
       "name": "Smart Bin 6 - Bryant Park Library Terrace",
       "lat": 40.7532,
       "lon": -73.9825,
-      "weight_kg": 310
+      "weight_kg": 400
     },
     {
       "id": "B7",
@@ -310,7 +310,7 @@
       "name": "Smart Bin 7 - Herald Square Shopping Concourse",
       "lat": 40.7495,
       "lon": -73.9885,
-      "weight_kg": 460
+      "weight_kg": 400
     },
     {
       "id": "B8",
@@ -318,7 +318,7 @@
       "name": "Smart Bin 8 - Penn Station Plaza",
       "lat": 40.7508,
       "lon": -73.993,
-      "weight_kg": 390
+      "weight_kg": 400
     },
     {
       "id": "B9",
@@ -326,7 +326,7 @@
       "name": "Smart Bin 9 - Hudson Yards High Line Concourse",
       "lat": 40.753,
       "lon": -74.002,
-      "weight_kg": 370
+      "weight_kg": 400
     },
     {
       "id": "B10",
@@ -334,7 +334,7 @@
       "name": "Smart Bin 10 - Empire State Observation Concourse",
       "lat": 40.7478,
       "lon": -73.9845,
-      "weight_kg": 440
+      "weight_kg": 400
     },
     {
       "id": "B11",
@@ -342,7 +342,7 @@
       "name": "Smart Bin 11 - Chelsea Market Promenade",
       "lat": 40.742,
       "lon": -74.006,
-      "weight_kg": 490
+      "weight_kg": 400
     },
     {
       "id": "B12",
@@ -350,7 +350,7 @@
       "name": "Smart Bin 12 - Madison Square Park Lawn",
       "lat": 40.7425,
       "lon": -73.9875,
-      "weight_kg": 260
+      "weight_kg": 400
     },
     {
       "id": "B13",
@@ -358,7 +358,7 @@
       "name": "Smart Bin 13 - Flatiron Landmark Plaza",
       "lat": 40.7405,
       "lon": -73.9905,
-      "weight_kg": 350
+      "weight_kg": 400
     },
     {
       "id": "B14",
@@ -366,7 +366,7 @@
       "name": "Smart Bin 14 - Gramercy Park East",
       "lat": 40.737,
       "lon": -73.9835,
-      "weight_kg": 210
+      "weight_kg": 400
     },
     {
       "id": "B15",
@@ -374,7 +374,7 @@
       "name": "Smart Bin 15 - Union Square Greenmarket",
       "lat": 40.7355,
       "lon": -73.991,
-      "weight_kg": 470
+      "weight_kg": 400
     },
     {
       "id": "B16",
@@ -382,7 +382,7 @@
       "name": "Smart Bin 16 - Meatpacking District Plaza",
       "lat": 40.74,
       "lon": -74.007,
-      "weight_kg": 380
+      "weight_kg": 400
     },
     {
       "id": "B17",
@@ -390,7 +390,7 @@
       "name": "Smart Bin 17 - Washington Square Arch",
       "lat": 40.7308,
       "lon": -73.9973,
-      "weight_kg": 490
+      "weight_kg": 400
     },
     {
       "id": "B18",
@@ -398,7 +398,7 @@
       "name": "Smart Bin 18 - East Village Tompkins Square",
       "lat": 40.7265,
       "lon": -73.9815,
-      "weight_kg": 320
+      "weight_kg": 400
     },
     {
       "id": "B19",
@@ -406,7 +406,7 @@
       "name": "Smart Bin 19 - NYU Stern Campus Courtyard",
       "lat": 40.729,
       "lon": -73.994,
-      "weight_kg": 280
+      "weight_kg": 400
     },
     {
       "id": "B20",
@@ -414,7 +414,7 @@
       "name": "Smart Bin 20 - SoHo Broadway Fashion District",
       "lat": 40.7235,
       "lon": -73.998,
-      "weight_kg": 430
+      "weight_kg": 400
     },
     {
       "id": "B21",
@@ -422,7 +422,7 @@
       "name": "Smart Bin 21 - Lower East Side Cultural Center",
       "lat": 40.717,
       "lon": -73.985,
-      "weight_kg": 360
+      "weight_kg": 400
     },
     {
       "id": "B22",
@@ -430,7 +430,7 @@
       "name": "Smart Bin 22 - Chinatown Columbus Park",
       "lat": 40.7145,
       "lon": -73.9995,
-      "weight_kg": 410
+      "weight_kg": 400
     },
     {
       "id": "B23",
@@ -438,7 +438,7 @@
       "name": "Smart Bin 23 - Tribeca Historic Promenade",
       "lat": 40.719,
       "lon": -74.007,
-      "weight_kg": 240
+      "weight_kg": 400
     },
     {
       "id": "B24",
@@ -446,7 +446,7 @@
       "name": "Smart Bin 24 - One World Trade Center Plaza",
       "lat": 40.713,
       "lon": -74.013,
-      "weight_kg": 500
+      "weight_kg": 400
     },
     {
       "id": "B25",
@@ -454,7 +454,7 @@
       "name": "Smart Bin 25 - Wall Street New York Stock Exchange",
       "lat": 40.7068,
       "lon": -74.009,
-      "weight_kg": 450
+      "weight_kg": 400
     }
   ],
   "adjacency_list": {

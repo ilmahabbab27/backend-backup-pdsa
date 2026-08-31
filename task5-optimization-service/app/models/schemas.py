@@ -178,3 +178,42 @@ class FleetEstimateResponse(BaseModel):
     truck_capacity_kg: int = Field(..., description="Uniform capacity per truck in kilograms")
     min_trucks_required: int = Field(..., description="Theoretical minimum trucks needed to collect all waste")
 
+
+class MapValidationResponse(BaseModel):
+    """Integrity and topology validation report for the road network graph."""
+
+    is_valid: bool = Field(..., description="Whether the road network graph is valid and connected")
+    map_source: str = Field(..., description="Source path of the currently loaded map JSON")
+    total_nodes: int = Field(..., description="Total count of road network nodes")
+    start_depots_count: int = Field(..., description="Count of start depots (D0)")
+    destinations_count: int = Field(..., description="Count of disposal facilities (T1)")
+    smart_bins_count: int = Field(..., description="Count of smart waste bins")
+    intersections_count: int = Field(..., description="Count of road junctions")
+    total_edges: int = Field(..., description="Total count of bidirectional road edges")
+    total_waste_kg: int = Field(..., description="Total waste weight across all smart bins")
+    is_connected: bool = Field(..., description="Whether the road network graph is fully connected")
+    connected_components: int = Field(1, description="Number of connected graph components")
+    validation_messages: List[str] = Field(default_factory=list, description="Diagnostic notices or warnings")
+
+
+class MapReloadRequest(BaseModel):
+    """Request payload to dynamically reload or switch the city map dataset."""
+
+    map_path: Optional[str] = Field(
+        None,
+        description="Optional relative or absolute path to a map JSON file (e.g. 'data/city_map_tier1_sparse.json')",
+    )
+
+
+class MapReloadResponse(BaseModel):
+    """Response after reloading city map dataset."""
+
+    status: str = Field("success", description="Status of the reload operation")
+    map_source: str = Field(..., description="Resolved path of the newly loaded map file")
+    nodes_loaded: int = Field(..., description="Number of nodes loaded")
+    bins_loaded: int = Field(..., description="Number of smart bins loaded")
+    edges_loaded: int = Field(..., description="Number of road edges constructed")
+    total_waste_kg: int = Field(..., description="Total waste weight in loaded dataset")
+    timestamp: str = Field(..., description="ISO 8601 reload timestamp")
+
+

@@ -1,16 +1,24 @@
 """Service orchestrating map data retrieval, graph traversals, fleet optimization, and path reconstruction."""
 
+from datetime import datetime, timezone
 import math
 from typing import Any, Dict, List, Optional
 from fastapi import HTTPException, status
 import networkx as nx
 
-from app.algorithms.branch_and_bound import select_feasible_bins_ffd, solve_fleet_routing
+from app.algorithms.clarke_wright import (
+    partition_bins_ffd,
+    select_feasible_bins_ffd,
+    solve_by_truck_partition,
+    solve_fleet_routing,
+)
 from app.algorithms.dijkstra import compute_distance_matrix, reconstruct_full_path
 from app.models.schemas import (
     CityMapResponse,
     CoordinatePoint,
     FleetEstimateResponse,
+    MapReloadResponse,
+    MapValidationResponse,
     NodeSchema,
     OptimizationRequest,
     OptimizationResponse,
@@ -93,6 +101,36 @@ class OptimizerService:
             min_trucks_required=min_trucks_required,
         )
 
+    def validate_map(self) -> MapValidationResponse:
+        """Validate road network graph topology, component connectivity, and facility presence."""
+        validation = self.map_repo.validate_map_integrity()
+        log_info(
+            f"GET /api/v1/map/validate -> Valid: {validation.is_valid}, Nodes: {validation.total_nodes}, "
+            f"Connected: {validation.is_connected} ({validation.connected_components} component(s))"
+        )
+        return validation
+
+    def reload_map(self, custom_path: Optional[str] = None) -> MapReloadResponse:
+        """Reload the city map data from disk or switch dataset."""
+        self.map_repo.reload(custom_path=custom_path)
+        full_map = self.map_repo.get_full_map()
+        bins = self.map_repo.get_nodes_by_type("bin")
+        total_waste = sum(b.weight_kg for b in bins)
+
+        log_success(
+            f"POST /api/v1/map/reload -> Reloaded {len(full_map.nodes)} nodes ({len(bins)} bins, {total_waste:,} kg) "
+            f"from '{self.map_repo.loaded_path}'"
+        )
+
+        return MapReloadResponse(
+            status="success",
+            map_source=str(self.map_repo.loaded_path),
+            nodes_loaded=len(full_map.nodes),
+            bins_loaded=len(bins),
+            edges_loaded=len(full_map.edges),
+            total_waste_kg=total_waste,
+            timestamp=datetime.now(timezone.utc).isoformat(),
+        )
 
     def optimize_waste_collection(self, request: OptimizationRequest) -> OptimizationResponse:
         """Execute the complete waste collection route optimization pipeline.
@@ -104,7 +142,8 @@ class OptimizerService:
            - In strict mode (`allow_partial_collection=False`): Raises `CapacityExceededException`.
         3. Verifies road network connectivity.
         4. Precomputes all-pairs shortest distances between POIs using Dijkstra's algorithm.
-        5. Solves vehicle partitioning and TSP sequencing with Branch and Bound.
+        5. Solves vehicle partitioning and route sequencing with Clarke-Wright Savings Algorithm,
+           with automatic fallback to Direct Truck Partition Routing if needed.
         6. Expands intermediate road intersections for full GPS coordinate trajectories.
         7. Returns structured OptimizationResponse with fallback metadata, warnings, and fleet recommendations.
         """
@@ -214,7 +253,7 @@ class OptimizerService:
             uncollected_bin_ids = [b["id"] for b in uncollected_bins]
             uncollected_waste_kg = sum(int(b["weight_kg"]) for b in uncollected_bins)
             collected_payload = sum(int(b["weight_kg"]) for b in packed_bins)
-            coverage_pct = round((collected_payload / total_bin_payload) * 100.0, 1)
+            coverage_pct = round((collected_payload / total_bin_payload) * 100.0, 1) if total_bin_payload > 0 else 100.0
 
             trigger_reason = (
                 f"Total waste payload ({total_bin_payload:,} kg) exceeds fleet capacity ({total_fleet_capacity:,} kg)"
@@ -278,12 +317,12 @@ class OptimizerService:
                 log_error("Dijkstra Graph Error", str(e))
                 raise GraphTopologyException(str(e))
 
-            # 5. Execute Branch and Bound solver
+            # 5. Execute Clarke-Wright Savings solver with multi-tier fallback
             log_step(
-                3, 5, "Executing Branch and Bound Fleet Route Optimizer",
+                3, 5, "Executing Clarke-Wright Savings Fleet Route Optimizer",
                 {
-                    "Algorithm": "Branch & Bound + Held-Karp TSP + Capacity Pruning",
-                    "Fleet Partitioning": f"Assigning {len(scheduled_bins_data)} bins across max {request.truck_count} trucks",
+                    "Algorithm": "Clarke-Wright Savings Heuristic + 2-Opt Local Search",
+                    "Fleet Partitioning": f"Consolidating {len(scheduled_bins_data)} bins across max {request.truck_count} trucks",
                     "Mode": "Capacity Fallback Subset" if is_fallback else "Full Collection",
                 }
             )
@@ -295,30 +334,29 @@ class OptimizerService:
                     dist_matrix=dist_matrix,
                     truck_count=request.truck_count,
                     truck_capacity_kg=request.truck_capacity_kg,
+                    allow_fallback=request.allow_partial_collection,
                 )
             except ValueError as e:
-                # If B&B fails on the subset, attempt one more emergency heuristic partition fallback
+                # If Clarke-Wright fails and partial collection is allowed, attempt secondary direct partition
                 if request.allow_partial_collection:
-                    log_warning(f"B&B Partitioning infeasible ({e}). Engaging secondary bin packing heuristic fallback.")
-                    packed_bins_2, uncollected_bins_2 = select_feasible_bins_ffd(
+                    log_warning(f"Clarke-Wright routing infeasible ({e}). Engaging direct FFD partition fallback.")
+                    partitions, uncollected_2 = partition_bins_ffd(
                         bins=scheduled_bins_data,
                         truck_count=request.truck_count,
                         truck_capacity_kg=request.truck_capacity_kg,
                     )
-                    if packed_bins_2 and len(packed_bins_2) < len(scheduled_bins_data):
-                        poi_ids_2 = [depot_node.id, dump_node.id] + [b["id"] for b in packed_bins_2]
-                        dist_matrix_2 = compute_distance_matrix(graph, poi_ids_2)
-                        route_results, total_fleet_distance = solve_fleet_routing(
+                    if partitions:
+                        route_results, total_fleet_distance = solve_by_truck_partition(
                             depot_id=depot_node.id,
                             dump_id=dump_node.id,
-                            bins=packed_bins_2,
-                            dist_matrix=dist_matrix_2,
-                            truck_count=request.truck_count,
+                            truck_partitions=partitions,
+                            dist_matrix=dist_matrix,
                             truck_capacity_kg=request.truck_capacity_kg,
                         )
                         is_fallback = True
-                        uncollected_bin_ids.extend([b["id"] for b in uncollected_bins_2])
-                        uncollected_waste_kg += sum(int(b["weight_kg"]) for b in uncollected_bins_2)
+                        if uncollected_2:
+                            uncollected_bin_ids.extend([b["id"] for b in uncollected_2])
+                            uncollected_waste_kg += sum(int(b.get("weight_kg", 0)) for b in uncollected_2)
                     else:
                         log_error("Optimization Solving Failed", str(e))
                         raise InfeasibleRoutingException(str(e))
@@ -334,16 +372,30 @@ class OptimizerService:
             truck_route_responses: List[TruckRouteResponse] = []
             for i, res in enumerate(route_results, 1):
                 full_path_nodes = reconstruct_full_path(graph, res.stop_sequence)
-                coordinates = [
-                    CoordinatePoint(
-                        node_id=nid,
-                        name=nodes_dict[nid].name,
-                        node_type=nodes_dict[nid].type,
-                        lat=nodes_dict[nid].lat,
-                        lon=nodes_dict[nid].lon,
-                    )
-                    for nid in full_path_nodes
-                ]
+                coordinates: List[CoordinatePoint] = []
+                for nid in full_path_nodes:
+                    node_obj = nodes_dict.get(nid)
+                    if node_obj is not None:
+                        coordinates.append(
+                            CoordinatePoint(
+                                node_id=nid,
+                                name=node_obj.name,
+                                node_type=node_obj.type,
+                                lat=node_obj.lat,
+                                lon=node_obj.lon,
+                            )
+                        )
+                    else:
+                        # Resilient fallback for uncatalogued intermediate nodes
+                        coordinates.append(
+                            CoordinatePoint(
+                                node_id=nid,
+                                name=f"Intersection {nid}",
+                                node_type="intersection",
+                                lat=0.0,
+                                lon=0.0,
+                            )
+                        )
 
                 log_truck_route_details(
                     truck_id=res.truck_id,
@@ -410,3 +462,4 @@ class OptimizerService:
             recommended_truck_capacity_kg=recommended_truck_capacity_kg if (is_fallback or is_capacity_exceeded) else None,
             warnings=warnings,
         )
+

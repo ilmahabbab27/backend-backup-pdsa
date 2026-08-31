@@ -121,16 +121,18 @@ def log_dijkstra_matrix(poi_count: int, sample_routes: List[Tuple[str, str, floa
         print(f"    {c.DIM}|-{c.RESET} Path {src} -> {dst}: {c.GREEN}{dist:.2f} km{c.RESET}", flush=True)
 
 
-def log_branch_and_bound_progress(
-    initial_heuristic_dist: float,
+def log_clarke_wright_progress(
+    initial_routes_count: int,
+    savings_pairs_evaluated: int,
+    initial_distance: float,
     optimal_dist: float,
     trucks_used: int,
 ) -> None:
-    """Print Branch and Bound search resolution metrics."""
+    """Print Clarke-Wright Savings Algorithm route merging metrics."""
     c = TerminalColors
-    print(f"    {c.DIM}|-{c.RESET} Greedy Incumbent Upper Bound: {c.YELLOW}{initial_heuristic_dist:.2f} km{c.RESET}", flush=True)
-    print(f"    {c.DIM}|-{c.RESET} Branch & Bound Search Pruning: Explored tree & pruned sub-optimal/over-capacity branches", flush=True)
-    print(f"    {c.DIM}\\-{c.RESET} Optimal Fleet Solution:       {c.BRIGHT_GREEN}{optimal_dist:.2f} km{c.RESET} across {c.BRIGHT_GREEN}{trucks_used} active trucks{c.RESET}", flush=True)
+    print(f"    {c.DIM}|-{c.RESET} Initial Single-Customer Routes: {c.YELLOW}{initial_routes_count} routes ({initial_distance:.2f} km total){c.RESET}", flush=True)
+    print(f"    {c.DIM}|-{c.RESET} Clarke-Wright Savings Pairs:   Evaluated {c.BRIGHT_CYAN}{savings_pairs_evaluated}{c.RESET} candidate merges & enforced capacity", flush=True)
+    print(f"    {c.DIM}\\-{c.RESET} Consolidated Fleet Solution:   {c.BRIGHT_GREEN}{optimal_dist:.2f} km{c.RESET} across {c.BRIGHT_GREEN}{trucks_used} active trucks{c.RESET}", flush=True)
 
 
 def log_truck_route_details(

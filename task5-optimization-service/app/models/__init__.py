@@ -7,6 +7,9 @@ from app.models.schemas import (
     EdgeSchema,
     FleetEstimateResponse,
     HealthResponse,
+    MapReloadRequest,
+    MapReloadResponse,
+    MapValidationResponse,
     NodeSchema,
     OptimizationRequest,
     OptimizationResponse,
@@ -21,10 +24,14 @@ __all__ = [
     "EdgeSchema",
     "FleetEstimateResponse",
     "HealthResponse",
+    "MapReloadRequest",
+    "MapReloadResponse",
+    "MapValidationResponse",
     "NodeSchema",
     "OptimizationRequest",
     "OptimizationResponse",
     "OptimizationSummary",
     "TruckRouteResponse",
 ]
+
 
