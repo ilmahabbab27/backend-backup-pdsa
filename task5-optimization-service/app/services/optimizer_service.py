@@ -425,6 +425,26 @@ class OptimizerService:
         total_collected_weight = sum(r.collected_weight_kg for r in truck_route_responses)
         coverage_pct = round((total_collected_weight / total_bin_payload) * 100.0, 2) if total_bin_payload > 0 else 100.0
 
+        # Reconcile collected bins to ensure fallback metadata consistency in fragmentation cases
+        collected_bin_ids = {b_id for r in route_results for b_id in r.bins}
+        missing_bin_ids = [b.id for b in bin_nodes if b.id not in collected_bin_ids]
+        if missing_bin_ids:
+            is_fallback = True
+            uncollected_bin_ids = missing_bin_ids
+            uncollected_waste_kg = sum(nodes_dict[b_id].weight_kg for b_id in missing_bin_ids if b_id in nodes_dict)
+            if not fallback_message:
+                fallback_message = (
+                    f"Fleet capacity or packing constraints triggered fallback: Prioritized {len(collected_bin_ids)} of {len(bin_nodes)} smart bins "
+                    f"({total_collected_weight:,} kg, {coverage_pct}% coverage). Deferred {len(missing_bin_ids)} bins "
+                    f"({uncollected_waste_kg:,} kg) to next collection dispatch."
+                )
+                if fallback_message not in warnings:
+                    warnings.insert(0, fallback_message)
+            if recommended_fleet_size is None:
+                recommended_fleet_size = math.ceil(total_bin_payload / request.truck_capacity_kg) if request.truck_capacity_kg > 0 else request.truck_count
+            if recommended_truck_capacity_kg is None:
+                recommended_truck_capacity_kg = math.ceil(total_bin_payload / request.truck_count) if request.truck_count > 0 else request.truck_capacity_kg
+
         log_step(5, 5, "Compiling Metrics & Summary Response")
         summary = OptimizationSummary(
             total_distance_km=total_fleet_distance,

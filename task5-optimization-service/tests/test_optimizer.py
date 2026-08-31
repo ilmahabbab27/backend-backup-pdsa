@@ -854,3 +854,103 @@ def test_single_bin_fleet_routing() -> None:
     assert abs(total_dist - 8.0) < 1e-4
 
 
+# ---------------------------------------------------------
+# 7. Additional Edge Case, Exception & Fragmentation Tests
+# ---------------------------------------------------------
+
+def test_partition_bins_ffd_decreasing_order() -> None:
+    """Verify that FFD prioritizes larger weight items first into trucks."""
+    bins = [
+        {"id": "B_LIGHT1", "weight_kg": 100},
+        {"id": "B_HEAVY", "weight_kg": 900},
+        {"id": "B_LIGHT2", "weight_kg": 100},
+    ]
+    # 1 truck with 950kg capacity: B_HEAVY (900kg) must be placed, leaving B_LIGHT2 uncollected
+    truck_partitions, uncollected = partition_bins_ffd(bins, truck_count=1, truck_capacity_kg=950)
+    assert len(truck_partitions) == 1
+    placed_ids = [b["id"] for b in truck_partitions[0]]
+    assert "B_HEAVY" in placed_ids
+    assert len(placed_ids) == 1 or sum(b["weight_kg"] for b in truck_partitions[0]) <= 950
+
+
+def test_api_optimize_fragmentation_fallback() -> None:
+    """Test fragmentation fallback when total waste <= total fleet capacity but bin sizing limits truck loading."""
+    # Use tier 1 sparse map (15 bins x 400kg = 6000kg)
+    # 3 trucks of 2000kg each = 6000kg total capacity
+    # Each truck can hold at most 5 bins (5 x 400 = 2000kg)
+    # But with 3 trucks and 15 bins, if we configure 3 trucks of 1800kg = 5400kg total capacity
+    # (each truck holds 4 bins = 1600kg, so 3 trucks hold 12 bins = 4800kg, deferring 3 bins = 1200kg)
+    res_tier1 = client.post("/api/v1/map/reload", json={"map_path": "data/city_map_tier1_sparse.json"})
+    assert res_tier1.status_code == 200
+
+    payload = {
+        "truck_count": 3,
+        "truck_capacity_kg": 1800,
+        "allow_partial_collection": True,
+    }
+    response = client.post("/api/v1/optimize", json=payload)
+    assert response.status_code == 200
+    data = response.json()
+
+    assert data["status"] == "partial_collection"
+    assert data["is_fallback"] is True
+    assert len(data["uncollected_bins"]) == 3
+    assert data["uncollected_waste_kg"] == 1200
+    assert data["summary"]["is_fallback"] is True
+    assert data["summary"]["total_waste_collected_kg"] == 4800
+    assert data["summary"]["total_waste_available_kg"] == 6000
+    assert data["recommended_fleet_size"] is not None
+    assert data["recommended_truck_capacity_kg"] is not None
+    assert len(data["warnings"]) >= 1
+
+    # Reload back to dense dataset
+    client.post("/api/v1/map/reload", json={"map_path": "data/city_map_tier3_dense.json"})
+
+
+def test_dijkstra_compute_path_matrix() -> None:
+    """Test compute_path_matrix helper function."""
+    repo = MapRepository()
+    graph = repo.get_graph()
+    target_nodes = ["D0", "T1", "B1"]
+
+    path_mat = compute_path_matrix(graph, target_nodes)
+    assert set(path_mat.keys()) == set(target_nodes)
+    for u in target_nodes:
+        for v in target_nodes:
+            path = path_mat[u][v]
+            assert path[0] == u
+            assert path[-1] == v
+
+    # Empty target nodes
+    assert compute_path_matrix(graph, []) == {}
+
+    # Non-existent node
+    with pytest.raises(ValueError, match="Target node 'INVALID' not found"):
+        compute_path_matrix(graph, ["INVALID"])
+
+
+def test_fleet_estimate_validation_error() -> None:
+    """Test GET /api/v1/fleet/estimate validation error when truck_capacity_kg < 100."""
+    response = client.get("/api/v1/fleet/estimate?truck_capacity_kg=50")
+    assert response.status_code == 422
+    data = response.json()
+    assert data["status"] == "error"
+    assert data["error"] == "ValidationError"
+    assert len(data["suggestions"]) > 0
+
+
+def test_logger_fallback_zero_total_waste_guard() -> None:
+    """Test log_fallback_initiated with 0 total waste does not raise ZeroDivisionError."""
+    from app.utils.logger import log_fallback_initiated
+    # Should execute cleanly without error
+    log_fallback_initiated(
+        reason="Test zero waste",
+        selected_bins=0,
+        total_bins=0,
+        collected_weight_kg=0,
+        total_waste_kg=0,
+        fleet_capacity_kg=1000,
+        uncollected_bins_count=0,
+    )
+
+

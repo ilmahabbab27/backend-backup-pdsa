@@ -178,8 +178,8 @@ def log_fallback_initiated(
     print(f"  {c.BOLD}Fallback Execution Rationale:{c.RESET}", flush=True)
     print(f"    * Trigger Reason:            {c.BRIGHT_YELLOW}{reason}{c.RESET}", flush=True)
     print(f"    * Total City Waste:          {c.BRIGHT_YELLOW}{total_waste_kg:,} kg{c.RESET} ({total_bins} bins)", flush=True)
-    print(f"    * Total Available Capacity:  {c.BRIGHT_YELLOW}{fleet_capacity_kg:,} kg{c.RESET}", flush=True)
-    print(f"    * Scheduled for Collection:  {c.BRIGHT_GREEN}{collected_weight_kg:,} kg{c.RESET} ({selected_bins}/{total_bins} bins, {round((collected_weight_kg/total_waste_kg)*100, 1)}% coverage)", flush=True)
+    coverage_pct = round((collected_weight_kg / total_waste_kg) * 100.0, 1) if total_waste_kg > 0 else 100.0
+    print(f"    * Scheduled for Collection:  {c.BRIGHT_GREEN}{collected_weight_kg:,} kg{c.RESET} ({selected_bins}/{total_bins} bins, {coverage_pct}% coverage)", flush=True)
     print(f"    * Deferred to Next Cycle:    {c.YELLOW}{total_waste_kg - collected_weight_kg:,} kg{c.RESET} ({uncollected_bins_count} bins)", flush=True)
     print(f"{c.YELLOW}{'-' * 79}{c.RESET}\n", flush=True)
 

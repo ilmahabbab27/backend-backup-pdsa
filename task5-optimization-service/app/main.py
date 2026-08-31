@@ -38,7 +38,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
         log_startup_banner(
             app_name=settings.APP_NAME,
             port=settings.APP_PORT,
-            map_path=str(settings.resolved_map_data_path),
+            map_path=str(map_repo.loaded_path),
             node_counts=node_counts,
             edge_count=edge_count,
             total_waste_kg=total_waste,
@@ -96,8 +96,9 @@ async def optimization_exception_handler(request: Request, exc: OptimizationExce
 async def validation_exception_handler(request: Request, exc: RequestValidationError) -> JSONResponse:
     """Handle Pydantic/FastAPI input payload validation errors."""
     error_messages = [f"{'.'.join(str(loc) for loc in err['loc'])}: {err['msg']}" for err in exc.errors()]
+    status_code = getattr(status, "HTTP_422_UNPROCESSABLE_CONTENT", status.HTTP_422_UNPROCESSABLE_ENTITY)
     return JSONResponse(
-        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+        status_code=status_code,
         content={
             "status": "error",
             "error": "ValidationError",

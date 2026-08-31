@@ -359,14 +359,15 @@ def partition_bins_ffd(
     valid_bins = [b for b in bins if int(b.get("weight_kg", 0)) <= truck_capacity_kg]
     overweight_bins = [b for b in bins if int(b.get("weight_kg", 0)) > truck_capacity_kg]
 
-    # Sort valid bins descending by weight
-    sorted_bins = sorted(valid_bins, key=lambda b: int(b.get("weight_kg", 0)), reverse=True)
+    # Sort valid bins descending by weight for true First-Fit Decreasing (FFD) packing
+    valid_bins.sort(key=lambda b: int(b.get("weight_kg", 0)), reverse=True)
 
+    # Allocate bins across trucks using First-Fit (FF) order
     truck_loads = [0] * max(1, truck_count)
     truck_bins: List[List[Dict[str, Any]]] = [[] for _ in range(max(1, truck_count))]
     uncollected_bins: List[Dict[str, Any]] = list(overweight_bins)
 
-    for b in sorted_bins:
+    for b in valid_bins:
         weight = int(b.get("weight_kg", 0))
         placed = False
         for t_idx in range(len(truck_loads)):
