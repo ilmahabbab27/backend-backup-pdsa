@@ -51,11 +51,11 @@ class MapRepository:
 
         # Candidate fallback map locations
         search_candidates = [
-            self._settings.BASE_DIR / "data" / "city_map.json",
             self._settings.BASE_DIR / "data" / "city_map_tier3_dense.json",
             self._settings.BASE_DIR / "data" / "city_map_tier2_medium.json",
             self._settings.BASE_DIR / "data" / "city_map_tier1_sparse.json",
-            Path("data/city_map.json").resolve(),
+            Path("data/city_map_tier3_dense.json").resolve(),
+            Path("data/city_map_tier1_sparse.json").resolve(),
         ]
 
         for cand in search_candidates:

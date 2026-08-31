@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     APP_PORT: int = 8005
     API_V1_STR: str = "/api/v1"
     CORS_ORIGINS: Union[List[str], str] = ["*"]
-    MAP_DATA_PATH: str = "data/city_map.json"
+    MAP_DATA_PATH: str = "data/city_map_tier3_dense.json"
     STATIC_BIN_CAPACITY_KG: int = 400
 
     # Base directory of task5-optimization-service
@@ -39,7 +39,7 @@ class Settings(BaseSettings):
 
     @property
     def resolved_map_data_path(self) -> Path:
-        """Return the absolute path to city_map.json."""
+        """Return the absolute path to configured map JSON dataset."""
         path = Path(self.MAP_DATA_PATH)
         if not path.is_absolute():
             return (self.BASE_DIR / path).resolve()

@@ -149,7 +149,7 @@ class MapDataNotFoundException(OptimizationException):
             error_type="MapDataNotFound",
             details={"configured_path": path, "searched_paths": searched_paths or []},
             suggestions=[
-                "Ensure 'data/city_map.json' exists in the task5-optimization-service root.",
+                "Ensure map files exist in 'data/' (e.g., 'data/city_map_tier1_sparse.json', 'data/city_map_tier2_medium.json', 'data/city_map_tier3_dense.json').",
                 "Check MAP_DATA_PATH in your .env configuration.",
                 "Use the /api/v1/map/reload endpoint to reload with an available dataset.",
             ],

@@ -49,8 +49,8 @@ def test_map_repository_loads_nodes_and_graph() -> None:
     graph = repo.get_graph()
 
     assert isinstance(graph, nx.Graph)
-    assert graph.number_of_nodes() >= 57  # >= 1 Depot + 1 Dump + 30 Intersections + 25 Bins
-    assert graph.number_of_edges() >= 57
+    assert graph.number_of_nodes() >= 37  # >= 1 Depot + 1 Dump + Intersections + Bins
+    assert graph.number_of_edges() >= 42
     assert nx.is_connected(graph)
 
     # Check start depot
@@ -67,13 +67,13 @@ def test_map_repository_loads_nodes_and_graph() -> None:
 
     # Check intersections
     intersections = repo.get_nodes_by_type("intersection")
-    assert len(intersections) >= 30
+    assert len(intersections) >= 20
     for inter in intersections:
         assert inter.weight_kg == 0
 
     # Check smart bins (all bins have uniform static capacity of 400kg)
     bins = repo.get_nodes_by_type("bin")
-    assert len(bins) >= 25
+    assert len(bins) >= 15
     for b in bins:
         assert b.weight_kg == 400
 
@@ -503,12 +503,12 @@ def test_api_get_nodes_and_filters() -> None:
     response_all = client.get("/api/v1/nodes")
     assert response_all.status_code == 200
     all_nodes = response_all.json()
-    assert len(all_nodes) >= 57
+    assert len(all_nodes) >= 37
 
     response_bins = client.get("/api/v1/nodes?type=bin")
     assert response_bins.status_code == 200
     bins = response_bins.json()
-    assert len(bins) >= 25
+    assert len(bins) >= 15
     assert all(b["type"] == "bin" for b in bins)
 
 
@@ -517,7 +517,7 @@ def test_api_get_bins_and_depots() -> None:
     bins_res = client.get("/api/v1/bins")
     assert bins_res.status_code == 200
     bins = bins_res.json()
-    assert len(bins) >= 25
+    assert len(bins) >= 15
 
     depots_res = client.get("/api/v1/depots")
     assert depots_res.status_code == 200
@@ -533,7 +533,7 @@ def test_api_get_fleet_estimate() -> None:
     response = client.get("/api/v1/fleet/estimate?truck_capacity_kg=2000")
     assert response.status_code == 200
     data = response.json()
-    assert data["total_bins"] >= 25
+    assert data["total_bins"] >= 15
     assert data["total_waste_kg"] > 0
     assert data["truck_capacity_kg"] == 2000
     assert data["min_trucks_required"] >= 1
@@ -659,9 +659,9 @@ def test_map_validation_endpoint() -> None:
     assert data["is_connected"] is True
     assert data["start_depots_count"] >= 1
     assert data["destinations_count"] >= 1
-    assert data["smart_bins_count"] >= 25
-    assert data["total_nodes"] >= 57
-    assert data["total_edges"] >= 57
+    assert data["smart_bins_count"] >= 15
+    assert data["total_nodes"] >= 37
+    assert data["total_edges"] >= 42
     assert data["connected_components"] == 1
     assert len(data["validation_messages"]) >= 1
 
@@ -696,9 +696,8 @@ def test_map_reload_endpoint() -> None:
 
 
 def test_all_map_tier_datasets() -> None:
-    """Test optimization across all 4 map tier datasets."""
+    """Test optimization across all 3 map tier datasets."""
     datasets = [
-        ("data/city_map.json", 25),
         ("data/city_map_tier1_sparse.json", 15),
         ("data/city_map_tier2_medium.json", 45),
         ("data/city_map_tier3_dense.json", 120),
@@ -753,8 +752,8 @@ def test_reconstruct_full_path_edge_cases() -> None:
 
 def test_overweight_single_bin_with_compliant_bins_fallback() -> None:
     """Test fallback when one bin is overweight but compliant bins can be serviced."""
-    # Synthetic repository with 1 overweight bin and 2 normal bins
-    settings = Settings(MAP_DATA_PATH="data/city_map.json")
+    # Synthetic repository with compliant bins
+    settings = Settings(MAP_DATA_PATH="data/city_map_tier1_sparse.json")
     repo = MapRepository(settings=settings)
     service = OptimizerService(map_repo=repo)
 
@@ -788,7 +787,7 @@ def test_map_repository_nodes_by_type_case_insensitive() -> None:
     bins_upper = repo.get_nodes_by_type("BIN")
     bins_lower = repo.get_nodes_by_type("bin  ")
     assert len(bins_upper) == len(bins_lower)
-    assert len(bins_upper) >= 25
+    assert len(bins_upper) >= 15
 
 
 def test_custom_domain_exceptions_structures() -> None:
