@@ -5,11 +5,18 @@ from app.models.schemas import (
     CoordinatePoint,
     EdgeNeighbor,
     EdgeSchema,
+    FleetEstimateResponse,
     HealthResponse,
+    MapReloadRequest,
+    MapReloadResponse,
+    MapTierSummary,
+    MapTiersResponse,
+    MapValidationResponse,
     NodeSchema,
     OptimizationRequest,
     OptimizationResponse,
     OptimizationSummary,
+    StructuredErrorResponse,
     TruckRouteResponse,
 )
 
@@ -18,10 +25,19 @@ __all__ = [
     "CoordinatePoint",
     "EdgeNeighbor",
     "EdgeSchema",
+    "FleetEstimateResponse",
     "HealthResponse",
+    "MapReloadRequest",
+    "MapReloadResponse",
+    "MapTierSummary",
+    "MapTiersResponse",
+    "MapValidationResponse",
     "NodeSchema",
     "OptimizationRequest",
     "OptimizationResponse",
     "OptimizationSummary",
+    "StructuredErrorResponse",
     "TruckRouteResponse",
 ]
+
+

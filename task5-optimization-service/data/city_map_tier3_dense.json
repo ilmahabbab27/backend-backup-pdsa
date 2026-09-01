@@ -3,7 +3,6 @@
     {
       "id": "D0",
       "type": "start",
-      "name": "Central Downtown Sanitation Depot",
       "lat": 40.745,
       "lon": -73.98,
       "weight_kg": 0
@@ -11,7 +10,6 @@
     {
       "id": "T1",
       "type": "destination",
-      "name": "Harbor Terminal Waste Transfer Station",
       "lat": 40.805,
       "lon": -73.9,
       "weight_kg": 0
@@ -19,7 +17,6 @@
     {
       "id": "I1",
       "type": "intersection",
-      "name": "Intersection 1 - Downtown Blvd & Sector 1 Cross",
       "lat": 40.7368,
       "lon": -73.9915,
       "weight_kg": 0
@@ -27,7 +24,6 @@
     {
       "id": "I2",
       "type": "intersection",
-      "name": "Intersection 2 - Downtown Blvd & Sector 2 Cross",
       "lat": 40.7335,
       "lon": -73.97,
       "weight_kg": 0
@@ -35,7 +31,6 @@
     {
       "id": "I3",
       "type": "intersection",
-      "name": "Intersection 3 - Downtown Blvd & Sector 3 Cross",
       "lat": 40.7352,
       "lon": -73.9477,
       "weight_kg": 0
@@ -43,7 +38,6 @@
     {
       "id": "I4",
       "type": "intersection",
-      "name": "Intersection 4 - Downtown Blvd & Sector 4 Cross",
       "lat": 40.7354,
       "lon": -73.9243,
       "weight_kg": 0
@@ -51,7 +45,6 @@
     {
       "id": "I5",
       "type": "intersection",
-      "name": "Intersection 5 - Downtown Blvd & Sector 5 Cross",
       "lat": 40.7338,
       "lon": -73.9031,
       "weight_kg": 0
@@ -59,7 +52,6 @@
     {
       "id": "I6",
       "type": "intersection",
-      "name": "Intersection 6 - Downtown Blvd & Sector 6 Cross",
       "lat": 40.7341,
       "lon": -73.882,
       "weight_kg": 0
@@ -67,7 +59,6 @@
     {
       "id": "I7",
       "type": "intersection",
-      "name": "Intersection 7 - Downtown Blvd & Sector 7 Cross",
       "lat": 40.7456,
       "lon": -73.9886,
       "weight_kg": 0
@@ -75,7 +66,6 @@
     {
       "id": "I8",
       "type": "intersection",
-      "name": "Intersection 8 - Downtown Blvd & Sector 8 Cross",
       "lat": 40.7424,
       "lon": -73.9687,
       "weight_kg": 0
@@ -83,7 +73,6 @@
     {
       "id": "I9",
       "type": "intersection",
-      "name": "Intersection 9 - Downtown Blvd & Sector 9 Cross",
       "lat": 40.7431,
       "lon": -73.9488,
       "weight_kg": 0
@@ -91,7 +80,6 @@
     {
       "id": "I10",
       "type": "intersection",
-      "name": "Intersection 10 - Downtown Blvd & Sector 10 Cross",
       "lat": 40.7451,
       "lon": -73.9247,
       "weight_kg": 0
@@ -99,7 +87,6 @@
     {
       "id": "I11",
       "type": "intersection",
-      "name": "Intersection 11 - Downtown Blvd & Sector 11 Cross",
       "lat": 40.743,
       "lon": -73.9026,
       "weight_kg": 0
@@ -107,7 +94,6 @@
     {
       "id": "I12",
       "type": "intersection",
-      "name": "Intersection 12 - Downtown Blvd & Sector 12 Cross",
       "lat": 40.7442,
       "lon": -73.8823,
       "weight_kg": 0
@@ -115,7 +101,6 @@
     {
       "id": "I13",
       "type": "intersection",
-      "name": "Intersection 13 - Downtown Blvd & Sector 13 Cross",
       "lat": 40.751,
       "lon": -73.9917,
       "weight_kg": 0
@@ -123,7 +108,6 @@
     {
       "id": "I14",
       "type": "intersection",
-      "name": "Intersection 14 - Downtown Blvd & Sector 14 Cross",
       "lat": 40.7545,
       "lon": -73.9668,
       "weight_kg": 0
@@ -131,7 +115,6 @@
     {
       "id": "I15",
       "type": "intersection",
-      "name": "Intersection 15 - Downtown Blvd & Sector 15 Cross",
       "lat": 40.7532,
       "lon": -73.9455,
       "weight_kg": 0
@@ -139,7 +122,6 @@
     {
       "id": "I16",
       "type": "intersection",
-      "name": "Intersection 16 - Downtown Blvd & Sector 16 Cross",
       "lat": 40.7533,
       "lon": -73.9266,
       "weight_kg": 0
@@ -147,7 +129,6 @@
     {
       "id": "I17",
       "type": "intersection",
-      "name": "Intersection 17 - Downtown Blvd & Sector 17 Cross",
       "lat": 40.7515,
       "lon": -73.9044,
       "weight_kg": 0
@@ -155,7 +136,6 @@
     {
       "id": "I18",
       "type": "intersection",
-      "name": "Intersection 18 - Downtown Blvd & Sector 18 Cross",
       "lat": 40.7546,
       "lon": -73.8808,
       "weight_kg": 0
@@ -163,7 +143,6 @@
     {
       "id": "I19",
       "type": "intersection",
-      "name": "Intersection 19 - Downtown Blvd & Sector 19 Cross",
       "lat": 40.7634,
       "lon": -73.9884,
       "weight_kg": 0
@@ -171,7 +150,6 @@
     {
       "id": "I20",
       "type": "intersection",
-      "name": "Intersection 20 - Downtown Blvd & Sector 20 Cross",
       "lat": 40.7608,
       "lon": -73.9694,
       "weight_kg": 0
@@ -179,7 +157,6 @@
     {
       "id": "I21",
       "type": "intersection",
-      "name": "Intersection 21 - Downtown Blvd & Sector 21 Cross",
       "lat": 40.7604,
       "lon": -73.9457,
       "weight_kg": 0
@@ -187,7 +164,6 @@
     {
       "id": "I22",
       "type": "intersection",
-      "name": "Intersection 22 - Downtown Blvd & Sector 22 Cross",
       "lat": 40.7635,
       "lon": -73.9256,
       "weight_kg": 0
@@ -195,7 +171,6 @@
     {
       "id": "I23",
       "type": "intersection",
-      "name": "Intersection 23 - Downtown Blvd & Sector 23 Cross",
       "lat": 40.7625,
       "lon": -73.905,
       "weight_kg": 0
@@ -203,7 +178,6 @@
     {
       "id": "I24",
       "type": "intersection",
-      "name": "Intersection 24 - Downtown Blvd & Sector 24 Cross",
       "lat": 40.7637,
       "lon": -73.8805,
       "weight_kg": 0
@@ -211,7 +185,6 @@
     {
       "id": "I25",
       "type": "intersection",
-      "name": "Intersection 25 - Downtown Blvd & Sector 25 Cross",
       "lat": 40.7729,
       "lon": -73.9888,
       "weight_kg": 0
@@ -219,7 +192,6 @@
     {
       "id": "I26",
       "type": "intersection",
-      "name": "Intersection 26 - Downtown Blvd & Sector 26 Cross",
       "lat": 40.7725,
       "lon": -73.9703,
       "weight_kg": 0
@@ -227,7 +199,6 @@
     {
       "id": "I27",
       "type": "intersection",
-      "name": "Intersection 27 - Downtown Blvd & Sector 27 Cross",
       "lat": 40.7719,
       "lon": -73.9475,
       "weight_kg": 0
@@ -235,7 +206,6 @@
     {
       "id": "I28",
       "type": "intersection",
-      "name": "Intersection 28 - Downtown Blvd & Sector 28 Cross",
       "lat": 40.7727,
       "lon": -73.924,
       "weight_kg": 0
@@ -243,7 +213,6 @@
     {
       "id": "I29",
       "type": "intersection",
-      "name": "Intersection 29 - Downtown Blvd & Sector 29 Cross",
       "lat": 40.7725,
       "lon": -73.9024,
       "weight_kg": 0
@@ -251,7 +220,6 @@
     {
       "id": "I30",
       "type": "intersection",
-      "name": "Intersection 30 - Downtown Blvd & Sector 30 Cross",
       "lat": 40.7701,
       "lon": -73.8809,
       "weight_kg": 0
@@ -259,7 +227,6 @@
     {
       "id": "I31",
       "type": "intersection",
-      "name": "Intersection 31 - Downtown Blvd & Sector 31 Cross",
       "lat": 40.7784,
       "lon": -73.9885,
       "weight_kg": 0
@@ -267,7 +234,6 @@
     {
       "id": "I32",
       "type": "intersection",
-      "name": "Intersection 32 - Downtown Blvd & Sector 32 Cross",
       "lat": 40.7814,
       "lon": -73.9695,
       "weight_kg": 0
@@ -275,7 +241,6 @@
     {
       "id": "I33",
       "type": "intersection",
-      "name": "Intersection 33 - Downtown Blvd & Sector 33 Cross",
       "lat": 40.7813,
       "lon": -73.947,
       "weight_kg": 0
@@ -283,7 +248,6 @@
     {
       "id": "I34",
       "type": "intersection",
-      "name": "Intersection 34 - Downtown Blvd & Sector 34 Cross",
       "lat": 40.7792,
       "lon": -73.924,
       "weight_kg": 0
@@ -291,7 +255,6 @@
     {
       "id": "I35",
       "type": "intersection",
-      "name": "Intersection 35 - Downtown Blvd & Sector 35 Cross",
       "lat": 40.7789,
       "lon": -73.9055,
       "weight_kg": 0
@@ -299,7 +262,6 @@
     {
       "id": "I36",
       "type": "intersection",
-      "name": "Intersection 36 - Downtown Blvd & Sector 36 Cross",
       "lat": 40.7788,
       "lon": -73.8827,
       "weight_kg": 0
@@ -307,7 +269,6 @@
     {
       "id": "I37",
       "type": "intersection",
-      "name": "Intersection 37 - Downtown Blvd & Sector 37 Cross",
       "lat": 40.7905,
       "lon": -73.9881,
       "weight_kg": 0
@@ -315,7 +276,6 @@
     {
       "id": "I38",
       "type": "intersection",
-      "name": "Intersection 38 - Downtown Blvd & Sector 38 Cross",
       "lat": 40.7881,
       "lon": -73.9678,
       "weight_kg": 0
@@ -323,7 +283,6 @@
     {
       "id": "I39",
       "type": "intersection",
-      "name": "Intersection 39 - Downtown Blvd & Sector 39 Cross",
       "lat": 40.7886,
       "lon": -73.9449,
       "weight_kg": 0
@@ -331,7 +290,6 @@
     {
       "id": "I40",
       "type": "intersection",
-      "name": "Intersection 40 - Downtown Blvd & Sector 40 Cross",
       "lat": 40.7891,
       "lon": -73.9234,
       "weight_kg": 0
@@ -339,7 +297,6 @@
     {
       "id": "I41",
       "type": "intersection",
-      "name": "Intersection 41 - Downtown Blvd & Sector 41 Cross",
       "lat": 40.7875,
       "lon": -73.9017,
       "weight_kg": 0
@@ -347,7 +304,6 @@
     {
       "id": "I42",
       "type": "intersection",
-      "name": "Intersection 42 - Downtown Blvd & Sector 42 Cross",
       "lat": 40.7877,
       "lon": -73.8801,
       "weight_kg": 0
@@ -355,7 +311,6 @@
     {
       "id": "I43",
       "type": "intersection",
-      "name": "Intersection 43 - Downtown Blvd & Sector 43 Cross",
       "lat": 40.7971,
       "lon": -73.9916,
       "weight_kg": 0
@@ -363,7 +318,6 @@
     {
       "id": "I44",
       "type": "intersection",
-      "name": "Intersection 44 - Downtown Blvd & Sector 44 Cross",
       "lat": 40.7977,
       "lon": -73.9675,
       "weight_kg": 0
@@ -371,7 +325,6 @@
     {
       "id": "I45",
       "type": "intersection",
-      "name": "Intersection 45 - Downtown Blvd & Sector 45 Cross",
       "lat": 40.7973,
       "lon": -73.9464,
       "weight_kg": 0
@@ -379,7 +332,6 @@
     {
       "id": "I46",
       "type": "intersection",
-      "name": "Intersection 46 - Downtown Blvd & Sector 46 Cross",
       "lat": 40.798,
       "lon": -73.9257,
       "weight_kg": 0
@@ -387,7 +339,6 @@
     {
       "id": "I47",
       "type": "intersection",
-      "name": "Intersection 47 - Downtown Blvd & Sector 47 Cross",
       "lat": 40.7983,
       "lon": -73.9046,
       "weight_kg": 0
@@ -395,7 +346,6 @@
     {
       "id": "I48",
       "type": "intersection",
-      "name": "Intersection 48 - Downtown Blvd & Sector 48 Cross",
       "lat": 40.7988,
       "lon": -73.884,
       "weight_kg": 0
@@ -403,7 +353,6 @@
     {
       "id": "I49",
       "type": "intersection",
-      "name": "Intersection 49 - Downtown Blvd & Sector 49 Cross",
       "lat": 40.8087,
       "lon": -73.9898,
       "weight_kg": 0
@@ -411,7 +360,6 @@
     {
       "id": "I50",
       "type": "intersection",
-      "name": "Intersection 50 - Downtown Blvd & Sector 50 Cross",
       "lat": 40.8079,
       "lon": -73.9674,
       "weight_kg": 0
@@ -419,7 +367,6 @@
     {
       "id": "I51",
       "type": "intersection",
-      "name": "Intersection 51 - Downtown Blvd & Sector 51 Cross",
       "lat": 40.8077,
       "lon": -73.9473,
       "weight_kg": 0
@@ -427,7 +374,6 @@
     {
       "id": "I52",
       "type": "intersection",
-      "name": "Intersection 52 - Downtown Blvd & Sector 52 Cross",
       "lat": 40.8053,
       "lon": -73.9245,
       "weight_kg": 0
@@ -435,7 +381,6 @@
     {
       "id": "I53",
       "type": "intersection",
-      "name": "Intersection 53 - Downtown Blvd & Sector 53 Cross",
       "lat": 40.8063,
       "lon": -73.9043,
       "weight_kg": 0
@@ -443,7 +388,6 @@
     {
       "id": "I54",
       "type": "intersection",
-      "name": "Intersection 54 - Downtown Blvd & Sector 54 Cross",
       "lat": 40.8084,
       "lon": -73.8811,
       "weight_kg": 0
@@ -451,7 +395,6 @@
     {
       "id": "I55",
       "type": "intersection",
-      "name": "Intersection 55 - Downtown Blvd & Sector 55 Cross",
       "lat": 40.8152,
       "lon": -73.9908,
       "weight_kg": 0
@@ -459,7 +402,6 @@
     {
       "id": "I56",
       "type": "intersection",
-      "name": "Intersection 56 - Downtown Blvd & Sector 56 Cross",
       "lat": 40.8156,
       "lon": -73.9688,
       "weight_kg": 0
@@ -467,7 +409,6 @@
     {
       "id": "I57",
       "type": "intersection",
-      "name": "Intersection 57 - Downtown Blvd & Sector 57 Cross",
       "lat": 40.8152,
       "lon": -73.9483,
       "weight_kg": 0
@@ -475,7 +416,6 @@
     {
       "id": "I58",
       "type": "intersection",
-      "name": "Intersection 58 - Downtown Blvd & Sector 58 Cross",
       "lat": 40.8157,
       "lon": -73.9234,
       "weight_kg": 0
@@ -483,7 +423,6 @@
     {
       "id": "I59",
       "type": "intersection",
-      "name": "Intersection 59 - Downtown Blvd & Sector 59 Cross",
       "lat": 40.8167,
       "lon": -73.902,
       "weight_kg": 0
@@ -491,7 +430,6 @@
     {
       "id": "I60",
       "type": "intersection",
-      "name": "Intersection 60 - Downtown Blvd & Sector 60 Cross",
       "lat": 40.8165,
       "lon": -73.8828,
       "weight_kg": 0
@@ -499,519 +437,454 @@
     {
       "id": "B1",
       "type": "bin",
-      "name": "Smart Bin 1 - Financial Plaza Commercial Hotspot #1",
       "lat": 40.7548,
       "lon": -73.9651,
-      "weight_kg": 340
+      "weight_kg": 400
     },
     {
       "id": "B2",
       "type": "bin",
-      "name": "Smart Bin 2 - Broadway Theater & Retail Hotspot #1",
       "lat": 40.7985,
       "lon": -73.943,
-      "weight_kg": 440
+      "weight_kg": 400
     },
     {
       "id": "B3",
       "type": "bin",
-      "name": "Smart Bin 3 - Waterfront Culinary & Market District #1",
       "lat": 40.76,
       "lon": -73.9242,
-      "weight_kg": 390
+      "weight_kg": 400
     },
     {
       "id": "B4",
       "type": "bin",
-      "name": "Smart Bin 4 - Convention Center & Tech Concourse #1",
       "lat": 40.7957,
       "lon": -73.9307,
-      "weight_kg": 500
+      "weight_kg": 400
     },
     {
       "id": "B5",
       "type": "bin",
-      "name": "Smart Bin 5 - Financial Plaza Commercial Hotspot #2",
       "lat": 40.7666,
       "lon": -73.9754,
-      "weight_kg": 300
+      "weight_kg": 400
     },
     {
       "id": "B6",
       "type": "bin",
-      "name": "Smart Bin 6 - Broadway Theater & Retail Hotspot #2",
       "lat": 40.7915,
       "lon": -73.9669,
-      "weight_kg": 460
+      "weight_kg": 400
     },
     {
       "id": "B7",
       "type": "bin",
-      "name": "Smart Bin 7 - Waterfront Culinary & Market District #2",
       "lat": 40.7601,
       "lon": -73.9217,
-      "weight_kg": 490
+      "weight_kg": 400
     },
     {
       "id": "B8",
       "type": "bin",
-      "name": "Smart Bin 8 - Convention Center & Tech Concourse #2",
       "lat": 40.8007,
       "lon": -73.9114,
-      "weight_kg": 500
+      "weight_kg": 400
     },
     {
       "id": "B9",
       "type": "bin",
-      "name": "Smart Bin 9 - Financial Plaza Commercial Hotspot #3",
       "lat": 40.7556,
       "lon": -73.9629,
-      "weight_kg": 320
+      "weight_kg": 400
     },
     {
       "id": "B10",
       "type": "bin",
-      "name": "Smart Bin 10 - Broadway Theater & Retail Hotspot #3",
       "lat": 40.8059,
       "lon": -73.9614,
-      "weight_kg": 490
+      "weight_kg": 400
     },
     {
       "id": "B11",
       "type": "bin",
-      "name": "Smart Bin 11 - Waterfront Culinary & Market District #3",
       "lat": 40.7724,
       "lon": -73.9104,
-      "weight_kg": 450
+      "weight_kg": 400
     },
     {
       "id": "B12",
       "type": "bin",
-      "name": "Smart Bin 12 - Convention Center & Tech Concourse #3",
       "lat": 40.7887,
       "lon": -73.9273,
-      "weight_kg": 370
+      "weight_kg": 400
     },
     {
       "id": "B13",
       "type": "bin",
-      "name": "Smart Bin 13 - Financial Plaza Commercial Hotspot #4",
       "lat": 40.749,
       "lon": -73.9647,
-      "weight_kg": 450
+      "weight_kg": 400
     },
     {
       "id": "B14",
       "type": "bin",
-      "name": "Smart Bin 14 - Broadway Theater & Retail Hotspot #4",
       "lat": 40.7885,
       "lon": -73.9795,
-      "weight_kg": 490
+      "weight_kg": 400
     },
     {
       "id": "B15",
       "type": "bin",
-      "name": "Smart Bin 15 - Waterfront Culinary & Market District #4",
       "lat": 40.7754,
       "lon": -73.9264,
-      "weight_kg": 320
+      "weight_kg": 400
     },
     {
       "id": "B16",
       "type": "bin",
-      "name": "Smart Bin 16 - Convention Center & Tech Concourse #4",
       "lat": 40.809,
       "lon": -73.8975,
-      "weight_kg": 410
+      "weight_kg": 400
     },
     {
       "id": "B17",
       "type": "bin",
-      "name": "Smart Bin 17 - Financial Plaza Commercial Hotspot #5",
       "lat": 40.745,
       "lon": -73.9622,
-      "weight_kg": 280
+      "weight_kg": 400
     },
     {
       "id": "B18",
       "type": "bin",
-      "name": "Smart Bin 18 - Broadway Theater & Retail Hotspot #5",
       "lat": 40.7812,
       "lon": -73.9551,
-      "weight_kg": 460
+      "weight_kg": 400
     },
     {
       "id": "B19",
       "type": "bin",
-      "name": "Smart Bin 19 - Waterfront Culinary & Market District #5",
       "lat": 40.755,
       "lon": -73.9175,
-      "weight_kg": 350
+      "weight_kg": 400
     },
     {
       "id": "B20",
       "type": "bin",
-      "name": "Smart Bin 20 - Convention Center & Tech Concourse #5",
       "lat": 40.816,
       "lon": -73.9265,
-      "weight_kg": 440
+      "weight_kg": 400
     },
     {
       "id": "B21",
       "type": "bin",
-      "name": "Smart Bin 21 - Financial Plaza Commercial Hotspot #6",
       "lat": 40.7617,
       "lon": -73.9844,
-      "weight_kg": 380
+      "weight_kg": 400
     },
     {
       "id": "B22",
       "type": "bin",
-      "name": "Smart Bin 22 - Broadway Theater & Retail Hotspot #6",
       "lat": 40.7999,
       "lon": -73.971,
-      "weight_kg": 300
+      "weight_kg": 400
     },
     {
       "id": "B23",
       "type": "bin",
-      "name": "Smart Bin 23 - Waterfront Culinary & Market District #6",
       "lat": 40.7646,
       "lon": -73.9263,
-      "weight_kg": 330
+      "weight_kg": 400
     },
     {
       "id": "B24",
       "type": "bin",
-      "name": "Smart Bin 24 - Convention Center & Tech Concourse #6",
       "lat": 40.8002,
       "lon": -73.9391,
-      "weight_kg": 330
+      "weight_kg": 400
     },
     {
       "id": "B25",
       "type": "bin",
-      "name": "Smart Bin 25 - Financial Plaza Commercial Hotspot #7",
       "lat": 40.756,
       "lon": -73.9771,
-      "weight_kg": 450
+      "weight_kg": 400
     },
     {
       "id": "B26",
       "type": "bin",
-      "name": "Smart Bin 26 - Broadway Theater & Retail Hotspot #7",
       "lat": 40.7956,
       "lon": -73.9493,
-      "weight_kg": 470
+      "weight_kg": 400
     },
     {
       "id": "B27",
       "type": "bin",
-      "name": "Smart Bin 27 - Waterfront Culinary & Market District #7",
       "lat": 40.7636,
       "lon": -73.9072,
-      "weight_kg": 350
+      "weight_kg": 400
     },
     {
       "id": "B28",
       "type": "bin",
-      "name": "Smart Bin 28 - Convention Center & Tech Concourse #7",
       "lat": 40.8026,
       "lon": -73.9226,
-      "weight_kg": 290
+      "weight_kg": 400
     },
     {
       "id": "B29",
       "type": "bin",
-      "name": "Smart Bin 29 - Financial Plaza Commercial Hotspot #8",
       "lat": 40.7564,
       "lon": -73.9497,
-      "weight_kg": 470
+      "weight_kg": 400
     },
     {
       "id": "B30",
       "type": "bin",
-      "name": "Smart Bin 30 - Broadway Theater & Retail Hotspot #8",
       "lat": 40.7969,
       "lon": -73.9499,
-      "weight_kg": 350
+      "weight_kg": 400
     },
     {
       "id": "B31",
       "type": "bin",
-      "name": "Smart Bin 31 - Waterfront Culinary & Market District #8",
       "lat": 40.757,
       "lon": -73.9177,
-      "weight_kg": 310
+      "weight_kg": 400
     },
     {
       "id": "B32",
       "type": "bin",
-      "name": "Smart Bin 32 - Convention Center & Tech Concourse #8",
       "lat": 40.804,
       "lon": -73.9286,
-      "weight_kg": 490
+      "weight_kg": 400
     },
     {
       "id": "B33",
       "type": "bin",
-      "name": "Smart Bin 33 - Financial Plaza Commercial Hotspot #9",
       "lat": 40.7443,
       "lon": -73.9728,
-      "weight_kg": 490
+      "weight_kg": 400
     },
     {
       "id": "B34",
       "type": "bin",
-      "name": "Smart Bin 34 - Broadway Theater & Retail Hotspot #9",
       "lat": 40.7869,
       "lon": -73.9652,
-      "weight_kg": 360
+      "weight_kg": 400
     },
     {
       "id": "B35",
       "type": "bin",
-      "name": "Smart Bin 35 - Waterfront Culinary & Market District #9",
       "lat": 40.7626,
       "lon": -73.9055,
-      "weight_kg": 380
+      "weight_kg": 400
     },
     {
       "id": "B36",
       "type": "bin",
-      "name": "Smart Bin 36 - Convention Center & Tech Concourse #9",
       "lat": 40.7873,
       "lon": -73.9239,
-      "weight_kg": 500
+      "weight_kg": 400
     },
     {
       "id": "B37",
       "type": "bin",
-      "name": "Smart Bin 37 - Financial Plaza Commercial Hotspot #10",
       "lat": 40.7505,
       "lon": -73.9693,
-      "weight_kg": 320
+      "weight_kg": 400
     },
     {
       "id": "B38",
       "type": "bin",
-      "name": "Smart Bin 38 - Broadway Theater & Retail Hotspot #10",
       "lat": 40.7937,
       "lon": -73.9486,
-      "weight_kg": 370
+      "weight_kg": 400
     },
     {
       "id": "B39",
       "type": "bin",
-      "name": "Smart Bin 39 - Waterfront Culinary & Market District #10",
       "lat": 40.7588,
       "lon": -73.9021,
-      "weight_kg": 370
+      "weight_kg": 400
     },
     {
       "id": "B40",
       "type": "bin",
-      "name": "Smart Bin 40 - Convention Center & Tech Concourse #10",
       "lat": 40.7975,
       "lon": -73.9389,
-      "weight_kg": 290
+      "weight_kg": 400
     },
     {
       "id": "B41",
       "type": "bin",
-      "name": "Smart Bin 41 - Financial Plaza Commercial Hotspot #11",
       "lat": 40.7648,
       "lon": -73.9665,
-      "weight_kg": 370
+      "weight_kg": 400
     },
     {
       "id": "B42",
       "type": "bin",
-      "name": "Smart Bin 42 - Broadway Theater & Retail Hotspot #11",
       "lat": 40.7851,
       "lon": -73.9681,
-      "weight_kg": 270
+      "weight_kg": 400
     },
     {
       "id": "B43",
       "type": "bin",
-      "name": "Smart Bin 43 - Waterfront Culinary & Market District #11",
       "lat": 40.7623,
       "lon": -73.9192,
-      "weight_kg": 390
+      "weight_kg": 400
     },
     {
       "id": "B44",
       "type": "bin",
-      "name": "Smart Bin 44 - Convention Center & Tech Concourse #11",
       "lat": 40.8026,
       "lon": -73.9129,
-      "weight_kg": 350
+      "weight_kg": 400
     },
     {
       "id": "B45",
       "type": "bin",
-      "name": "Smart Bin 45 - Financial Plaza Commercial Hotspot #12",
       "lat": 40.7567,
       "lon": -73.9564,
-      "weight_kg": 490
+      "weight_kg": 400
     },
     {
       "id": "B46",
       "type": "bin",
-      "name": "Smart Bin 46 - Broadway Theater & Retail Hotspot #12",
       "lat": 40.7997,
       "lon": -73.9655,
-      "weight_kg": 380
+      "weight_kg": 400
     },
     {
       "id": "B47",
       "type": "bin",
-      "name": "Smart Bin 47 - Waterfront Culinary & Market District #12",
       "lat": 40.765,
       "lon": -73.9109,
-      "weight_kg": 250
+      "weight_kg": 400
     },
     {
       "id": "B48",
       "type": "bin",
-      "name": "Smart Bin 48 - Convention Center & Tech Concourse #12",
       "lat": 40.8,
       "lon": -73.9233,
-      "weight_kg": 360
+      "weight_kg": 400
     },
     {
       "id": "B49",
       "type": "bin",
-      "name": "Smart Bin 49 - Financial Plaza Commercial Hotspot #13",
       "lat": 40.7555,
       "lon": -73.9613,
-      "weight_kg": 450
+      "weight_kg": 400
     },
     {
       "id": "B50",
       "type": "bin",
-      "name": "Smart Bin 50 - Broadway Theater & Retail Hotspot #13",
       "lat": 40.7969,
       "lon": -73.9594,
-      "weight_kg": 320
+      "weight_kg": 400
     },
     {
       "id": "B51",
       "type": "bin",
-      "name": "Smart Bin 51 - Waterfront Culinary & Market District #13",
       "lat": 40.7655,
       "lon": -73.9131,
-      "weight_kg": 290
+      "weight_kg": 400
     },
     {
       "id": "B52",
       "type": "bin",
-      "name": "Smart Bin 52 - Convention Center & Tech Concourse #13",
       "lat": 40.8007,
       "lon": -73.9087,
-      "weight_kg": 280
+      "weight_kg": 400
     },
     {
       "id": "B53",
       "type": "bin",
-      "name": "Smart Bin 53 - Financial Plaza Commercial Hotspot #14",
       "lat": 40.7498,
       "lon": -73.9677,
-      "weight_kg": 470
+      "weight_kg": 400
     },
     {
       "id": "B54",
       "type": "bin",
-      "name": "Smart Bin 54 - Broadway Theater & Retail Hotspot #14",
       "lat": 40.7947,
       "lon": -73.9504,
-      "weight_kg": 440
+      "weight_kg": 400
     },
     {
       "id": "B55",
       "type": "bin",
-      "name": "Smart Bin 55 - Waterfront Culinary & Market District #14",
       "lat": 40.7546,
       "lon": -73.9254,
-      "weight_kg": 280
+      "weight_kg": 400
     },
     {
       "id": "B56",
       "type": "bin",
-      "name": "Smart Bin 56 - Convention Center & Tech Concourse #14",
       "lat": 40.8008,
       "lon": -73.9259,
-      "weight_kg": 340
+      "weight_kg": 400
     },
     {
       "id": "B57",
       "type": "bin",
-      "name": "Smart Bin 57 - Financial Plaza Commercial Hotspot #15",
       "lat": 40.7564,
       "lon": -73.9636,
-      "weight_kg": 340
+      "weight_kg": 400
     },
     {
       "id": "B58",
       "type": "bin",
-      "name": "Smart Bin 58 - Broadway Theater & Retail Hotspot #15",
       "lat": 40.7795,
       "lon": -73.97,
-      "weight_kg": 370
+      "weight_kg": 400
     },
     {
       "id": "B59",
       "type": "bin",
-      "name": "Smart Bin 59 - Waterfront Culinary & Market District #15",
       "lat": 40.7549,
       "lon": -73.9054,
-      "weight_kg": 270
+      "weight_kg": 400
     },
     {
       "id": "B60",
       "type": "bin",
-      "name": "Smart Bin 60 - Convention Center & Tech Concourse #15",
       "lat": 40.7874,
       "lon": -73.9303,
-      "weight_kg": 320
+      "weight_kg": 400
     },
     {
       "id": "B61",
       "type": "bin",
-      "name": "Smart Bin 61 - Financial Plaza Commercial Hotspot #16",
       "lat": 40.766,
       "lon": -73.9547,
-      "weight_kg": 460
+      "weight_kg": 400
     },
     {
       "id": "B62",
       "type": "bin",
-      "name": "Smart Bin 62 - Broadway Theater & Retail Hotspot #16",
       "lat": 40.7917,
       "lon": -73.963,
-      "weight_kg": 430
+      "weight_kg": 400
     },
     {
       "id": "B63",
       "type": "bin",
-      "name": "Smart Bin 63 - Waterfront Culinary & Market District #16",
       "lat": 40.7665,
       "lon": -73.924,
-      "weight_kg": 380
+      "weight_kg": 400
     },
     {
       "id": "B64",
       "type": "bin",
-      "name": "Smart Bin 64 - Convention Center & Tech Concourse #16",
       "lat": 40.7984,
       "lon": -73.9232,
-      "weight_kg": 450
+      "weight_kg": 400
     },
     {
       "id": "B65",
       "type": "bin",
-      "name": "Smart Bin 65 - Financial Plaza Commercial Hotspot #17",
       "lat": 40.7466,
       "lon": -73.9486,
       "weight_kg": 400
@@ -1019,71 +892,62 @@
     {
       "id": "B66",
       "type": "bin",
-      "name": "Smart Bin 66 - Broadway Theater & Retail Hotspot #17",
       "lat": 40.811,
       "lon": -73.9443,
-      "weight_kg": 450
+      "weight_kg": 400
     },
     {
       "id": "B67",
       "type": "bin",
-      "name": "Smart Bin 67 - Waterfront Culinary & Market District #17",
       "lat": 40.7719,
       "lon": -73.922,
-      "weight_kg": 290
+      "weight_kg": 400
     },
     {
       "id": "B68",
       "type": "bin",
-      "name": "Smart Bin 68 - Convention Center & Tech Concourse #17",
       "lat": 40.788,
       "lon": -73.9136,
-      "weight_kg": 450
+      "weight_kg": 400
     },
     {
       "id": "B69",
       "type": "bin",
-      "name": "Smart Bin 69 - Financial Plaza Commercial Hotspot #18",
       "lat": 40.7532,
       "lon": -73.947,
-      "weight_kg": 420
+      "weight_kg": 400
     },
     {
       "id": "B70",
       "type": "bin",
-      "name": "Smart Bin 70 - Broadway Theater & Retail Hotspot #18",
       "lat": 40.7964,
       "lon": -73.971,
-      "weight_kg": 480
+      "weight_kg": 400
     },
     {
       "id": "B71",
       "type": "bin",
-      "name": "Smart Bin 71 - Waterfront Culinary & Market District #18",
       "lat": 40.7591,
       "lon": -73.9198,
-      "weight_kg": 320
+      "weight_kg": 400
     },
     {
       "id": "B72",
       "type": "bin",
-      "name": "Smart Bin 72 - Convention Center & Tech Concourse #18",
       "lat": 40.8017,
       "lon": -73.9237,
-      "weight_kg": 390
+      "weight_kg": 400
     },
     {
       "id": "B73",
       "type": "bin",
-      "name": "Smart Bin 73 - Financial Plaza Commercial Hotspot #19",
       "lat": 40.7553,
       "lon": -73.9538,
-      "weight_kg": 440
+      "weight_kg": 400
     },
     {
       "id": "B74",
       "type": "bin",
-      "name": "Smart Bin 74 - Broadway Theater & Retail Hotspot #19",
       "lat": 40.7914,
       "lon": -73.9679,
       "weight_kg": 400
@@ -1091,39 +955,34 @@
     {
       "id": "B75",
       "type": "bin",
-      "name": "Smart Bin 75 - Waterfront Culinary & Market District #19",
       "lat": 40.768,
       "lon": -73.9201,
-      "weight_kg": 310
+      "weight_kg": 400
     },
     {
       "id": "B76",
       "type": "bin",
-      "name": "Smart Bin 76 - Convention Center & Tech Concourse #19",
       "lat": 40.7962,
       "lon": -73.9139,
-      "weight_kg": 330
+      "weight_kg": 400
     },
     {
       "id": "B77",
       "type": "bin",
-      "name": "Smart Bin 77 - Financial Plaza Commercial Hotspot #20",
       "lat": 40.7641,
       "lon": -73.9756,
-      "weight_kg": 330
+      "weight_kg": 400
     },
     {
       "id": "B78",
       "type": "bin",
-      "name": "Smart Bin 78 - Broadway Theater & Retail Hotspot #20",
       "lat": 40.7859,
       "lon": -73.9641,
-      "weight_kg": 310
+      "weight_kg": 400
     },
     {
       "id": "B79",
       "type": "bin",
-      "name": "Smart Bin 79 - Waterfront Culinary & Market District #20",
       "lat": 40.776,
       "lon": -73.9068,
       "weight_kg": 400
@@ -1131,7 +990,6 @@
     {
       "id": "B80",
       "type": "bin",
-      "name": "Smart Bin 80 - Convention Center & Tech Concourse #20",
       "lat": 40.7944,
       "lon": -73.9225,
       "weight_kg": 400
@@ -1139,135 +997,118 @@
     {
       "id": "B81",
       "type": "bin",
-      "name": "Smart Bin 81 - Financial Plaza Commercial Hotspot #21",
       "lat": 40.7493,
       "lon": -73.9742,
-      "weight_kg": 500
+      "weight_kg": 400
     },
     {
       "id": "B82",
       "type": "bin",
-      "name": "Smart Bin 82 - Broadway Theater & Retail Hotspot #21",
       "lat": 40.8016,
       "lon": -73.9591,
-      "weight_kg": 370
+      "weight_kg": 400
     },
     {
       "id": "B83",
       "type": "bin",
-      "name": "Smart Bin 83 - Waterfront Culinary & Market District #21",
       "lat": 40.7626,
       "lon": -73.923,
-      "weight_kg": 430
+      "weight_kg": 400
     },
     {
       "id": "B84",
       "type": "bin",
-      "name": "Smart Bin 84 - Convention Center & Tech Concourse #21",
       "lat": 40.7931,
       "lon": -73.9107,
-      "weight_kg": 360
+      "weight_kg": 400
     },
     {
       "id": "B85",
       "type": "bin",
-      "name": "Smart Bin 85 - Financial Plaza Commercial Hotspot #22",
       "lat": 40.7432,
       "lon": -73.9575,
-      "weight_kg": 350
+      "weight_kg": 400
     },
     {
       "id": "B86",
       "type": "bin",
-      "name": "Smart Bin 86 - Broadway Theater & Retail Hotspot #22",
       "lat": 40.7897,
       "lon": -73.9512,
-      "weight_kg": 340
+      "weight_kg": 400
     },
     {
       "id": "B87",
       "type": "bin",
-      "name": "Smart Bin 87 - Waterfront Culinary & Market District #22",
       "lat": 40.765,
       "lon": -73.9099,
-      "weight_kg": 310
+      "weight_kg": 400
     },
     {
       "id": "B88",
       "type": "bin",
-      "name": "Smart Bin 88 - Convention Center & Tech Concourse #22",
       "lat": 40.7947,
       "lon": -73.9049,
-      "weight_kg": 490
+      "weight_kg": 400
     },
     {
       "id": "B89",
       "type": "bin",
-      "name": "Smart Bin 89 - Financial Plaza Commercial Hotspot #23",
       "lat": 40.7531,
       "lon": -73.9711,
-      "weight_kg": 480
+      "weight_kg": 400
     },
     {
       "id": "B90",
       "type": "bin",
-      "name": "Smart Bin 90 - Broadway Theater & Retail Hotspot #23",
       "lat": 40.7822,
       "lon": -73.9584,
-      "weight_kg": 490
+      "weight_kg": 400
     },
     {
       "id": "B91",
       "type": "bin",
-      "name": "Smart Bin 91 - Waterfront Culinary & Market District #23",
       "lat": 40.7586,
       "lon": -73.9163,
-      "weight_kg": 280
+      "weight_kg": 400
     },
     {
       "id": "B92",
       "type": "bin",
-      "name": "Smart Bin 92 - Convention Center & Tech Concourse #23",
       "lat": 40.8033,
       "lon": -73.9273,
-      "weight_kg": 360
+      "weight_kg": 400
     },
     {
       "id": "B93",
       "type": "bin",
-      "name": "Smart Bin 93 - Financial Plaza Commercial Hotspot #24",
       "lat": 40.7556,
       "lon": -73.9635,
-      "weight_kg": 420
+      "weight_kg": 400
     },
     {
       "id": "B94",
       "type": "bin",
-      "name": "Smart Bin 94 - Broadway Theater & Retail Hotspot #24",
       "lat": 40.7967,
       "lon": -73.9578,
-      "weight_kg": 260
+      "weight_kg": 400
     },
     {
       "id": "B95",
       "type": "bin",
-      "name": "Smart Bin 95 - Waterfront Culinary & Market District #24",
       "lat": 40.7533,
       "lon": -73.9201,
-      "weight_kg": 290
+      "weight_kg": 400
     },
     {
       "id": "B96",
       "type": "bin",
-      "name": "Smart Bin 96 - Convention Center & Tech Concourse #24",
       "lat": 40.7913,
       "lon": -73.9327,
-      "weight_kg": 280
+      "weight_kg": 400
     },
     {
       "id": "B97",
       "type": "bin",
-      "name": "Smart Bin 97 - Financial Plaza Commercial Hotspot #25",
       "lat": 40.7623,
       "lon": -73.9744,
       "weight_kg": 400
@@ -1275,119 +1116,104 @@
     {
       "id": "B98",
       "type": "bin",
-      "name": "Smart Bin 98 - Broadway Theater & Retail Hotspot #25",
       "lat": 40.7878,
       "lon": -73.9588,
-      "weight_kg": 260
+      "weight_kg": 400
     },
     {
       "id": "B99",
       "type": "bin",
-      "name": "Smart Bin 99 - Waterfront Culinary & Market District #25",
       "lat": 40.7648,
       "lon": -73.8951,
-      "weight_kg": 280
+      "weight_kg": 400
     },
     {
       "id": "B100",
       "type": "bin",
-      "name": "Smart Bin 100 - Convention Center & Tech Concourse #25",
       "lat": 40.8035,
       "lon": -73.9291,
-      "weight_kg": 270
+      "weight_kg": 400
     },
     {
       "id": "B101",
       "type": "bin",
-      "name": "Smart Bin 101 - Financial Plaza Commercial Hotspot #26",
       "lat": 40.7442,
       "lon": -73.9721,
-      "weight_kg": 290
+      "weight_kg": 400
     },
     {
       "id": "B102",
       "type": "bin",
-      "name": "Smart Bin 102 - Broadway Theater & Retail Hotspot #26",
       "lat": 40.8011,
       "lon": -73.9496,
-      "weight_kg": 340
+      "weight_kg": 400
     },
     {
       "id": "B103",
       "type": "bin",
-      "name": "Smart Bin 103 - Waterfront Culinary & Market District #26",
       "lat": 40.7702,
       "lon": -73.9111,
-      "weight_kg": 420
+      "weight_kg": 400
     },
     {
       "id": "B104",
       "type": "bin",
-      "name": "Smart Bin 104 - Convention Center & Tech Concourse #26",
       "lat": 40.801,
       "lon": -73.9336,
-      "weight_kg": 500
+      "weight_kg": 400
     },
     {
       "id": "B105",
       "type": "bin",
-      "name": "Smart Bin 105 - Financial Plaza Commercial Hotspot #27",
       "lat": 40.7448,
       "lon": -73.9767,
-      "weight_kg": 370
+      "weight_kg": 400
     },
     {
       "id": "B106",
       "type": "bin",
-      "name": "Smart Bin 106 - Broadway Theater & Retail Hotspot #27",
       "lat": 40.7868,
       "lon": -73.9567,
-      "weight_kg": 430
+      "weight_kg": 400
     },
     {
       "id": "B107",
       "type": "bin",
-      "name": "Smart Bin 107 - Waterfront Culinary & Market District #27",
       "lat": 40.7718,
       "lon": -73.9155,
-      "weight_kg": 440
+      "weight_kg": 400
     },
     {
       "id": "B108",
       "type": "bin",
-      "name": "Smart Bin 108 - Convention Center & Tech Concourse #27",
       "lat": 40.818,
       "lon": -73.9106,
-      "weight_kg": 280
+      "weight_kg": 400
     },
     {
       "id": "B109",
       "type": "bin",
-      "name": "Smart Bin 109 - Financial Plaza Commercial Hotspot #28",
       "lat": 40.7602,
       "lon": -73.9672,
-      "weight_kg": 310
+      "weight_kg": 400
     },
     {
       "id": "B110",
       "type": "bin",
-      "name": "Smart Bin 110 - Broadway Theater & Retail Hotspot #28",
       "lat": 40.7947,
       "lon": -73.9559,
-      "weight_kg": 320
+      "weight_kg": 400
     },
     {
       "id": "B111",
       "type": "bin",
-      "name": "Smart Bin 111 - Waterfront Culinary & Market District #28",
       "lat": 40.7665,
       "lon": -73.9115,
-      "weight_kg": 250
+      "weight_kg": 400
     },
     {
       "id": "B112",
       "type": "bin",
-      "name": "Smart Bin 112 - Convention Center & Tech Concourse #28",
       "lat": 40.7897,
       "lon": -73.9117,
       "weight_kg": 400
@@ -1395,66 +1221,58 @@
     {
       "id": "B113",
       "type": "bin",
-      "name": "Smart Bin 113 - Financial Plaza Commercial Hotspot #29",
       "lat": 40.7535,
       "lon": -73.958,
-      "weight_kg": 470
+      "weight_kg": 400
     },
     {
       "id": "B114",
       "type": "bin",
-      "name": "Smart Bin 114 - Broadway Theater & Retail Hotspot #29",
       "lat": 40.7918,
       "lon": -73.9406,
-      "weight_kg": 270
+      "weight_kg": 400
     },
     {
       "id": "B115",
       "type": "bin",
-      "name": "Smart Bin 115 - Waterfront Culinary & Market District #29",
       "lat": 40.758,
       "lon": -73.936,
-      "weight_kg": 500
+      "weight_kg": 400
     },
     {
       "id": "B116",
       "type": "bin",
-      "name": "Smart Bin 116 - Convention Center & Tech Concourse #29",
       "lat": 40.8027,
       "lon": -73.9329,
-      "weight_kg": 500
+      "weight_kg": 400
     },
     {
       "id": "B117",
       "type": "bin",
-      "name": "Smart Bin 117 - Financial Plaza Commercial Hotspot #30",
       "lat": 40.7627,
       "lon": -73.9693,
-      "weight_kg": 420
+      "weight_kg": 400
     },
     {
       "id": "B118",
       "type": "bin",
-      "name": "Smart Bin 118 - Broadway Theater & Retail Hotspot #30",
       "lat": 40.7957,
       "lon": -73.9544,
-      "weight_kg": 330
+      "weight_kg": 400
     },
     {
       "id": "B119",
       "type": "bin",
-      "name": "Smart Bin 119 - Waterfront Culinary & Market District #30",
       "lat": 40.7664,
       "lon": -73.9184,
-      "weight_kg": 300
+      "weight_kg": 400
     },
     {
       "id": "B120",
       "type": "bin",
-      "name": "Smart Bin 120 - Convention Center & Tech Concourse #30",
       "lat": 40.8028,
       "lon": -73.933,
-      "weight_kg": 430
+      "weight_kg": 400
     }
   ],
   "adjacency_list": {
