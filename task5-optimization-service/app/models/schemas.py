@@ -11,7 +11,6 @@ class NodeSchema(BaseModel):
     type: Literal["start", "destination", "intersection", "bin"] = Field(
         ..., description="Type of node: depot start, destination, intersection, or smart bin"
     )
-    name: str = Field(..., description="Human-readable location name")
     lat: float = Field(..., description="GPS Latitude coordinate")
     lon: float = Field(..., description="GPS Longitude coordinate")
     weight_kg: int = Field(
@@ -70,7 +69,6 @@ class CoordinatePoint(BaseModel):
     """Detailed GPS waypoint in a vehicle's full travel path."""
 
     node_id: str = Field(..., description="Node identifier")
-    name: str = Field(..., description="Location name")
     node_type: str = Field(..., description="Node classification type")
     lat: float = Field(..., description="Latitude")
     lon: float = Field(..., description="Longitude")

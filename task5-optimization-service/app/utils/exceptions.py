@@ -167,7 +167,7 @@ class InvalidMapDataException(OptimizationException):
             details={"file_path": path, "reason": reason},
             suggestions=[
                 "Verify that the map file contains valid JSON with 'nodes' and 'adjacency_list' keys.",
-                "Ensure each node has 'id', 'type', 'name', 'lat', and 'lon' fields.",
+                "Ensure each node has 'id', 'type', 'lat', and 'lon' fields.",
             ],
         )
 

@@ -70,11 +70,11 @@ class MapRepository:
         log_warning("No map JSON files found on disk. Initializing emergency synthetic default map.")
         return {
             "nodes": [
-                {"id": "D0", "type": "start", "name": "Default Central Municipal Depot", "lat": 40.7580, "lon": -73.9995, "weight_kg": 0},
-                {"id": "T1", "type": "destination", "name": "Default Waste Disposal Facility", "lat": 40.7180, "lon": -73.9750, "weight_kg": 0},
-                {"id": "I1", "type": "intersection", "name": "Default Central Junction 1", "lat": 40.7500, "lon": -73.9850, "weight_kg": 0},
-                {"id": "B1", "type": "bin", "name": "Default Smart Bin 1", "lat": 40.7400, "lon": -73.9800, "weight_kg": 400},
-                {"id": "B2", "type": "bin", "name": "Default Smart Bin 2", "lat": 40.7300, "lon": -73.9900, "weight_kg": 400},
+                {"id": "D0", "type": "start", "lat": 40.7580, "lon": -73.9995, "weight_kg": 0},
+                {"id": "T1", "type": "destination", "lat": 40.7180, "lon": -73.9750, "weight_kg": 0},
+                {"id": "I1", "type": "intersection", "lat": 40.7500, "lon": -73.9850, "weight_kg": 0},
+                {"id": "B1", "type": "bin", "lat": 40.7400, "lon": -73.9800, "weight_kg": 400},
+                {"id": "B2", "type": "bin", "lat": 40.7300, "lon": -73.9900, "weight_kg": 400},
             ],
             "adjacency_list": {
                 "D0": [{"target": "I1", "distance_km": 1.2}],
@@ -116,7 +116,6 @@ class MapRepository:
                 node = NodeSchema(
                     id=str(n.get("id", "")).strip(),
                     type=n.get("type", "intersection"),
-                    name=n.get("name", f"Node {n.get('id', '')}"),
                     lat=float(n.get("lat", 0.0)),
                     lon=float(n.get("lon", 0.0)),
                     weight_kg=int(n.get("weight_kg", 0)),
@@ -133,7 +132,6 @@ class MapRepository:
             graph.add_node(
                 node.id,
                 type=node.type,
-                name=node.name,
                 lat=node.lat,
                 lon=node.lon,
                 weight_kg=node.weight_kg,
@@ -150,14 +148,13 @@ class MapRepository:
                 synthetic_src = NodeSchema(
                     id=source_id,
                     type="intersection",
-                    name=f"Intersection {source_id}",
                     lat=0.0,
                     lon=0.0,
                     weight_kg=0,
                 )
                 nodes_dict[source_id] = synthetic_src
                 nodes_list.append(synthetic_src)
-                graph.add_node(source_id, type="intersection", name=synthetic_src.name, lat=0.0, lon=0.0, weight_kg=0)
+                graph.add_node(source_id, type="intersection", lat=0.0, lon=0.0, weight_kg=0)
 
             for nbr in neighbors:
                 if not isinstance(nbr, dict):
@@ -175,14 +172,13 @@ class MapRepository:
                     synthetic_tgt = NodeSchema(
                         id=target_id,
                         type="intersection",
-                        name=f"Intersection {target_id}",
                         lat=0.0,
                         lon=0.0,
                         weight_kg=0,
                     )
                     nodes_dict[target_id] = synthetic_tgt
                     nodes_list.append(synthetic_tgt)
-                    graph.add_node(target_id, type="intersection", name=synthetic_tgt.name, lat=0.0, lon=0.0, weight_kg=0)
+                    graph.add_node(target_id, type="intersection", lat=0.0, lon=0.0, weight_kg=0)
 
                 graph.add_edge(source_id, target_id, weight=distance_km)
 

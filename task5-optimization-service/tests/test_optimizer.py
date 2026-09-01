@@ -89,10 +89,43 @@ def test_map_repository_node_dict_and_lookup() -> None:
     assert "I1" in nodes_dict
 
     d0 = repo.get_node("D0")
-    assert "Depot" in d0.name
+    assert d0.type == "start"
+
+    t1 = repo.get_node("T1")
+    assert t1.type == "destination"
+
+    i1 = repo.get_node("I1")
+    assert i1.type == "intersection"
+
+    b1 = repo.get_node("B1")
+    assert b1.type == "bin"
 
     with pytest.raises(KeyError):
         repo.get_node("NON_EXISTENT_NODE")
+
+
+def test_nodes_have_required_fields_across_all_tiers() -> None:
+    """Test that all nodes across Tier 1, 2, and 3 maps have valid coordinates and types."""
+    for map_file in ["city_map_tier1_sparse.json", "city_map_tier2_medium.json", "city_map_tier3_dense.json"]:
+        repo = MapRepository(map_path=f"data/{map_file}")
+        intersections = repo.get_nodes_by_type("intersection")
+        assert len(intersections) > 0
+        for inter in intersections:
+            assert inter.lat != 0.0 or inter.lon != 0.0 or inter.id is not None
+            assert inter.weight_kg == 0
+
+        bins = repo.get_nodes_by_type("bin")
+        assert len(bins) > 0
+        for b in bins:
+            assert b.weight_kg > 0
+
+        depots = repo.get_nodes_by_type("start")
+        assert len(depots) == 1
+        assert depots[0].id == "D0"
+
+        destinations = repo.get_nodes_by_type("destination")
+        assert len(destinations) == 1
+        assert destinations[0].id == "T1"
 
 
 def test_map_repository_full_map_response() -> None:
@@ -397,6 +430,12 @@ def test_api_optimize_successful_full_fleet() -> None:
         assert route["stop_sequence"][-2] == "T1"
         assert route["stop_sequence"][-1] == "D0"
         assert len(route["full_path_coordinates"]) >= len(route["stop_sequence"])
+        for pt in route["full_path_coordinates"]:
+            assert "node_id" in pt
+            assert "node_type" in pt
+            assert "lat" in pt
+            assert "lon" in pt
+            assert "name" not in pt
         all_collected_bins.extend([s for s in route["stop_sequence"] if s.startswith("B")])
 
     assert len(all_collected_bins) == len(bins)

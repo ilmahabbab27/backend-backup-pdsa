@@ -183,8 +183,8 @@ class OptimizerService:
             {
                 "Smart Bins Found": f"{len(bin_nodes)} locations ({total_bin_payload:,} kg total waste)",
                 "Fleet Max Capacity": f"{total_fleet_capacity:,} kg ({request.truck_count} trucks x {request.truck_capacity_kg:,} kg)",
-                "Start Depot": f"{depot_node.id} ({depot_node.name})",
-                "Disposal Facility": f"{dump_node.id} ({dump_node.name})",
+                "Start Depot": f"{depot_node.id}",
+                "Disposal Facility": f"{dump_node.id}",
                 "Partial Fallback Allowed": "Enabled" if request.allow_partial_collection else "Disabled (Strict)",
             }
         )
@@ -379,7 +379,6 @@ class OptimizerService:
                         coordinates.append(
                             CoordinatePoint(
                                 node_id=nid,
-                                name=node_obj.name,
                                 node_type=node_obj.type,
                                 lat=node_obj.lat,
                                 lon=node_obj.lon,
@@ -390,7 +389,6 @@ class OptimizerService:
                         coordinates.append(
                             CoordinatePoint(
                                 node_id=nid,
-                                name=f"Intersection {nid}",
                                 node_type="intersection",
                                 lat=0.0,
                                 lon=0.0,
