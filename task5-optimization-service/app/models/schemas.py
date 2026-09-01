@@ -197,9 +197,13 @@ class MapValidationResponse(BaseModel):
 class MapReloadRequest(BaseModel):
     """Request payload to dynamically reload or switch the city map dataset."""
 
+    tier_id: Optional[str] = Field(
+        None,
+        description="Supabase map tier ID (e.g. 'tier1_sparse', 'tier2_medium', 'tier3_dense')",
+    )
     map_path: Optional[str] = Field(
         None,
-        description="Optional relative or absolute path to a map JSON file (e.g. 'data/city_map_tier1_sparse.json')",
+        description="Optional relative or absolute path (or tier name) to switch dataset",
     )
 
 
@@ -207,11 +211,34 @@ class MapReloadResponse(BaseModel):
     """Response after reloading city map dataset."""
 
     status: str = Field("success", description="Status of the reload operation")
-    map_source: str = Field(..., description="Resolved path of the newly loaded map file")
+    map_source: str = Field(..., description="Resolved source identifier of the newly loaded map dataset")
     nodes_loaded: int = Field(..., description="Number of nodes loaded")
     bins_loaded: int = Field(..., description="Number of smart bins loaded")
     edges_loaded: int = Field(..., description="Number of road edges constructed")
     total_waste_kg: int = Field(..., description="Total waste weight in loaded dataset")
     timestamp: str = Field(..., description="ISO 8601 reload timestamp")
+
+
+class MapTierSummary(BaseModel):
+    """Metadata summary of an individual road network tier in Supabase."""
+
+    tier_id: str = Field(..., description="Unique tier ID (e.g., 'tier1_sparse', 'tier2_medium', 'tier3_dense')")
+    tier_level: int = Field(..., description="Tier complexity level (1, 2, or 3)")
+    display_name: str = Field(..., description="Human-readable title of the map tier")
+    description: Optional[str] = Field(None, description="Detailed description of network topology")
+    node_count: int = Field(..., description="Total nodes in the graph")
+    bin_count: int = Field(..., description="Total smart collection bins")
+    intersection_count: int = Field(..., description="Total road intersections")
+    edge_count: int = Field(..., description="Total undirected road segments")
+    total_waste_kg: float = Field(..., description="Total aggregate waste capacity in kg")
+    is_active: bool = Field(False, description="True if this tier is currently loaded in memory")
+
+
+class MapTiersResponse(BaseModel):
+    """Response containing all available road network tiers in Supabase."""
+
+    active_tier_id: str = Field(..., description="Currently active map tier identifier")
+    total_tiers: int = Field(..., description="Total number of map tiers available")
+    tiers: List[MapTierSummary] = Field(..., description="List of all available map tiers")
 
 

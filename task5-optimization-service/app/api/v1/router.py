@@ -11,6 +11,7 @@ from app.models.schemas import (
     HealthResponse,
     MapReloadRequest,
     MapReloadResponse,
+    MapTiersResponse,
     MapValidationResponse,
     NodeSchema,
     OptimizationRequest,
@@ -52,6 +53,19 @@ def get_city_map(
 
 
 @api_router.get(
+    "/map/tiers",
+    response_model=MapTiersResponse,
+    summary="List Available Road Network Tiers in Supabase",
+    tags=["map"],
+)
+def get_map_tiers(
+    service: Annotated[OptimizerService, Depends(get_optimizer_service)],
+) -> MapTiersResponse:
+    """Retrieve all available road network tiers from Supabase with node, bin, edge, and payload metrics."""
+    return service.get_available_tiers()
+
+
+@api_router.get(
     "/map/validate",
     response_model=MapValidationResponse,
     summary="Validate Map Topology & Connectivity",
@@ -76,7 +90,8 @@ def reload_map(
 ) -> MapReloadResponse:
     """Reload the city map data from disk or switch dataset path dynamically."""
     custom_path = request.map_path if request else None
-    return service.reload_map(custom_path=custom_path)
+    tier_id = request.tier_id if request else None
+    return service.reload_map(custom_path=custom_path, tier_id=tier_id)
 
 
 @api_router.get(

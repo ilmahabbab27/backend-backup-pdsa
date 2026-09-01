@@ -1,8 +1,8 @@
-"""Repository for loading, caching, and serving city map and road network graph data."""
+"""Repository for loading, caching, and serving city map and road network graph data from Supabase."""
 
 import json
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 import networkx as nx
 
 from app.algorithms.dijkstra import get_connected_components, is_graph_connected
@@ -10,6 +10,7 @@ from app.config.settings import Settings, get_settings
 from app.models.schemas import (
     CityMapResponse,
     EdgeSchema,
+    MapTierSummary,
     MapValidationResponse,
     NodeSchema,
 )
@@ -18,12 +19,20 @@ from app.utils.logger import log_error, log_info, log_warning
 
 
 class MapRepository:
-    """Repository managing city map data and NetworkX road network graph construction."""
+    """Repository managing city map data and NetworkX road network graph construction from Supabase."""
 
-    def __init__(self, settings: Optional[Settings] = None, map_path: Optional[str] = None) -> None:
-        """Initialize the map repository with application settings or custom map path."""
+    def __init__(
+        self,
+        settings: Optional[Settings] = None,
+        map_path: Optional[str] = None,
+        tier_id: Optional[str] = None,
+    ) -> None:
+        """Initialize the map repository with application settings, Supabase tier ID, or custom map path."""
         self._settings = settings or get_settings()
         self._custom_map_path: Optional[str] = map_path
+        self._custom_tier_id: Optional[str] = tier_id
+        self._current_tier_id: str = "tier3_dense"
+        self._loaded_source: str = ""
         self._loaded_path: Optional[Path] = None
         self._raw_data: Optional[dict] = None
         self._graph: Optional[nx.Graph] = None
@@ -32,12 +41,114 @@ class MapRepository:
         self._load_and_build()
 
     @property
+    def current_tier_id(self) -> str:
+        """Return the identifier of the active map tier (e.g., 'tier1_sparse', 'tier2_medium', 'tier3_dense')."""
+        return self._current_tier_id
+
+    @property
     def loaded_path(self) -> Path:
-        """Return the resolved path of the currently loaded map file."""
+        """Return the resolved path or identifier of the currently loaded map dataset."""
         return self._loaded_path or self._settings.resolved_map_data_path
 
-    def _resolve_file_path(self) -> Path:
-        """Resolve map file path with automated fallback discovery if configured path is missing."""
+    @property
+    def loaded_source(self) -> str:
+        """Return human-readable source of the loaded map data (e.g. 'supabase:tier2_medium' or file path)."""
+        return self._loaded_source or str(self.loaded_path)
+
+    def _resolve_target_tier(self) -> str:
+        """Resolve the target Supabase tier ID from explicit tier_id, custom map path, or configuration."""
+        if self._custom_tier_id:
+            return Settings.resolve_tier_id_from_path(self._custom_tier_id)
+        if self._custom_map_path:
+            return Settings.resolve_tier_id_from_path(self._custom_map_path)
+        if self._settings.MAP_DATA_PATH and any(t in str(self._settings.MAP_DATA_PATH).lower() for t in ["tier1", "tier2", "tier3", "sparse", "medium", "dense"]):
+            return Settings.resolve_tier_id_from_path(self._settings.MAP_DATA_PATH)
+        if self._settings.SUPABASE_MAP_TIER:
+            return Settings.resolve_tier_id_from_path(self._settings.SUPABASE_MAP_TIER)
+        return "tier3_dense"
+
+    def _load_from_supabase(self, tier_id: str) -> Optional[dict]:
+        """Attempt to load the specified map tier directly from the Supabase database."""
+        url = self._settings.SUPABASE_URL
+        key = self._settings.SUPABASE_KEY
+        if not url or not key:
+            return None
+
+        try:
+            from app.utils.supabase_map_seeder import get_supabase_client, resolve_table_name
+            client = get_supabase_client(url, key)
+            target_table = resolve_table_name(client, "task5_city_maps")
+            res = client.table(target_table).select("*").eq("tier_id", tier_id).single().execute()
+            if res.data and "nodes" in res.data and "adjacency_list" in res.data:
+                log_info(
+                    f"Loaded map '{tier_id}' directly from Supabase table '{target_table}' "
+                    f"({res.data.get('node_count')} nodes, {res.data.get('bin_count')} bins)."
+                )
+                return {
+                    "nodes": res.data["nodes"],
+                    "adjacency_list": res.data["adjacency_list"],
+                }
+        except Exception as e:
+            log_warning(f"Failed to load map '{tier_id}' from Supabase: {e}. Falling back to disk.")
+        return None
+
+    def list_available_tiers(self) -> List[MapTierSummary]:
+        """Query and return all available road network tiers from Supabase or built-in registry."""
+        url = self._settings.SUPABASE_URL
+        key = self._settings.SUPABASE_KEY
+
+        if url and key:
+            try:
+                from app.utils.supabase_map_seeder import get_supabase_client, resolve_table_name
+                client = get_supabase_client(url, key)
+                target_table = resolve_table_name(client, "task5_city_maps")
+                res = client.table(target_table).select(
+                    "tier_id, tier_level, display_name, description, node_count, bin_count, intersection_count, edge_count, total_waste_kg"
+                ).order("tier_level").execute()
+                if res.data:
+                    return [
+                        MapTierSummary(
+                            tier_id=row["tier_id"],
+                            tier_level=row.get("tier_level", 1),
+                            display_name=row.get("display_name", row["tier_id"]),
+                            description=row.get("description"),
+                            node_count=row.get("node_count", 0),
+                            bin_count=row.get("bin_count", 0),
+                            intersection_count=row.get("intersection_count", 0),
+                            edge_count=row.get("edge_count", 0),
+                            total_waste_kg=float(row.get("total_waste_kg", 0)),
+                            is_active=(row["tier_id"] == self._current_tier_id),
+                        )
+                        for row in res.data
+                    ]
+            except Exception as e:
+                log_warning(f"Could not fetch tier list from Supabase: {e}. Returning built-in tier summaries.")
+
+        # Fallback tier summaries if Supabase query fails
+        from app.utils.supabase_map_seeder import MAP_TIER_CONFIGS
+        tier_counts = {
+            "tier1_sparse": {"nodes": 37, "bins": 15, "intersections": 20, "edges": 42, "waste": 6000.0},
+            "tier2_medium": {"nodes": 87, "bins": 45, "intersections": 40, "edges": 141, "waste": 18000.0},
+            "tier3_dense": {"nodes": 182, "bins": 120, "intersections": 60, "edges": 423, "waste": 48000.0},
+        }
+        return [
+            MapTierSummary(
+                tier_id=cfg["tier_id"],
+                tier_level=cfg["tier_level"],
+                display_name=cfg["display_name"],
+                description=cfg["description"],
+                node_count=tier_counts.get(cfg["tier_id"], {}).get("nodes", 0),
+                bin_count=tier_counts.get(cfg["tier_id"], {}).get("bins", 0),
+                intersection_count=tier_counts.get(cfg["tier_id"], {}).get("intersections", 0),
+                edge_count=tier_counts.get(cfg["tier_id"], {}).get("edges", 0),
+                total_waste_kg=tier_counts.get(cfg["tier_id"], {}).get("waste", 0.0),
+                is_active=(cfg["tier_id"] == self._current_tier_id),
+            )
+            for cfg in MAP_TIER_CONFIGS
+        ]
+
+    def _resolve_file_path(self, tier_id: str) -> Path:
+        """Resolve map file path with automated discovery if configured path is missing."""
         if self._custom_map_path:
             p = Path(self._custom_map_path)
             if not p.is_absolute():
@@ -45,29 +156,26 @@ class MapRepository:
             if p.exists():
                 return p
 
-        configured_path = self._settings.resolved_map_data_path
-        if configured_path.exists():
-            return configured_path
-
-        # Candidate fallback map locations
-        search_candidates = [
+        # Map tier_id to filename candidate
+        tier_filename = f"city_map_{tier_id}.json"
+        candidates = [
+            self._settings.BASE_DIR / "data" / tier_filename,
+            Path(f"data/{tier_filename}").resolve(),
+            self._settings.resolved_map_data_path,
             self._settings.BASE_DIR / "data" / "city_map_tier3_dense.json",
             self._settings.BASE_DIR / "data" / "city_map_tier2_medium.json",
             self._settings.BASE_DIR / "data" / "city_map_tier1_sparse.json",
-            Path("data/city_map_tier3_dense.json").resolve(),
-            Path("data/city_map_tier1_sparse.json").resolve(),
         ]
 
-        for cand in search_candidates:
+        for cand in candidates:
             if cand.exists():
-                log_warning(f"Configured map '{configured_path}' not found. Falling back to '{cand.name}'.")
                 return cand.resolve()
 
-        return configured_path
+        return self._settings.resolved_map_data_path
 
     def _generate_synthetic_fallback_map(self) -> dict:
-        """Generate a minimal connected default map topology when no map files exist on disk."""
-        log_warning("No map JSON files found on disk. Initializing emergency synthetic default map.")
+        """Generate a minimal connected default map topology when no map sources are available."""
+        log_warning("No map data available from Supabase or disk. Initializing emergency synthetic default map.")
         return {
             "nodes": [
                 {"id": "D0", "type": "start", "lat": 40.7580, "lon": -73.9995, "weight_kg": 0},
@@ -86,24 +194,40 @@ class MapRepository:
         }
 
     def _load_and_build(self) -> None:
-        """Load JSON file from disk and build NetworkX graph along with cached data structures."""
-        file_path = self._resolve_file_path()
+        """Load map data from Supabase (or fallback to local disk) and build NetworkX graph."""
         data: Optional[dict] = None
+        target_tier = self._resolve_target_tier()
+        self._current_tier_id = target_tier
 
-        if file_path.exists():
-            try:
-                with open(file_path, "r", encoding="utf-8") as f:
-                    data = json.load(f)
-            except Exception as e:
-                log_error("Map Parsing Error", f"Failed to parse JSON map file at '{file_path}': {e}")
+        # 1. Primary Strategy: Load directly from Supabase database
+        if self._settings.USE_SUPABASE_MAP:
+            data = self._load_from_supabase(target_tier)
+            if data:
+                self._loaded_source = f"supabase:{target_tier}"
+                self._loaded_path = Path(f"supabase/{target_tier}")
+
+        # 2. Secondary Strategy: Fall back to local disk JSON if Supabase is disabled or unreachable
+        if data is None:
+            file_path = self._resolve_file_path(target_tier)
+            if file_path.exists():
+                try:
+                    with open(file_path, "r", encoding="utf-8") as f:
+                        data = json.load(f)
+                    self._loaded_source = str(file_path)
+                    self._loaded_path = file_path
+                except Exception as e:
+                    log_error("Map Parsing Error", f"Failed to parse JSON map file at '{file_path}': {e}")
+                    data = self._generate_synthetic_fallback_map()
+                    self._loaded_source = "synthetic_fallback"
+                    self._loaded_path = file_path
+            else:
                 data = self._generate_synthetic_fallback_map()
-        else:
-            data = self._generate_synthetic_fallback_map()
+                self._loaded_source = "synthetic_fallback"
+                self._loaded_path = file_path
 
         if not isinstance(data, dict):
             data = self._generate_synthetic_fallback_map()
 
-        self._loaded_path = file_path
         self._raw_data = data
         nodes_raw = data.get("nodes", [])
         adj_raw = data.get("adjacency_list", {})
@@ -205,7 +329,7 @@ class MapRepository:
         bin_count = len([n for n in nodes_list if n.type == "bin"])
         log_info(
             f"MapRepository loaded {len(nodes_list)} nodes ({bin_count} bins, {total_waste:,} kg waste), "
-            f"{len(edges_list)} edges from '{file_path.name if file_path else 'synthetic'}'"
+            f"{len(edges_list)} edges from '{self.loaded_source}'"
         )
 
     def get_graph(self) -> nx.Graph:
@@ -241,9 +365,13 @@ class MapRepository:
             raise KeyError(f"Node '{node_id}' not found in map repository.")
         return self._nodes_dict[node_id]  # type: ignore[index]
 
-    def reload(self, custom_path: Optional[str] = None) -> None:
-        """Force reloads map data from the file system or switches to a custom dataset."""
-        if custom_path is not None:
+    def reload(self, custom_path: Optional[str] = None, tier_id: Optional[str] = None) -> None:
+        """Force reloads map data from Supabase tier or custom dataset."""
+        if tier_id is not None:
+            self._custom_tier_id = Settings.resolve_tier_id_from_path(tier_id)
+            self._custom_map_path = None
+        elif custom_path is not None:
+            self._custom_tier_id = Settings.resolve_tier_id_from_path(custom_path)
             self._custom_map_path = custom_path
         self._load_and_build()
 
@@ -283,7 +411,7 @@ class MapRepository:
 
         return MapValidationResponse(
             is_valid=is_valid,
-            map_source=str(self.loaded_path),
+            map_source=self.loaded_source,
             total_nodes=len(nodes_dict),
             start_depots_count=len(start_nodes),
             destinations_count=len(dest_nodes),

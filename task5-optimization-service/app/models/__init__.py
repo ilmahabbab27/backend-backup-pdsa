@@ -9,11 +9,14 @@ from app.models.schemas import (
     HealthResponse,
     MapReloadRequest,
     MapReloadResponse,
+    MapTierSummary,
+    MapTiersResponse,
     MapValidationResponse,
     NodeSchema,
     OptimizationRequest,
     OptimizationResponse,
     OptimizationSummary,
+    StructuredErrorResponse,
     TruckRouteResponse,
 )
 
@@ -26,11 +29,14 @@ __all__ = [
     "HealthResponse",
     "MapReloadRequest",
     "MapReloadResponse",
+    "MapTierSummary",
+    "MapTiersResponse",
     "MapValidationResponse",
     "NodeSchema",
     "OptimizationRequest",
     "OptimizationResponse",
     "OptimizationSummary",
+    "StructuredErrorResponse",
     "TruckRouteResponse",
 ]
 

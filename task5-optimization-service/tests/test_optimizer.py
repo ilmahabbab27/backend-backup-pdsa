@@ -706,27 +706,35 @@ def test_map_validation_endpoint() -> None:
 
 
 def test_map_reload_endpoint() -> None:
-    """Test POST /api/v1/map/reload endpoint with custom datasets."""
+    """Test POST /api/v1/map/reload endpoint with custom datasets and Supabase tiers."""
     # Reload with tier 1 sparse map
     res_tier1 = client.post("/api/v1/map/reload", json={"map_path": "data/city_map_tier1_sparse.json"})
     assert res_tier1.status_code == 200
     data1 = res_tier1.json()
     assert data1["status"] == "success"
     assert data1["bins_loaded"] == 15
-    assert "city_map_tier1_sparse.json" in data1["map_source"]
+    assert "tier1" in data1["map_source"]
 
     # Verify map endpoint reflects tier 1 dataset
     map_res = client.get("/api/v1/map")
     assert map_res.status_code == 200
     assert len(map_res.json()["nodes"]) == 37
 
+    # Reload with tier 2 medium via explicit tier_id
+    res_tier2 = client.post("/api/v1/map/reload", json={"tier_id": "tier2_medium"})
+    assert res_tier2.status_code == 200
+    data2 = res_tier2.json()
+    assert data2["status"] == "success"
+    assert data2["bins_loaded"] == 45
+    assert "tier2" in data2["map_source"]
+
     # Reload back to tier 3 dense dataset
-    res_dense = client.post("/api/v1/map/reload", json={"map_path": "data/city_map_tier3_dense.json"})
+    res_dense = client.post("/api/v1/map/reload", json={"tier_id": "tier3_dense"})
     assert res_dense.status_code == 200
     data_dense = res_dense.json()
     assert data_dense["status"] == "success"
     assert data_dense["bins_loaded"] == 120
-    assert "city_map_tier3_dense.json" in data_dense["map_source"]
+    assert "tier3" in data_dense["map_source"]
 
     # Verify map endpoint reflects tier 3 dataset
     map_res_dense = client.get("/api/v1/map")
@@ -991,5 +999,24 @@ def test_logger_fallback_zero_total_waste_guard() -> None:
         fleet_capacity_kg=1000,
         uncollected_bins_count=0,
     )
+
+
+def test_get_map_tiers_endpoint() -> None:
+    """Test GET /api/v1/map/tiers endpoint returns all available Supabase road network tiers."""
+    response = client.get("/api/v1/map/tiers")
+    assert response.status_code == 200
+    data = response.json()
+
+    assert data["total_tiers"] >= 3
+    assert "active_tier_id" in data
+    tier_ids = [t["tier_id"] for t in data["tiers"]]
+    assert "tier1_sparse" in tier_ids
+    assert "tier2_medium" in tier_ids
+    assert "tier3_dense" in tier_ids
+
+    active_tier = next(t for t in data["tiers"] if t["tier_id"] == data["active_tier_id"])
+    assert active_tier["is_active"] is True
+    assert active_tier["node_count"] > 0
+    assert active_tier["bin_count"] > 0
 
 

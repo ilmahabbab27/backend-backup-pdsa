@@ -18,6 +18,8 @@ from app.models.schemas import (
     CoordinatePoint,
     FleetEstimateResponse,
     MapReloadResponse,
+    MapTierSummary,
+    MapTiersResponse,
     MapValidationResponse,
     NodeSchema,
     OptimizationRequest,
@@ -62,6 +64,17 @@ class OptimizerService:
             f"{len(full_map.edges)} edges, {len(full_map.adjacency_list)} adjacency entries."
         )
         return full_map
+
+    def get_available_tiers(self) -> MapTiersResponse:
+        """Retrieve all available road network tiers from Supabase."""
+        tiers = self.map_repo.list_available_tiers()
+        active_tier = self.map_repo.current_tier_id
+        log_info(f"GET /api/v1/map/tiers -> Returning {len(tiers)} map tiers (active: '{active_tier}').")
+        return MapTiersResponse(
+            active_tier_id=active_tier,
+            total_tiers=len(tiers),
+            tiers=tiers,
+        )
 
     def get_nodes(self, node_type: Optional[str] = None) -> List[NodeSchema]:
         """Retrieve all nodes or filter by node type ('start', 'destination', 'intersection', 'bin')."""
@@ -110,21 +123,25 @@ class OptimizerService:
         )
         return validation
 
-    def reload_map(self, custom_path: Optional[str] = None) -> MapReloadResponse:
-        """Reload the city map data from disk or switch dataset."""
-        self.map_repo.reload(custom_path=custom_path)
+    def reload_map(
+        self,
+        custom_path: Optional[str] = None,
+        tier_id: Optional[str] = None,
+    ) -> MapReloadResponse:
+        """Reload the city map data from Supabase tier or disk."""
+        self.map_repo.reload(custom_path=custom_path, tier_id=tier_id)
         full_map = self.map_repo.get_full_map()
         bins = self.map_repo.get_nodes_by_type("bin")
         total_waste = sum(b.weight_kg for b in bins)
 
         log_success(
             f"POST /api/v1/map/reload -> Reloaded {len(full_map.nodes)} nodes ({len(bins)} bins, {total_waste:,} kg) "
-            f"from '{self.map_repo.loaded_path}'"
+            f"from '{self.map_repo.loaded_source}'"
         )
 
         return MapReloadResponse(
             status="success",
-            map_source=str(self.map_repo.loaded_path),
+            map_source=str(self.map_repo.loaded_source),
             nodes_loaded=len(full_map.nodes),
             bins_loaded=len(bins),
             edges_loaded=len(full_map.edges),

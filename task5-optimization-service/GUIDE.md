@@ -129,13 +129,15 @@ Each vertex $v \in V$ is assigned one of four distinct functional roles:
    * Navigable road transit junctions without waste ($w_i = 0\text{ kg}$).
    * Intersections provide realistic graph connectivity between distant bins and facilities.
 
-### 4.3 Supported Dataset Tiers
+### 4.3 Supported Dataset Tiers (Supabase Database: `task5_city_maps`)
 
-| Dataset File | Tier | Total Nodes | Depots ($D_0$) | Disposal ($T_1$) | Smart Bins ($B_k$) | Intersections ($I_k$) | Road Edges | Total Waste Payload |
-| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| `city_map_tier1_sparse.json` | Tier 1 (Sparse) | 37 | 1 | 1 | 15 | 20 | 42 | $6,000\text{ kg}$ |
-| `city_map_tier2_medium.json` | Tier 2 (Medium) | 87 | 1 | 1 | 45 | 40 | 141 | $18,000\text{ kg}$ |
-| `city_map_tier3_dense.json` | Tier 3 (Dense) | 182 | 1 | 1 | 120 | 60 | 423 | $48,000\text{ kg}$ |
+The system uses **Supabase PostgreSQL** as its primary data store. All 3 dataset tiers are stored with full relational and geospatial JSONB metadata in the `task5_city_maps` table, with automated conflict handling and schema indexing:
+
+| Tier ID | Level | Display Name | Total Nodes | Depots ($D_0$) | Disposal ($T_1$) | Smart Bins ($B_k$) | Intersections ($I_k$) | Road Edges | Total Waste Payload |
+| :--- | :---: | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| `tier1_sparse` | 1 | Tier 1 (Sparse) | 37 | 1 | 1 | 15 | 20 | 42 | $6,000\text{ kg}$ |
+| `tier2_medium` | 2 | Tier 2 (Medium) | 87 | 1 | 1 | 45 | 40 | 141 | $18,000\text{ kg}$ |
+| `tier3_dense` | 3 | Tier 3 (Dense) | 182 | 1 | 1 | 120 | 60 | 423 | $48,000\text{ kg}$ |
 
 ---
 
@@ -527,13 +529,64 @@ Calculates the theoretical minimum fleet requirement for all city waste.
 
 ---
 
-#### 4. `POST /api/v1/map/reload`
-Dynamically reloads map data or switches dataset at runtime without restarting the server.
+#### 4. `GET /api/v1/map/tiers`
+Lists all available road network tiers directly stored in the Supabase `task5_city_maps` table, with their active indicator and complete topology metrics.
+
+**Sample Response (`200 OK`)**:
+```json
+{
+  "active_tier_id": "tier3_dense",
+  "total_tiers": 3,
+  "tiers": [
+    {
+      "tier_id": "tier1_sparse",
+      "tier_level": 1,
+      "display_name": "Tier 1: Sparse Network (15 Bins)",
+      "description": "Small-scale sparse municipal road network (37 nodes, 15 bins, 20 intersections, 42 edges).",
+      "node_count": 37,
+      "bin_count": 15,
+      "intersection_count": 20,
+      "edge_count": 42,
+      "total_waste_kg": 6000.0,
+      "is_active": false
+    },
+    {
+      "tier_id": "tier2_medium",
+      "tier_level": 2,
+      "display_name": "Tier 2: Medium Network (45 Bins)",
+      "description": "Medium-scale urban layout (87 nodes, 45 bins, 40 intersections, 141 edges).",
+      "node_count": 87,
+      "bin_count": 45,
+      "intersection_count": 40,
+      "edge_count": 141,
+      "total_waste_kg": 18000.0,
+      "is_active": false
+    },
+    {
+      "tier_id": "tier3_dense",
+      "tier_level": 3,
+      "display_name": "Tier 3: Dense Network (120 Bins)",
+      "description": "High-density metropolitan road network (182 nodes, 120 bins, 60 intersections, 423 edges).",
+      "node_count": 182,
+      "bin_count": 120,
+      "intersection_count": 60,
+      "edge_count": 423,
+      "total_waste_kg": 48000.0,
+      "is_active": true
+    }
+  ]
+}
+```
+
+---
+
+#### 5. `POST /api/v1/map/reload`
+Dynamically reloads the active map tier directly from Supabase (or optional path) at runtime without restarting the server.
 
 **Request Body**:
 ```json
 {
-  "map_path": "data/city_map_tier2_medium.json"
+  "tier_id": "tier2_medium"
 }
 ```
 
@@ -541,7 +594,7 @@ Dynamically reloads map data or switches dataset at runtime without restarting t
 ```json
 {
   "status": "success",
-  "map_source": "D:\\...\\data\\city_map_tier2_medium.json",
+  "map_source": "supabase:tier2_medium",
   "nodes_loaded": 87,
   "bins_loaded": 45,
   "edges_loaded": 141,
