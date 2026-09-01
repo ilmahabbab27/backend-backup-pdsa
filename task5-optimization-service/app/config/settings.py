@@ -6,6 +6,8 @@ from typing import List, Union
 from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+SERVICE_DIR = Path(__file__).resolve().parent.parent.parent
+
 
 class Settings(BaseSettings):
     """Configuration settings for the optimization service."""
@@ -15,9 +17,12 @@ class Settings(BaseSettings):
     API_V1_STR: str = "/api/v1"
     CORS_ORIGINS: Union[List[str], str] = ["*"]
     MAP_DATA_PATH: str = "data/city_map.json"
+    SUPABASE_URL: str
+    SUPABASE_KEY: str
+    SUPABASE_MAP_VIEW: str = "enlarged_city_map_payload"
 
     # Base directory of task5-optimization-service
-    BASE_DIR: Path = Path(__file__).resolve().parent.parent.parent
+    BASE_DIR: Path = SERVICE_DIR
 
     @field_validator("CORS_ORIGINS", mode="before")
     @classmethod
@@ -45,7 +50,7 @@ class Settings(BaseSettings):
         return path.resolve()
 
     model_config = SettingsConfigDict(
-        env_file=".env",
+        env_file=(SERVICE_DIR / ".env.example", SERVICE_DIR / ".env"),
         env_file_encoding="utf-8",
         case_sensitive=True,
         extra="ignore",

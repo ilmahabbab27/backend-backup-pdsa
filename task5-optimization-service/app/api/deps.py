@@ -6,6 +6,7 @@ from fastapi import Depends
 
 from app.config.settings import Settings, get_settings
 from app.repositories.map_repository import MapRepository
+from app.repositories.supabase_map_repository import SupabaseMapRepository
 from app.services.optimizer_service import OptimizerService
 
 
@@ -21,3 +22,9 @@ def get_optimizer_service(
 ) -> OptimizerService:
     """Dependency provider for OptimizerService."""
     return OptimizerService(map_repo=map_repo)
+
+
+@lru_cache()
+def get_supabase_map_repository() -> SupabaseMapRepository:
+    """Return the repository used by the public 2D map endpoint."""
+    return SupabaseMapRepository(settings=get_settings())
