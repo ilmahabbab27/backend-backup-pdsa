@@ -2,7 +2,7 @@
 
 from functools import lru_cache
 from pathlib import Path
-from typing import List, Union
+from typing import List, Optional, Union
 from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -16,10 +16,12 @@ class Settings(BaseSettings):
     APP_PORT: int = 8005
     API_V1_STR: str = "/api/v1"
     CORS_ORIGINS: Union[List[str], str] = ["*"]
-    MAP_DATA_PATH: str = "data/city_map.json"
-    SUPABASE_URL: str
-    SUPABASE_KEY: str
-    SUPABASE_MAP_VIEW: str = "enlarged_city_map_payload"
+    MAP_DATA_PATH: str = "data/city_map_tier3_dense.json"
+    SUPABASE_URL: Optional[str] = None
+    SUPABASE_KEY: Optional[str] = None
+    SUPABASE_MAP_TIER: str = "tier3_dense"
+    USE_SUPABASE_MAP: bool = True
+    STATIC_BIN_CAPACITY_KG: int = 400
 
     # Base directory of task5-optimization-service
     BASE_DIR: Path = SERVICE_DIR
@@ -41,9 +43,23 @@ class Settings(BaseSettings):
             return v
         return ["*"]
 
+    @classmethod
+    def resolve_tier_id_from_path(cls, path_or_tier: Optional[str]) -> str:
+        """Resolve a standard tier_id ('tier1_sparse', 'tier2_medium', 'tier3_dense') from string or path."""
+        if not path_or_tier:
+            return "tier3_dense"
+        lower = path_or_tier.lower()
+        if "tier1" in lower or "sparse" in lower:
+            return "tier1_sparse"
+        elif "tier2" in lower or "medium" in lower:
+            return "tier2_medium"
+        elif "tier3" in lower or "dense" in lower:
+            return "tier3_dense"
+        return path_or_tier
+
     @property
     def resolved_map_data_path(self) -> Path:
-        """Return the absolute path to city_map.json."""
+        """Return the absolute path to configured map JSON dataset."""
         path = Path(self.MAP_DATA_PATH)
         if not path.is_absolute():
             return (self.BASE_DIR / path).resolve()

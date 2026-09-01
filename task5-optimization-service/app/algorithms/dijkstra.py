@@ -1,7 +1,21 @@
 """Dijkstra's shortest path algorithms and road network path reconstruction."""
 
-from typing import Dict, List, Tuple
+from typing import Dict, List, Optional, Tuple
 import networkx as nx
+
+
+def is_graph_connected(graph: nx.Graph) -> bool:
+    """Check if the undirected road network graph is fully connected."""
+    if graph is None or not isinstance(graph, nx.Graph) or graph.number_of_nodes() == 0:
+        return False
+    return nx.is_connected(graph)
+
+
+def get_connected_components(graph: nx.Graph) -> List[List[str]]:
+    """Return all connected components (node ID lists) in the road network graph."""
+    if graph is None or not isinstance(graph, nx.Graph):
+        return []
+    return [list(c) for c in nx.connected_components(graph)]
 
 
 def compute_distance_matrix(
@@ -18,8 +32,14 @@ def compute_distance_matrix(
         A nested dictionary matrix where matrix[u][v] is the shortest distance in km from u to v.
 
     Raises:
-        ValueError: If a target node does not exist in the graph or if any pair is disconnected.
+        ValueError: If graph is invalid, a target node does not exist in graph, or any pair is disconnected.
     """
+    if graph is None or not isinstance(graph, nx.Graph):
+        raise ValueError("Invalid graph provided for distance matrix computation.")
+
+    if not target_nodes:
+        return {}
+
     for node in target_nodes:
         if node not in graph:
             raise ValueError(f"Target node '{node}' not found in the road network graph.")
@@ -28,7 +48,11 @@ def compute_distance_matrix(
 
     for source in target_nodes:
         # Use single-source Dijkstra to compute shortest distances from `source`
-        lengths = nx.single_source_dijkstra_path_length(graph, source, weight="weight")
+        try:
+            lengths = nx.single_source_dijkstra_path_length(graph, source, weight="weight")
+        except Exception as e:
+            raise ValueError(f"Dijkstra calculation failed for source '{source}': {e}") from e
+
         for target in target_nodes:
             if target not in lengths:
                 raise ValueError(
@@ -56,6 +80,12 @@ def compute_path_matrix(
     Raises:
         ValueError: If any target node is missing or unreachable.
     """
+    if graph is None or not isinstance(graph, nx.Graph):
+        raise ValueError("Invalid graph provided for path matrix computation.")
+
+    if not target_nodes:
+        return {}
+
     for node in target_nodes:
         if node not in graph:
             raise ValueError(f"Target node '{node}' not found in the road network graph.")
@@ -63,7 +93,11 @@ def compute_path_matrix(
     path_matrix: Dict[str, Dict[str, List[str]]] = {u: {} for u in target_nodes}
 
     for source in target_nodes:
-        paths = nx.single_source_dijkstra_path(graph, source, weight="weight")
+        try:
+            paths = nx.single_source_dijkstra_path(graph, source, weight="weight")
+        except Exception as e:
+            raise ValueError(f"Dijkstra path calculation failed for source '{source}': {e}") from e
+
         for target in target_nodes:
             if target not in paths:
                 raise ValueError(f"No path found between '{source}' and '{target}'.")
@@ -87,6 +121,9 @@ def compute_shortest_path(
     Returns:
         A tuple (distance_km, [node_1, node_2, ..., node_k]).
     """
+    if graph is None or not isinstance(graph, nx.Graph):
+        raise ValueError("Invalid graph provided.")
+
     if source not in graph:
         raise ValueError(f"Source node '{source}' not found in the road network graph.")
     if target not in graph:
@@ -97,6 +134,8 @@ def compute_shortest_path(
         return round(float(dist), 4), path
     except nx.NetworkXNoPath:
         raise ValueError(f"No navigable path exists between '{source}' and '{target}'.")
+    except Exception as e:
+        raise ValueError(f"Error computing shortest path from '{source}' to '{target}': {e}") from e
 
 
 def reconstruct_full_path(
@@ -132,7 +171,11 @@ def reconstruct_full_path(
                 full_path.append(src)
             continue
 
-        _, segment_nodes = compute_shortest_path(graph, src, dst)
+        try:
+            _, segment_nodes = compute_shortest_path(graph, src, dst)
+        except Exception:
+            # Fallback if graph calculation fails: connect endpoints directly
+            segment_nodes = [src, dst]
 
         if not full_path:
             full_path.extend(segment_nodes)
@@ -141,3 +184,4 @@ def reconstruct_full_path(
             full_path.extend(segment_nodes[1:])
 
     return full_path
+

@@ -125,13 +125,65 @@ class InfeasibleRoutingException(OptimizationException):
 class GraphTopologyException(OptimizationException):
     """Raised when map topology is invalid or disconnected."""
 
-    def __init__(self, detail: str) -> None:
+    def __init__(self, detail: str, details: Optional[Dict[str, Any]] = None) -> None:
         super().__init__(
             message=f"Graph topology error: {detail}",
             status_code=400,
             error_type="GraphTopologyError",
+            details=details or {"error_detail": detail},
             suggestions=[
                 "Verify that city map JSON contains both depot ('start') and dump ('destination') nodes.",
-                "Ensure all road segments are properly connected in the adjacency list.",
+                "Ensure all road segments are properly connected in the adjacency list without isolated subgraphs.",
+                "Check that all node IDs referenced in adjacency list are properly declared.",
             ],
         )
+
+
+class MapDataNotFoundException(OptimizationException):
+    """Raised when map data file cannot be found at configured path and fallbacks fail."""
+
+    def __init__(self, path: str, searched_paths: Optional[List[str]] = None) -> None:
+        super().__init__(
+            message=f"City map data file not found at '{path}'.",
+            status_code=404,
+            error_type="MapDataNotFound",
+            details={"configured_path": path, "searched_paths": searched_paths or []},
+            suggestions=[
+                "Ensure map files exist in 'data/' (e.g., 'data/city_map_tier1_sparse.json', 'data/city_map_tier2_medium.json', 'data/city_map_tier3_dense.json').",
+                "Check MAP_DATA_PATH in your .env configuration.",
+                "Use the /api/v1/map/reload endpoint to reload with an available dataset.",
+            ],
+        )
+
+
+class InvalidMapDataException(OptimizationException):
+    """Raised when map data file exists but is corrupted, unparseable, or missing key schema structures."""
+
+    def __init__(self, path: str, reason: str) -> None:
+        super().__init__(
+            message=f"City map data at '{path}' is invalid or corrupted: {reason}",
+            status_code=422,
+            error_type="InvalidMapData",
+            details={"file_path": path, "reason": reason},
+            suggestions=[
+                "Verify that the map file contains valid JSON with 'nodes' and 'adjacency_list' keys.",
+                "Ensure each node has 'id', 'type', 'lat', and 'lon' fields.",
+            ],
+        )
+
+
+class OptimizationTimeoutException(OptimizationException):
+    """Raised when optimization exceeds execution time SLA limits."""
+
+    def __init__(self, elapsed_ms: float, limit_ms: float) -> None:
+        super().__init__(
+            message=f"Optimization exceeded time limit of {limit_ms:.1f} ms (took {elapsed_ms:.1f} ms).",
+            status_code=504,
+            error_type="OptimizationTimeout",
+            details={"elapsed_ms": elapsed_ms, "limit_ms": limit_ms},
+            suggestions=[
+                "Reduce the number of bins scheduled in a single optimization dispatch.",
+                "Increase the time limit configuration.",
+            ],
+        )
+

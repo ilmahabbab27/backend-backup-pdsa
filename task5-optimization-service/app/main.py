@@ -5,6 +5,7 @@ from datetime import datetime, timezone
 import time
 from typing import AsyncGenerator
 from fastapi import FastAPI, HTTPException, Request, Response, status
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
@@ -14,6 +15,7 @@ from app.config.settings import get_settings
 from app.models.schemas import HealthResponse, StructuredErrorResponse
 from app.utils.exceptions import OptimizationException
 from app.utils.logger import log_error, log_request, log_response, log_startup_banner
+
 
 settings = get_settings()
 
@@ -36,7 +38,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
         log_startup_banner(
             app_name=settings.APP_NAME,
             port=settings.APP_PORT,
-            map_path=str(settings.resolved_map_data_path),
+            map_path=str(map_repo.loaded_path),
             node_counts=node_counts,
             edge_count=edge_count,
             total_waste_kg=total_waste,
@@ -52,7 +54,7 @@ app = FastAPI(
     description=(
         "Production-ready backend service solving homogeneous waste collection fleet "
         "allocation, sequencing, and route optimization using NetworkX, Dijkstra's algorithm, "
-        "and Branch and Bound pruning."
+        "and Clarke-Wright Savings heuristic optimization."
     ),
     version="1.0.0",
     docs_url="/docs",
@@ -73,6 +75,7 @@ app.add_middleware(
 
 # Global Exception Handlers
 @app.exception_handler(OptimizationException)
+
 async def optimization_exception_handler(request: Request, exc: OptimizationException) -> JSONResponse:
     """Handle domain-specific optimization errors with structured recovery suggestions."""
     return JSONResponse(
@@ -84,6 +87,29 @@ async def optimization_exception_handler(request: Request, exc: OptimizationExce
             "detail": exc.message,
             "details": exc.details,
             "suggestions": exc.suggestions,
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+        },
+    )
+
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError) -> JSONResponse:
+    """Handle Pydantic/FastAPI input payload validation errors."""
+    error_messages = [f"{'.'.join(str(loc) for loc in err['loc'])}: {err['msg']}" for err in exc.errors()]
+    status_code = getattr(status, "HTTP_422_UNPROCESSABLE_CONTENT", status.HTTP_422_UNPROCESSABLE_ENTITY)
+    return JSONResponse(
+        status_code=status_code,
+        content={
+            "status": "error",
+            "error": "ValidationError",
+            "message": "Input request validation failed. Please check field constraints.",
+            "detail": exc.errors(),
+            "details": {"validation_errors": error_messages},
+            "suggestions": [
+                "Ensure 'truck_count' is an integer >= 1.",
+                "Ensure 'truck_capacity_kg' is an integer >= 100.",
+                "Verify required parameters are present in JSON request body.",
+            ],
             "timestamp": datetime.now(timezone.utc).isoformat(),
         },
     )
@@ -104,6 +130,7 @@ async def http_exception_handler(request: Request, exc: HTTPException) -> JSONRe
             "timestamp": datetime.now(timezone.utc).isoformat(),
         },
     )
+
 
 
 @app.exception_handler(Exception)
