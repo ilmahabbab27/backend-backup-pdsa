@@ -123,6 +123,12 @@ def heuristic_scoring(candidates: list[Candidate]) -> list[Candidate]:
       * Add a 15-point bonus if the facility still has >25% capacity free.
       * Apply a 30-point penalty if the facility is effectively full
         (availability <= 0).
+
+    Unlike the other two techniques this score is not bounded to 0..1 - it
+    is a raw rule-based point total, intentionally left unnormalised so the
+    report can contrast it against the normalised techniques. Callers that
+    display it alongside linear_search/weighted_ranking should label it as
+    a raw score rather than a percentage.
     """
     for c in candidates:
         capacity = c["capacity"] or 0
