@@ -24,7 +24,8 @@ def get_optimizer_service(
     return OptimizerService(map_repo=map_repo)
 
 
-@lru_cache()
-def get_supabase_map_repository() -> SupabaseMapRepository:
+def get_supabase_map_repository(
+    map_repo: Annotated[MapRepository, Depends(get_map_repository)],
+) -> SupabaseMapRepository:
     """Return the repository used by the public 2D map endpoint."""
-    return SupabaseMapRepository(settings=get_settings())
+    return SupabaseMapRepository(settings=get_settings(), map_repo=map_repo)
