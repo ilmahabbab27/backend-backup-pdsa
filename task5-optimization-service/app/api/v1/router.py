@@ -1,5 +1,5 @@
 """API v1 router definitions for Waste Route Optimization Service."""
-
+from typing import Dict, Any
 from datetime import datetime, timezone
 from typing import Annotated, List, Optional
 from fastapi import APIRouter, Depends, Query, status
