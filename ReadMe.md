@@ -206,32 +206,19 @@ in the Supabase SQL editor.
 
 ## 2. Start the backend services
 
-Open five terminals from the backend root and run one service per terminal:
+Run all five services from a single command at the backend root:
 
 ```powershell
-cd task1-route-service
-.\.venv\Scripts\python.exe -m uvicorn app.main:app --reload --port 8001
+python run_all_services.py
 ```
 
-```powershell
-cd task2-resource-service
-.\.venv\Scripts\python.exe -m uvicorn app.main:app --reload --port 8002
-```
+This starts:
 
-```powershell
-cd task3-network-service
-.\.venv\Scripts\python.exe -m uvicorn app.main:app --reload --port 8003
-```
-
-```powershell
-cd task4-decision-service
-.\.venv\Scripts\python.exe -m uvicorn app.main:app --reload --port 8004
-```
-
-```powershell
-cd task5-optimization-service
-.\.venv\Scripts\python.exe -m uvicorn app.main:app --reload --port 8005
-```
+- Task 1 on `8001`
+- Task 2 on `8002`
+- Task 3 on `8003`
+- Task 4 on `8004`
+- Task 5 on `8005`
 
 ## 3. Start the frontend
 
