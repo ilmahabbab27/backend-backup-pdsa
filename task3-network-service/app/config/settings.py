@@ -10,6 +10,8 @@ from dotenv import load_dotenv
 
 SERVICE_ROOT = Path(__file__).resolve().parents[2]
 load_dotenv(dotenv_path=SERVICE_ROOT / ".env", override=False)
+# Use the shared backend configuration when this service has no local .env.
+load_dotenv(dotenv_path=SERVICE_ROOT.parent / ".env", override=False)
 
 
 DEFAULT_ALLOWED_ORIGINS = ("http://localhost:5173",)
