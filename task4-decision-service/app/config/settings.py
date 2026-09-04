@@ -4,6 +4,7 @@ Reads values from environment variables (loaded from a local .env file).
 Never commit the real .env — only .env.example is pushed.
 """
 from functools import lru_cache
+from pathlib import Path
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -20,7 +21,7 @@ class Settings(BaseSettings):
     SUPABASE_KEY: str = ""
 
     model_config = SettingsConfigDict(
-        env_file=".env",
+        env_file=(Path(__file__).resolve().parents[2] / ".env", Path(__file__).resolve().parents[2].parent / ".env"),
         env_file_encoding="utf-8",
         extra="ignore",
     )
