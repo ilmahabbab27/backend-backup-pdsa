@@ -4,6 +4,8 @@ from collections import deque
 import time
 from typing import Optional
 
+# T1DS: BFS algorithm for finding the route with the fewest hops in an unweighted graph.
+
 from app.algorithms.graph import Graph
 from app.algorithms.helpers import calculate_path_distance, reconstruct_path
 from app.algorithms.types import AlgorithmResult

@@ -25,9 +25,11 @@ from app.models.network_models import (
 )
 
 
+# T3DS: Generic result type used for timed graph-analysis helpers.
 Result = TypeVar("Result")
 
 
+# T3DS: Repository contract for loading location and road data before network analysis begins.
 class NetworkDataRepository(Protocol):
     """The database operations required by the analysis service."""
 
@@ -36,10 +38,12 @@ class NetworkDataRepository(Protocol):
     def get_roads(self) -> list[Road]: ...
 
 
+# T3DS: Raised when the selected starting node does not exist in the loaded city network.
 class InvalidStartNodeError(ValueError):
     """Raised when a requested traversal start is absent from the graph."""
 
 
+# T3DS: Helper used to measure algorithm execution time in milliseconds for BFS/DFS and metric calculations.
 def _timed(operation: Callable[[], Result]) -> tuple[Result, float]:
     """Run an operation and return its result plus elapsed milliseconds."""
     started = perf_counter()
@@ -47,12 +51,14 @@ def _timed(operation: Callable[[], Result]) -> tuple[Result, float]:
     return result, (perf_counter() - started) * 1000
 
 
+# T3DS: Service that loads the city graph, runs each structural diagnostic, and returns the final network report.
 class NetworkAnalysisService:
     """Coordinate repository data and the pure Task 3 graph algorithms."""
 
     def __init__(self, repository: NetworkDataRepository) -> None:
         self._repository = repository
 
+# T3DS: Return the list of selectable start nodes in stable order for the UI dropdown.
     def list_nodes(self) -> AvailableNodesResponse:
         """Return selectable locations in deterministic key order."""
         locations = self._repository.get_locations()
@@ -66,6 +72,7 @@ class NetworkAnalysisService:
         ]
         return AvailableNodesResponse(nodes=nodes)
 
+# T3DS: Analyze the full city graph from a selected start node and return BFS, DFS, centrality, and connectivity diagnostics.
     def analyze(self, start_node: str) -> NetworkAnalysisResponse:
         """Run all Task 3 analyses from ``start_node`` over repository data."""
         total_started = perf_counter()
@@ -89,6 +96,17 @@ class NetworkAnalysisService:
         ranking = rank_by_degree_centrality(graph)
         highest = most_connected_node(graph)
         density = network_density(graph)
+        reachable_nodes = bfs_data[1]
+        unreachable_nodes = len(graph) - reachable_nodes
+        reachability_percentage = (
+            (reachable_nodes / len(graph)) * 100 if graph else 0.0
+        )
+        if reachability_percentage == 100.0:
+            connectivity_status = "fully_connected"
+        elif reachable_nodes == 1 and len(graph) > 1:
+            connectivity_status = "isolated"
+        else:
+            connectivity_status = "partially_connected"
         metrics_time = (perf_counter() - metrics_started) * 1000
 
         centrality_results = [
@@ -118,6 +136,10 @@ class NetworkAnalysisService:
             total_nodes=len(graph),
             # A source road row is one edge record, regardless of its direction.
             total_edges=len(roads),
+            reachable_nodes=reachable_nodes,
+            unreachable_nodes=unreachable_nodes,
+            reachability_percentage=reachability_percentage,
+            connectivity_status=connectivity_status,
             most_connected_location=most_connected,
             network_density=density,
             bfs=TraversalResult(

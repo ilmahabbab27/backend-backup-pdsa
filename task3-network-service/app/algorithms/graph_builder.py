@@ -5,9 +5,11 @@ from collections.abc import Iterable
 from app.models.network_models import Location, Road
 
 
+# T3DS: Adjacency map representing the city road network as a node-to-neighbour graph for traversal and analysis.
 Adjacency = dict[str, list[str]]
 
 
+# T3DS: Transform location and road records into a deterministic adjacency dictionary before BFS/DFS and centrality analysis.
 def build_adjacency(
     locations: Iterable[Location],
     roads: Iterable[Road],

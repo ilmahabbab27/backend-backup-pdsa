@@ -3,7 +3,7 @@
 from typing import Dict, List, Optional, Tuple
 import networkx as nx
 
-
+# T5DS: Checks if the road network is connected before route optimization begins.
 def is_graph_connected(graph: nx.Graph) -> bool:
     """Check if the undirected road network graph is fully connected."""
     if graph is None or not isinstance(graph, nx.Graph) or graph.number_of_nodes() == 0:
@@ -11,6 +11,7 @@ def is_graph_connected(graph: nx.Graph) -> bool:
     return nx.is_connected(graph)
 
 
+# T5DS: Finds separate connected groups in the transport network for validation and debugging.
 def get_connected_components(graph: nx.Graph) -> List[List[str]]:
     """Return all connected components (node ID lists) in the road network graph."""
     if graph is None or not isinstance(graph, nx.Graph):
@@ -18,6 +19,7 @@ def get_connected_components(graph: nx.Graph) -> List[List[str]]:
     return [list(c) for c in nx.connected_components(graph)]
 
 
+# T5DS: Computes all-pairs shortest distances across the route network for fleet optimization.
 def compute_distance_matrix(
     graph: nx.Graph,
     target_nodes: List[str],
@@ -64,6 +66,7 @@ def compute_distance_matrix(
     return distance_matrix
 
 
+# T5DS: Stores the shortest path sequence between all route points for downstream optimization logic.
 def compute_path_matrix(
     graph: nx.Graph,
     target_nodes: List[str],
@@ -106,6 +109,7 @@ def compute_path_matrix(
     return path_matrix
 
 
+# T5DS: Computes the shortest path cost and node sequence between two network nodes using Dijkstra.
 def compute_shortest_path(
     graph: nx.Graph,
     source: str,
@@ -138,6 +142,7 @@ def compute_shortest_path(
         raise ValueError(f"Error computing shortest path from '{source}' to '{target}': {e}") from e
 
 
+# T5DS: Expands a stop sequence into a fully connected route across the road network.
 def reconstruct_full_path(
     graph: nx.Graph,
     stop_sequence: List[str],

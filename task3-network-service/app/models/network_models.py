@@ -1,11 +1,12 @@
 """Database-facing models for city locations and roads."""
 
-from typing import Any
+from typing import Any, Literal
 from uuid import UUID
 
 from pydantic import BaseModel, Field
 
 
+# T3DS: City location entity representing a graph node or transport stop in the road network.
 class Location(BaseModel):
     """A city location or intersection represented as a graph node."""
 
@@ -18,6 +19,7 @@ class Location(BaseModel):
     metadata: dict[str, Any] = Field(default_factory=dict)
 
 
+# T3DS: Road record used to connect two location nodes; it may be directional or bidirectional.
 class Road(BaseModel):
     """A road represented as a directed or bidirectional graph edge."""
 
@@ -30,6 +32,7 @@ class Road(BaseModel):
     metadata: dict[str, Any] = Field(default_factory=dict)
 
 
+# T3DS: Lightweight DTO used by the UI to populate the selectable list of start nodes.
 class AvailableNode(BaseModel):
     """A lightweight location that can be selected for analysis."""
 
@@ -44,6 +47,7 @@ class AvailableNodesResponse(BaseModel):
     nodes: list[AvailableNode]
 
 
+# T3DS: Returned traversal result with ordered visit sequence and measured runtime in milliseconds.
 class TraversalResult(BaseModel):
     """Traversal output and measured algorithm execution time."""
 
@@ -52,6 +56,7 @@ class TraversalResult(BaseModel):
     execution_time_ms: float
 
 
+# T3DS: Centrality score for one node, including degree count and normalized network importance.
 class CentralityResult(BaseModel):
     """A ranked location and its degree metrics."""
 
@@ -62,6 +67,7 @@ class CentralityResult(BaseModel):
     rank: int
 
 
+# T3DS: Summary wrapper for the single most connected node in the analyzed graph.
 class MostConnectedLocation(BaseModel):
     """Summary of the highest-ranked location."""
 
@@ -71,6 +77,7 @@ class MostConnectedLocation(BaseModel):
     centrality: float
 
 
+# T3DS: Full network diagnostic payload including BFS, DFS, centrality, and connectivity summary.
 class NetworkAnalysisResponse(BaseModel):
     """Complete Task 3 analysis for a selected starting location."""
 
@@ -78,6 +85,10 @@ class NetworkAnalysisResponse(BaseModel):
     start_location_name: str
     total_nodes: int
     total_edges: int
+    reachable_nodes: int
+    unreachable_nodes: int
+    reachability_percentage: float
+    connectivity_status: Literal["fully_connected", "partially_connected", "isolated"]
     most_connected_location: MostConnectedLocation | None
     network_density: float
     bfs: TraversalResult

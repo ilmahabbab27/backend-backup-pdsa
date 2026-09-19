@@ -4,10 +4,12 @@ from collections.abc import Hashable, Iterable, Mapping
 from typing import TypedDict, TypeVar
 
 
+# T3DS: Generic graph node and adjacency type used for structural metrics across the city network.
 Node = TypeVar("Node", bound=Hashable)
 Adjacency = Mapping[Node, Iterable[Node]]
 
 
+# T3DS: Rank entry for a node showing its direct-link count, normalized centrality, and sorted position.
 class RankedNode(TypedDict):
     """A node's degree metrics and deterministic position in the ranking."""
 
@@ -17,11 +19,13 @@ class RankedNode(TypedDict):
     rank: int
 
 
+# T3DS: Count the number of direct links each node has in the road network.
 def connection_counts(graph: Adjacency[Node]) -> dict[Node, int]:
     """Return the number of distinct directly connected neighbours per node."""
     return {node: len(set(neighbours)) for node, neighbours in graph.items()}
 
 
+# T3DS: Normalize degree centrality as deg(v) / (V - 1) to identify the most structurally important hubs.
 def degree_centrality(graph: Adjacency[Node]) -> dict[Node, float]:
     """Return normalized degree centrality for every node in ``graph``."""
     vertex_count = len(graph)
@@ -35,6 +39,7 @@ def degree_centrality(graph: Adjacency[Node]) -> dict[Node, float]:
     }
 
 
+# T3DS: Sort all nodes by descending centrality and break ties deterministically by node name.
 def rank_by_degree_centrality(graph: Adjacency[Node]) -> list[RankedNode]:
     """Rank nodes by descending centrality, breaking ties by node text."""
     counts = connection_counts(graph)
@@ -55,12 +60,14 @@ def rank_by_degree_centrality(graph: Adjacency[Node]) -> list[RankedNode]:
     ]
 
 
+# T3DS: Return the strongest structural backbone node, used in the final network summary.
 def most_connected_node(graph: Adjacency[Node]) -> RankedNode | None:
     """Return the highest-ranked node, or ``None`` for an empty graph."""
     ranking = rank_by_degree_centrality(graph)
     return ranking[0] if ranking else None
 
 
+# T3DS: Measure how dense the city network is by comparing existing road connections to the maximum possible graph edges.
 def network_density(graph: Adjacency[Node]) -> float:
     """Return density for an undirected simple graph.
 

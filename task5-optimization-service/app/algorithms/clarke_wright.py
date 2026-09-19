@@ -2,7 +2,7 @@
 
 from typing import Any, Dict, List, Optional, Tuple
 
-
+# T5DS: Result object capturing one truck route, stop sequence, capacity usage, and distance for an optimization solution.
 class RouteOptimizationResult:
     """Represents the optimal routing solution for a single truck."""
 
@@ -34,6 +34,7 @@ class RouteOptimizationResult:
         }
 
 
+# T5DS: Helper function that measures the full route cost from depot to bins to dump and back.
 def calculate_route_distance(
     depot_id: str,
     dump_id: str,
@@ -51,6 +52,7 @@ def calculate_route_distance(
     return dist
 
 
+# T5DS: Local-search optimization that improves a delivery order by reversing segments to reduce total route distance.
 def two_opt_sequence(
     depot_id: str,
     dump_id: str,
@@ -86,6 +88,7 @@ def two_opt_sequence(
     return best_seq
 
 
+# T5DS: Main Clarke-Wright optimizer that merges routes by savings and enforces truck capacity constraints.
 class ClarkeWrightOptimizer:
     """Clarke-Wright Savings heuristic solver for Capacitated Vehicle Routing with Fixed Start Depot and Dump Destination."""
 
@@ -340,6 +343,7 @@ class ClarkeWrightOptimizer:
         return results, total_fleet_distance
 
 
+# T5DS: First-fit decreasing bin packing used as a fallback to assign waste bins to trucks under capacity.
 def partition_bins_ffd(
     bins: List[Dict[str, Any]],
     truck_count: int,
@@ -384,6 +388,7 @@ def partition_bins_ffd(
     return active_truck_bins, uncollected_bins
 
 
+# T5DS: Selects the feasible set of bins that can be assigned without exceeding truck capacities.
 def select_feasible_bins_ffd(
     bins: List[Dict[str, Any]],
     truck_count: int,
@@ -409,6 +414,7 @@ def select_feasible_bins_ffd(
     return packed_bins, uncollected_bins
 
 
+# T5DS: Fallback route optimizer that solves each truck partition independently with 2-opt sequencing.
 def solve_by_truck_partition(
     depot_id: str,
     dump_id: str,

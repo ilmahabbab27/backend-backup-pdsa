@@ -4,6 +4,8 @@ import heapq
 import time
 from typing import Optional
 
+# T1DS: Dijkstra algorithm for shortest path in weighted graphs with non-negative costs.
+
 from app.algorithms.graph import Graph
 from app.algorithms.helpers import calculate_path_distance, reconstruct_path
 from app.algorithms.types import AlgorithmResult

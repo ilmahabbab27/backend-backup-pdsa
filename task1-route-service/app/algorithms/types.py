@@ -3,7 +3,7 @@
 from dataclasses import dataclass
 from typing import Optional
 
-
+# T1DS: Result object returned by all pathfinding algorithms after a route search.
 @dataclass
 class AlgorithmResult:
     """Represents the outcome of a pathfinding algorithm run."""

@@ -4,6 +4,8 @@ import heapq
 import time
 from typing import Callable, Optional
 
+# T1DS: A* search algorithm using heuristic guidance to reach the target faster than plain Dijkstra.
+
 from app.algorithms.graph import Graph, Node
 from app.algorithms.helpers import calculate_path_distance, reconstruct_path
 from app.algorithms.types import AlgorithmResult

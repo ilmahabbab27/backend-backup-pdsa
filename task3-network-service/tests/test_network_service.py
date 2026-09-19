@@ -63,6 +63,10 @@ def test_successful_complete_analysis(service: NetworkAnalysisService) -> None:
     assert result.start_location_name == "Alpha"
     assert result.total_nodes == 3
     assert result.total_edges == 2
+    assert result.reachable_nodes == 3
+    assert result.unreachable_nodes == 0
+    assert result.reachability_percentage == pytest.approx(100.0)
+    assert result.connectivity_status == "fully_connected"
     assert result.network_density == pytest.approx(2 / 3)
     assert result.metrics_execution_time_ms >= 0
     assert result.total_execution_time_ms >= result.metrics_execution_time_ms
@@ -125,6 +129,10 @@ def test_disconnected_graph_visits_only_the_start_component() -> None:
 
     assert result.bfs.traversal_order == ["C", "D"]
     assert result.dfs.traversal_order == ["C", "D"]
+    assert result.reachable_nodes == 2
+    assert result.unreachable_nodes == 2
+    assert result.reachability_percentage == pytest.approx(50.0)
+    assert result.connectivity_status == "partially_connected"
     assert result.total_nodes == 4
     assert result.network_density == pytest.approx(1 / 3)
 
@@ -139,6 +147,10 @@ def test_isolated_start_node_is_valid() -> None:
     assert result.bfs.traversal_order == ["ISOLATED"]
     assert result.dfs.traversal_order == ["ISOLATED"]
     assert result.bfs.visited_count == 1
+    assert result.reachable_nodes == 1
+    assert result.unreachable_nodes == 1
+    assert result.reachability_percentage == pytest.approx(50.0)
+    assert result.connectivity_status == "isolated"
     assert result.network_density == 0.0
 
 

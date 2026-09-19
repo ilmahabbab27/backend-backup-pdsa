@@ -10,6 +10,9 @@ Distances below are illustrative haversine-style values from the
 'residential' location.
 """
 from app.algorithms import ranking
+from app.algorithms.heuristic_scoring import heuristic_scoring
+from app.algorithms.linear_search import linear_search
+from app.algorithms.weighted_ranking import weighted_ranking
 
 
 def _candidates() -> list[dict]:
@@ -90,3 +93,10 @@ def test_normalise_handles_equal_values():
     """When all values are equal, every item normalises to 1.0."""
     out = ranking._normalise_min_max([5.0, 5.0, 5.0], higher_is_better=True)
     assert out == [1.0, 1.0, 1.0]
+
+
+def test_task4_algorithm_modules_are_available_as_separate_files():
+    """The API should expose each ranking algorithm as its own module."""
+    assert callable(linear_search)
+    assert callable(weighted_ranking)
+    assert callable(heuristic_scoring)

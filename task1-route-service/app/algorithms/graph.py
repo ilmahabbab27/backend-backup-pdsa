@@ -3,7 +3,7 @@
 from dataclasses import dataclass, field
 from typing import Any, Optional
 
-
+# T1DS: Graph node representing a city or location in the route network.
 @dataclass
 class Node:
     """Represents a city/location vertex in the transportation network."""
@@ -18,6 +18,7 @@ class Node:
     metadata: dict[str, Any] = field(default_factory=dict)
 
 
+# T1DS: Road connection between two locations, carrying distance and travel-time metadata.
 @dataclass
 class Edge:
     """Represents a road/connection between two cities."""
@@ -30,6 +31,7 @@ class Edge:
     metadata: dict[str, Any] = field(default_factory=dict)
 
 
+# T1DS: Main graph structure storing nodes and adjacency lists for route calculations.
 class Graph:
     """Adjacency-list graph representation of a weighted transportation network.
 
